@@ -1,0 +1,135 @@
+﻿using Application.Interfaces;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+namespace Infrastucture.Services
+{
+    public class UserService : IUserService
+    {
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<ApplicationRoles> roleManager;
+        private readonly IConfiguration configuration;
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRoles> roleManager, IConfiguration configuration)
+        {
+            this.userManager=userManager;
+            this.signInManager=signInManager;
+            this.roleManager=roleManager;
+            this.configuration=configuration;
+        }
+
+        public async Task<Domain.Entities.Response> SignUp(SignUpReq signUpReq)
+        {
+            var res = new Domain.Entities.Response()
+            {
+                ResponseText = "An Error Has Occured",
+                StatusCode = ResponseStatus.Failed
+            };
+            try
+            {
+                var userexists = await userManager.FindByEmailAsync(signUpReq.Email);
+                if (userexists != null)
+                {
+                    res.ResponseText = "User Already Exits Try With Another Email";
+                    res.StatusCode = ResponseStatus.Failed;
+                    return res;
+                }
+                ApplicationUser user = new ApplicationUser
+                {
+                    UserName = signUpReq.Email,
+                    Email = signUpReq.Email,
+                    FirstName = signUpReq.FirstName,
+                    LastName = signUpReq.LastName,
+                    EmailConfirmed = true,
+                    MobileNo = signUpReq.MobileNo,
+                };
+                var result = await userManager.CreateAsync(user, signUpReq.Password);
+                if (result.Succeeded)
+                {
+                    if (!await roleManager.RoleExistsAsync(signUpReq.Role))
+                    {
+                        await roleManager.CreateAsync(new ApplicationRoles(signUpReq.Role));
+                    }
+                    if (await roleManager.RoleExistsAsync(signUpReq.Role))
+                    {
+                        await userManager.AddToRoleAsync(user, signUpReq.Role);
+                        res.ResponseText = "SignUp Sucessfully";
+                        res.StatusCode = ResponseStatus.Success;
+                    }
+                }
+                return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        public async Task<Domain.Entities.Response<LoginResponse>> Login(LoginReq loginReq)
+        {
+            var response = new Domain.Entities.Response<LoginResponse>();
+            try
+            {
+                var userexists = await userManager.FindByEmailAsync(loginReq.Email);
+                if (userexists != null)
+                {
+                    var result = await userManager.CheckPasswordAsync(userexists, loginReq.Password);
+                    if (!result)
+                    {
+                        response.ResponseText = "Password did not Match";
+                        response.StatusCode = ResponseStatus.Failed;
+                        return response;
+                    }
+                    await signInManager.SignInAsync(userexists, isPersistent: true);
+                    var roledetails = await userManager.GetRolesAsync(userexists);
+                    var claimlist = new List<Claim>
+                       {
+                        new Claim(ClaimTypes.Name, userexists.UserName),
+                        new Claim("UserId", userexists.Id.ToString()),
+                        new Claim(ClaimTypes.MobilePhone, userexists.MobileNo),
+                        new Claim(ClaimTypes.Role, roledetails.FirstOrDefault()??""),
+                      };
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Secretkey"]));
+                    var token = new JwtSecurityToken(
+                        issuer: configuration["AuthSettings:Issuer"],
+                        audience: configuration["AuthSettings:Audience"],
+                        claims: claimlist,
+                        expires: DateTime.Now.AddDays(30),
+                        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+                        );
+
+                    string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
+                    response.StatusCode = ResponseStatus.Success;
+                    response.ResponseText = ResponseStatus.Success.ToString();
+                    response.Result = new LoginResponse
+                    {
+                        Email = userexists.Email,
+                        UserId = userexists.Id.ToString(),
+                        UserName = userexists.UserName,
+                        Name = userexists.UserName,
+                        Token = tokenAsString,
+                        Role = roledetails.FirstOrDefault(),
+                    };
+                    response.ResponseText="Login Succesfull";
+                    response.StatusCode = ResponseStatus.Success;
+                    return response;
+                }
+                response.ResponseText = "User Not Exists Please Sign Up !";
+                response.StatusCode = ResponseStatus.Failed;
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+    }
+}
