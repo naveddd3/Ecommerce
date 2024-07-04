@@ -84,10 +84,9 @@ namespace WEBAPI.Extension
             #endregion
 
             #region Services
-
+            services.AddScoped<IDapperRepository, DapperRepository>();
             services.AddScoped<IUserService,UserService>();
-
-
+            services.AddScoped<ICategoryService,CategoryService>();
             #endregion
         }
     }

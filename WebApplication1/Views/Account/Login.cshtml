@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Domain.Entities.LoginReq
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -29,15 +30,15 @@
                 <div class="my-auto">
                     <h4 class="mt-0">Sign In</h4>
                     <p class="text-muted mb-4">Enter your email address and password to access account.</p>
-                    <form action="#">
+                    <form asp-action="Login" method="post">
                         <div class="mb-3">
-                            <label for="emailaddress" class="form-label">Email address</label>
-                            <input class="form-control" type="email" id="emailaddress" required="" placeholder="Enter your email">
+                            <label asp-for="Email" class="form-label">Email address</label>
+                            <input class="form-control" type="email" asp-for="Email" required="" placeholder="Enter your email">
                         </div>
                         <div class="mb-3">
                             <a href="pages-recoverpw-2.html" class="text-muted float-end"><small>Forgot your password?</small></a>
-                            <label for="password" class="form-label">Password</label>
-                            <input class="form-control" type="password" required="" id="password" placeholder="Enter your password">
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <input class="form-control" type="password" required="" asp-for="Password" placeholder="Enter your password">
                         </div>
                         <div class="mb-3">
                             <div class="form-check">
@@ -46,7 +47,7 @@
                             </div>
                         </div>
                         <div class="d-grid mb-0 text-center">
-                            <button class="btn btn-primary" onclick="doLogin()"><i class="mdi mdi-login"></i> Log In </button>
+                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-login"></i> Log In </button>
                         </div>
                         <!-- social-->
                         <div class="text-center mt-4">
@@ -69,7 +70,7 @@
                     </form>
                 </div>
                 <footer class="footer footer-alt">
-                    <p class="text-muted">Don't have an account? <a href="pages-register-2.html" class="text-muted ms-1"><b>Sign Up</b></a></p>
+                    <p class="text-muted">Don't have an account? <a href="/Account/Signup" class="text-muted ms-1"><b>Sign Up</b></a></p>
                 </footer>
 
             </div>
@@ -89,16 +90,3 @@
     <script src="~/js/app.min.js"></script>
 </body>
 </html>
-@section Scripts{
-    <script>
-        var doLogin = () => {
-            let obj = {
-                Email: $("#emailaddress").val(),
-                Password: $("#password").val()
-            }
-            $.post("/Account/DoLogin", obj).done((response) => {
-
-            })
-        }
-    </script>
-}
