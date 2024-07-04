@@ -428,7 +428,7 @@
                             </a>
 
                             <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">
+                            <a href="/Account/Logout" class="dropdown-item">
                                 <i class="mdi mdi-logout me-1"></i>
                                 <span>Logout</span>
                             </a>
@@ -484,41 +484,22 @@
                 <!--- Sidemenu -->
                 <ul class="side-nav">
 
-                    <li class="side-nav-title">Navigation</li>
+                    <li class="side-nav-title">Dashboard</li>
 
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
                             <i class="uil-home-alt"></i>
-                            <span class="badge bg-success float-end">5</span>
-                            <span> Dashboards </span>
+                            <span> Dashboard </span>
                         </a>
-                        <div class="collapse" id="sidebarDashboards">
-                            <ul class="side-nav-second-level">
-                                <li>
-                                    <a href="dashboard-analytics.html">Analytics</a>
-                                </li>
-                                <li>
-                                    <a href="index.html">Ecommerce</a>
-                                </li>
-                                <li>
-                                    <a href="dashboard-projects.html">Projects</a>
-                                </li>
-                                <li>
-                                    <a href="dashboard-crm.html">CRM</a>
-                                </li>
-                                <li>
-                                    <a href="dashboard-wallet.html">E-Wallet</a>
-                                </li>
-                            </ul>
-                        </div>
+                      
                     </li>
 
-                    <li class="side-nav-title">Apps</li>
+                    <li class="side-nav-title">Masters</li>
 
                     <li class="side-nav-item">
                         <a href="apps-calendar.html" class="side-nav-link">
                             <i class="uil-calender"></i>
-                            <span> Calendar </span>
+                            <span>Category</span>
                         </a>
                     </li>
 
@@ -1208,15 +1189,16 @@
                 <div class="clearfix"></div>
             </div>
         </div>
-       
+        <div id="alert-container" style="
+    position: fixed;
+    top: 65px;
+    right: 4px;
+    z-index: 1000"></div>
+        <div class="content-page">
+            <main role="main" class="pb-3">
                 @RenderBody()
-        
-
-       
-
-        <!--**********************************
-            Footer start
-        ***********************************-->
+            </main>
+        </div>
         <footer class="footer">
             <div class="container-fluid">
                 <div class="row">
@@ -1936,7 +1918,7 @@
     <!-- Daterangepicker js -->
     <script src="~/vendor/daterangepicker/moment.min.js"></script>
     <script src="~/vendor/daterangepicker/daterangepicker.js"></script>
-
+    <script src="~/js/alert.js"></script>
     <!-- Apex Charts js -->
     <script src="~/vendor/apexcharts/apexcharts.min.js"></script>
 
