@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\images\svg\england.svg" />
     <None Include="wwwroot\images\svg\india.svg" />
     <None Include="wwwroot\images\svg\united-arab-emirates.svg" />

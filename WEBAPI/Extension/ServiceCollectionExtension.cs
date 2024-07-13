@@ -87,6 +87,9 @@ namespace WEBAPI.Extension
             services.AddScoped<IDapperRepository, DapperRepository>();
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<ICategoryService,CategoryService>();
+            services.AddScoped<IProductService,ProductService>();
+            services.AddScoped<IVarientService, VarientService>();
+            services.AddScoped<FileUploadService>();
             #endregion
         }
     }

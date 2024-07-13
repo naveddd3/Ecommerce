@@ -1,0 +1,25 @@
+﻿@model IEnumerable< Domain.Entities.Varient>
+
+@if (Model != null && Model.Any())
+{
+    int i = 0;
+    foreach (var item in Model)
+    {
+        i++;
+        <tr>
+            <td>@i</td>
+            <td>@item.VarientName</td>
+            <td>@item.VarientType</td>
+            <td class="table-action">
+                <a href="javascript:void(0);" class="action-icon" onclick="AddOrEditVarient(@item.VarientId)"> <i class="mdi mdi-square-edit-outline"></i></a>
+
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="12" style="text-align:center" class="danger">Record Not Found!</td>
+    </tr>
+}

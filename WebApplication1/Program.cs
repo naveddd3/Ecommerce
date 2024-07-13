@@ -1,4 +1,5 @@
 using Domain.Helper;
+using Infrastucture.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 string baseurl = builder.Configuration["WEBAPIURL:BaseUrl"];
 var bs = new AppSetting { WebApiBaseUrl = baseurl };
 builder.Services.AddSingleton<AppSetting>(bs);
+builder.Services.AddScoped<FileUploadService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/Account/Login";
