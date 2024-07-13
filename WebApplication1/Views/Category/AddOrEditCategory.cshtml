@@ -1,0 +1,55 @@
+﻿@model Domain.Entities.MasterCategory
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #313a46">
+                @if (Model.CategoryId>0)
+                {
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">Edit Category</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">ADD Category</h5>
+                }
+            </div>
+            <div class="modal-body">
+                <div class="m-1">
+                    <input type="hidden" asp-for="CategoryId" />
+                    <label name="CategoryName">Category Name :</label>
+                    <input class="form-control" type="text" placeholder="Enter Name" asp-for="CategoryName">
+                </div>
+
+                <div class="m-1">
+                    <label name="CategoryDescription">Category Discription :</label>
+                    <input class="form-control" type="text" placeholder="Enter Name" asp-for="CategoryDescription">
+                </div>
+
+                <div class="m-1">
+                    <label name="CategoryImage">Category Image :</label>
+                    <input class="form-control" type="file" placeholder="Enter Name" asp-for="CategoryImage">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveOrUpdate()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

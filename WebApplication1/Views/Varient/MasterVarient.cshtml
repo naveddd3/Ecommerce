@@ -1,0 +1,96 @@
+﻿
+<div id="modal"></div>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                            <li class="breadcrumb-item active">Master Varient</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Master Varient</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-5">
+                                <button onclick="AddOrEditVarient(0)" href="javascript:void(0);" class="btn btn-danger mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Master Varient
+                                </button>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="text-sm-end">
+                                    <button type="button" class="btn btn-success mb-2 me-1">
+                                        <i class="mdi mdi-cog-outline"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                    <button type="button" class="btn btn-light mb-2">Export</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" id="grid">
+                            <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Varient Name</th>
+                                        <th>Varient Type</th>
+                                        <th style="width: 85px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadData();
+    })
+    function loadData() {
+        $.post('/Varient/GetAll').done((response) => {
+            $("#grid tbody").html(response);
+        }).fail((error) => {
+            console.error("Error loading data: ", error);
+        });
+    }
+    var AddOrEditVarient = (VarientId) => {
+        debugger;
+        $.post('/Varient/AddOrEditVarient', { Id: VarientId }).done((response) => {
+            $("#modal").html(response);
+            $("#exampleModalCenter").modal("show");
+        }).fail((res) => {
+            QAlert(res.status, res.responseText);
+        });
+    }
+
+    var SaveVarient = () => {
+        let obj = {
+            VarientId: $("#VarientId").val(),
+            VarientName: $("#VarientName").val(),
+            VarientType: $("#VarientType").val()
+        };
+        $.post('/Varient/SaveVarient', obj).done((response) => {
+            QAlert(response.statusCode,response.responseText);
+            $("#exampleModalCenter").modal("hide");
+            loadData();
+        }).fail((res) => {
+            console.error(res.responseText);
+        })
+    }
+</script>

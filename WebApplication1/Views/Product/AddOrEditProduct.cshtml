@@ -1,0 +1,73 @@
+﻿@using Domain.Entities
+@model ProductVM
+@{
+    var categories = new SelectList(Model.MasterCategories, "CategoryId", "CategoryName");
+}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item active">Product</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Product</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <button onclick="loadData()" class="btn btn-success mb-2 me-1">
+                            <i class="ri-arrow-left-line"></i>
+                            Back To List
+                        </button>
+                        <ul class="nav nav-tabs nav-bordered mb-3">
+                        </ul>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="hidden" asp-for="ProductId"/>
+                                <label name="ProductName">Product Name :</label>
+                                <input class="form-control" type="text" placeholder="Enter Name" asp-for="ProductName">
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="CategoryId">Category:</label>
+                                <select asp-for="CategoryId" asp-items="@categories" class="form-control">
+                                    <option value="0">Select a Category</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="MRP">MRP:</label>
+                                <input asp-for="MRP" class="form-control" type="text" placeholder="Enter MRP of Product">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-4">
+                                <label asp-for="Discount">Discount :</label>
+                                <input class="form-control" type="text" placeholder="Enter Discount in Percentage" asp-for="Discount">
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="Description">Description:</label>
+                                <input asp-for="Description" class="form-control" type="text" placeholder="Enter Description of Product">
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="ImageUrl">MRP:</label>
+                                <input asp-for="ImageUrl" class="form-control" type="file" multiple onchange="multipleImage()">
+                            </div>
+                        </div>
+                        <div style="display: flex;justify-content: end;">
+                            <button onclick="SaveOrUpdate()" type="button" class="btn btn-success mb-2 me-1" style="margin-top: 2rem;">
+                                Save Product
+                            </button>
+                        </div>
+
+                        <div id="result" style="display: flex;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

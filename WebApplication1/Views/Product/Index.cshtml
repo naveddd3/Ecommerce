@@ -1,0 +1,83 @@
+﻿
+<div id="partialView"></div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+<script>
+    $(document).ready(function () {
+        loadData();
+
+    });
+
+    var multipleImage = () => {
+        var files = event.target.files;
+        var output = $('#result');
+        $.each(files, function (i, file) {
+            if (!file.type.match('image'))
+                return true;
+            var picReader = new FileReader();
+            picReader.onload = function (event) {
+                var picFile = event.target;
+                var img = ("<img class='output_multiple_image form-control col-sm-6' src = '" + picFile.result + "' title = '" + picFile.name + "' style = 'width:10rem;margin-right: 0.5rem;height:7rem;' />");
+                output.append(img);
+            };
+            picReader.readAsDataURL(file);
+        });
+    }
+   
+    var loadData = () => {
+        $.post("/Product/GetProducts").done((result) => {
+            $("#partialView").html(result);
+        })
+    }
+
+    var AddOrEditProduct = (Id) => {
+        $.post("/Product/AddOrEditProduct", { Id: Id }).done((response) => {
+            $("#partialView").html(response);
+        }).fail((res) => {
+            QAlert(res.status, res.responseText);
+        });
+    }
+
+    var SaveOrUpdate = () => {
+        debugger;
+        var formData = new FormData();
+
+        var obj = {
+            ProductId: $("#ProductId").val(),
+            ProductName: $("#ProductName").val(),
+            Description: $("#Description").val(),
+            CategoryId: $("#CategoryId").val(),
+            MRP: $("#MRP").val(),
+            Discount: $("#Discount").val()
+        }
+        formData.append('Jsondata', JSON.stringify(obj));
+        var imageInput = $('#ImageUrl')[0];
+        console.log(imageInput);
+        if (imageInput.files.length > 0) {
+            for (var i = 0; i < imageInput.files.length; i++) {
+                var file = imageInput.files[i];
+                formData.append('productImage', file);
+            }
+        }
+        $.ajax({
+            url: '/Product/SaveOrUpdateProduct',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $("#exampleModalCenter").modal("hide");
+                loadData();
+                QAlert(response.statusCode, response.responseText);
+            },
+            error: function (error) {
+                alert("Error saving product.");
+            }
+        });
+    }
+</script>

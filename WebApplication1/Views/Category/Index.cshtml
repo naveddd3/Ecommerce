@@ -1,0 +1,142 @@
+﻿
+<div id="modal"></div>
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                                <li class="breadcrumb-item active">Category</li>
+                            </ol>
+                        </div>
+                        <h4 class="page-title">Category</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-sm-5">
+                                <button onclick="AddOrEdit(0)" href="javascript:void(0);" class="btn btn-danger mb-2">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Add Category
+                                    </button>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="text-sm-end">
+                                        <button type="button" class="btn btn-success mb-2 me-1">
+                                            <i class="mdi mdi-cog-outline"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                        <button type="button" class="btn btn-light mb-2">Export</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>Category Name</th>
+                                            <th>Category Image</th>
+                                            <th>Category Description</th>
+                                            <th style="width: 85px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be loaded here dynamically using AJAX -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- end card-body -->
+                    </div> <!-- end card -->
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+
+        </div> <!-- end container-fluid -->
+    </div> <!-- end content -->
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        loadData();
+    });
+
+    function loadData() {
+        $.ajax({
+            type: "POST",
+            url: "/Category/AllCategory",
+            success: function (result) {
+                $("#grid tbody").html(result);
+            },
+            error: function (error) {
+                console.error("Error loading data:", error);
+            }
+        });
+    }
+
+    var AddOrEdit = (Id) => {
+        $.post("/Category/AddOrEditCategory", { Id: Id })
+            .done((result) => {
+                console.log(result);
+                $("#modal").html(result);
+                $("#exampleModalCenter").modal("show");
+            })
+            .fail((res) => {
+                QAlert(res.status, res.responseText);
+            });
+    }
+    var closeModal = () => {
+        $("#exampleModalCenter").modal("hide");
+    }
+
+    var SaveOrUpdate = () => {
+        var formData = new FormData();
+
+        var obj = {
+            CategoryId: $("#CategoryId").val(),
+            CategoryName: $("#CategoryName").val(),
+            CategoryDescription: $("#CategoryDescription").val()
+        };
+
+        formData.append("Jsondata", JSON.stringify(obj));
+
+        var imageInput = $('#CategoryImage')[0];
+        if (imageInput.files.length > 0) {
+            formData.append('CategoryImage', imageInput.files[0]);
+        }
+
+        $.ajax({
+            url: "/Category/SaveOrUpdateCategory",
+            type: "POST",
+            data: formData,
+            contentType: false, // Important to prevent jQuery from setting content type
+            processData: false, // Important to prevent jQuery from processing the data
+            success: function (response) {
+                $("#exampleModalCenter").modal("hide");
+                loadData();
+                QAlert(response.statusCode, response.responseText);
+            },
+            error: function (res) {
+                QAlert(res.statusCode, res.responseText);
+            }
+        });
+    };
+
+
+
+</script>

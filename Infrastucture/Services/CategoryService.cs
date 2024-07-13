@@ -25,7 +25,8 @@ namespace Infrastucture.Services
                 {
                     category.CategoryId,
                     category.CategoryName,
-                    category.CategoryDescription
+                    category.CategoryDescription,
+                    category.CategoryImage
                 });
                 return res;
             }
@@ -52,13 +53,18 @@ namespace Infrastucture.Services
 
         public async Task<MasterCategory> AddOrEditCategory(int Id)
         {
+            var category = new MasterCategory();
             try
             {
-                var res = await _dapper.GetAsync<MasterCategory>("SELECT * FROM Master_Category WHERE CategoryId = @Id", new
+                var res  = await _dapper.GetAsync<MasterCategory>("SELECT * FROM Master_Category WHERE CategoryId = @Id", new
                 {
-                    Id
+                    Id=Id
                 }, CommandType.Text);
-                return res; 
+                if(res != null)
+                {
+                    category = res;
+                }
+                return category; 
             }
             catch (Exception ex)
             {

@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Net;
+using WEBAPP.Models.Helper;
 
 namespace WEBAPP.Controllers
 {
@@ -35,7 +36,7 @@ namespace WEBAPP.Controllers
             {
                if(ModelState.IsValid)
                 {
-                    var apiRes = await ApiClient.O.PostAsync($"{_BaseUrl}/api/Account/Login", JsonConvert.SerializeObject(loginReq), null);
+                    var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Account/Login", JsonConvert.SerializeObject(loginReq), null);
                     if (apiRes != null)
                     {
                         var authenticateResponse = JsonConvert.DeserializeObject<Response<LoginResponse>>(apiRes.Result);
@@ -74,7 +75,7 @@ namespace WEBAPP.Controllers
         {
             signUpReq.Role = "User";
             var res = new Response();
-            var apiRes = await ApiClient.O.PostAsync($"{_BaseUrl}/api/Account/SignUp", JsonConvert.SerializeObject(signUpReq));
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Account/SignUp", JsonConvert.SerializeObject(signUpReq));
             var authenticateResponse = JsonConvert.DeserializeObject<Response>(apiRes.Result);
 
             if (authenticateResponse.StatusCode != ResponseStatus.Success)
