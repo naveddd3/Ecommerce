@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using static Dapper.SqlMapper;
 
 namespace Domain.Helper
 {
@@ -28,5 +29,8 @@ namespace Domain.Helper
             Func<T1, T2, T3, TReturn> p, string splitOn);
         Task<IEnumerable<TReturn>> GetAllAsyncProc<T1, T2, T3, T4, TReturn>(T1 entity, string sqlQuery, DynamicParameters parms, Func<T1, T2, T3, T4, TReturn> p, string splitOn);
         Task<IEnumerable<TReturn>> GetAllAsyncProc<T1, T2, T3, T4, T5, T6, T7, TReturn>(T1 entity, string sqlQuery, DynamicParameters parms, Func<T1, T2, T3, T4, T5, T6, T7, TReturn> p, string splitOn);
+        Task<dynamic> GetMultipleAsync<T1, T2>(string sp, object parms, CommandType commandType = CommandType.StoredProcedure);
+
+        Task<GridReader> GetMultipleAsync(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
     }
 }

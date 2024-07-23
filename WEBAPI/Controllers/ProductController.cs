@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Helper;
 using Infrastucture.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +57,21 @@ namespace WEBAPI.Controllers
         [HttpPost(nameof(GetProductById)+"/{Id}")]
         public async Task<IActionResult> GetProductById(int Id)
         {
-            var res = await _productService.GetProductById(Id);
+            var res = await _productService.GetProductById(User.GetLoggedInUserId<int>(),Id);
+            return Ok(res);
+        }
+
+        [HttpPost(nameof(ShowImagesOfProduct)+"/{ID}")]
+        public async Task<IActionResult> ShowImagesOfProduct(int ID)
+        {
+            var res = await _productService.ShowImagesOfProduct(ID);
+            return Ok(res); 
+        }
+
+        [HttpPost(nameof(DeleteImageOfProduct)+"/{Id}")]
+        public async Task<IActionResult> DeleteImageOfProduct(int Id)
+        {
+            var res = await _productService.DeleteImageOfProduct(Id);
             return Ok(res);
         }
     }

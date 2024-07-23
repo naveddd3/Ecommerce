@@ -37,7 +37,6 @@ namespace WEBAPP.Controllers
 
                 throw;
             }
-            return PartialView();
         }
         public async Task<IActionResult> AddOrEditVarient(int Id)
         {

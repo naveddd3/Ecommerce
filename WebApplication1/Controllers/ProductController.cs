@@ -4,6 +4,7 @@ using Domain.Helper;
 using Infrastucture.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using WEBAPP.Models.Helper;
 using Response = Domain.Entities.Response;
 
@@ -24,16 +25,16 @@ namespace WEBAPP.Controllers
         {
             return View();
         }
-
         public async Task<IActionResult> GetProducts()
         {
-            var list = new List<Product>();
+            var list = new ApiResponseProduct();
             try
             {
                 var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProduct", null, User.GetLoggedInUserToken());
                 if (apiRes != null)
                 {
-                    list = JsonConvert.DeserializeObject<List<Product>>(apiRes.Result);
+                  list = JsonConvert.DeserializeObject<ApiResponseProduct>(apiRes.Result);
+                    
                 }
             }
             catch (Exception ex)
@@ -43,7 +44,6 @@ namespace WEBAPP.Controllers
             }
             return PartialView(list);
         }
-
         public async Task<IActionResult> AddOrEditProduct(int Id)
         {
             ProductVM category = new ProductVM();
@@ -71,19 +71,18 @@ namespace WEBAPP.Controllers
                 ResponseText="An error Has Been Occured !",
                 StatusCode = ResponseStatus.Failed
             };
-
-            var request = JsonConvert.DeserializeObject<ProductReq>(Jsondata);
-            request.Images = productImage;
-            if (request.ProductId == 0)
-            {
-                if (!productImage.Any())
-                {
-                    res.ResponseText = "Please Upload Images!";
-                    return Json(res);
-                }
-            }
             try
             {
+                var request = JsonConvert.DeserializeObject<ProductReq>(Jsondata);
+                request.Images = productImage;
+                if (request.ProductId == 0)
+                {
+                    if (!productImage.Any())
+                    {
+                        res.ResponseText = "Please Upload Images!";
+                        return Json(res);
+                    }
+                }
                 var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveProduct",  User.GetLoggedInUserToken(), request);
                 var response = await apiRes.Content.ReadAsStringAsync();
                 if (apiRes != null)
@@ -98,6 +97,32 @@ namespace WEBAPP.Controllers
 
                 throw;
             }
+        }
+
+        public async Task<IActionResult> ShowImagesOfProduct(int ID)
+        {
+            var list = new List<ProductImage>();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/ShowImagesOfProduct/{ID}", null, User.GetLoggedInUserToken());
+            if (apiRes != null)
+            {
+                list = JsonConvert.DeserializeObject<List<ProductImage>>(apiRes.Result);
+            }
+            return Json(list);
+        }
+
+        public async Task<IActionResult> DeleteImageOfProduct(int ID)
+        {
+            var res = new Response()
+            {
+                ResponseText="An Error Has Been Occured !",
+                StatusCode = ResponseStatus.Failed
+            };
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/DeleteImageOfProduct/{ID}", null, User.GetLoggedInUserToken());
+            if (apiRes != null)
+            {
+                res = JsonConvert.DeserializeObject<Response>(apiRes.Result);
+            }
+            return Json(res);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Infrastucture.Services
         {
             try
             {
-                var list = await repository.GetAllAsync<Varient>("SELECT * FROM Master_Varient_Type", null, CommandType.Text);
+                var list = await repository.GetAllAsync<Varient>("SELECT Id as VarientId,* FROM Master_Varient_Type", null, CommandType.Text);
                 return list;    
             }
             catch (Exception ex)

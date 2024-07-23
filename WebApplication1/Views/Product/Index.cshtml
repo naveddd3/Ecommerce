@@ -1,63 +1,105 @@
-﻿
-<div id="partialView"></div>
+﻿<div id="modal"></div>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                            <li class="breadcrumb-item active">Products</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Products</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="partialview">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-5">
+                                <button onclick="AddOrEditProduct(0)" s class="btn btn-danger mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Add Product
+                                </button>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="text-sm-end">
+                                    <button type="button" class="btn btn-success mb-2 me-1">
+                                        <i class="mdi mdi-cog-outline"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                    <button type="button" class="btn btn-light mb-2">Export</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hidden-content" style="display:none;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Product Name</th>
+                                        <th>Product Description</th>
+                                        <th>Image</th>
+                                        <th>Category</th>
+                                        <th style="width: 85px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- end card-body -->
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
 
-
-
-
+    </div> <!-- end container-fluid -->
+</div> <!-- end content -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
 <script>
     $(document).ready(function () {
         loadData();
-
     });
-
-    var multipleImage = () => {
-        var files = event.target.files;
-        var output = $('#result');
-        $.each(files, function (i, file) {
-            if (!file.type.match('image'))
-                return true;
-            var picReader = new FileReader();
-            picReader.onload = function (event) {
-                var picFile = event.target;
-                var img = ("<img class='output_multiple_image form-control col-sm-6' src = '" + picFile.result + "' title = '" + picFile.name + "' style = 'width:10rem;margin-right: 0.5rem;height:7rem;' />");
-                output.append(img);
-            };
-            picReader.readAsDataURL(file);
-        });
-    }
-   
     var loadData = () => {
         $.post("/Product/GetProducts").done((result) => {
-            $("#partialView").html(result);
+            $("#grid tbody").html(result);
         })
     }
 
     var AddOrEditProduct = (Id) => {
+        preloader.load();
         $.post("/Product/AddOrEditProduct", { Id: Id }).done((response) => {
-            $("#partialView").html(response);
+            $("#partialview").html(response);
+            preloader.remove();
         }).fail((res) => {
             QAlert(res.status, res.responseText);
         });
     }
 
     var SaveOrUpdate = () => {
-        debugger;
+        if (!valiadteInputs()) {
+            return false;
+        }
         var formData = new FormData();
-
         var obj = {
-            ProductId: $("#ProductId").val(),
-            ProductName: $("#ProductName").val(),
-            Description: $("#Description").val(),
-            CategoryId: $("#CategoryId").val(),
-            MRP: $("#MRP").val(),
-            Discount: $("#Discount").val()
+            ProductId: $("#product_ProductId").val(),
+            ProductName: $("#product_ProductName").val(),
+            Description: $("#product_Description").val(),
+            CategoryId: $("#product_CategoryId").val(),
+            MRP: $("#product_MRP").val(),
+            Discount: $("#product_Discount").val()
+        }
+        if (obj.ProductId == "" || obj.ProductId == null) {
+            obj.ProductId = 0;
         }
         formData.append('Jsondata', JSON.stringify(obj));
         var imageInput = $('#ImageUrl')[0];
-        console.log(imageInput);
         if (imageInput.files.length > 0) {
             for (var i = 0; i < imageInput.files.length; i++) {
                 var file = imageInput.files[i];
@@ -79,5 +121,59 @@
                 alert("Error saving product.");
             }
         });
+    }
+
+    var openImages = (Id) => {
+        $.post('/Product/ShowImagesOfProduct', { ID: Id })
+            .done((response) => {
+                let imagesHtml = '';
+                let Images = '';
+                for (let i = 0; i < response.length; i++) {
+                    Images = response[i];
+                    imagesHtml += `<a href="${Images.imageURI}" data-fancybox="gallery"><img src="${Images.imageURI}" alt="Product Image" /></a>`;
+                }
+                $('#hidden-content').html(imagesHtml);
+                $.fancybox.open($('[data-fancybox="gallery"]'), {
+                    type: 'image',
+                    opts: {
+                        afterShow: function (instance, current) {
+                            console.info('done!');
+                        }
+                    }
+                });
+            })
+            .fail((error) => {
+                console.error('Error fetching images:', error);
+            });
+    }
+
+    var removeImagePopUp = (Id) => {
+        var div = `<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        Delete Image
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are You Sure To Delete This Image ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Cancel</button>
+                                                        <button type="button" class="btn btn-primary" onclick="deleteImg(${Id})">Yes,Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                             </div>`;
+        $("#modal").html(div);
+        $("#exampleModalCenter").modal("show");
+    }
+
+
+    var deleteImg = (Id) => {
+        console.log(Id);
+        $.post("/Product/DeleteImageOfProduct", { ID: Id }).done((response) => {
+            $("#exampleModalCenter").modal("hide");
+            QAlert(response.statusCode, response.responseText);
+        })
     }
 </script>
