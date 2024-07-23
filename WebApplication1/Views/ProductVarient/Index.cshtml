@@ -1,7 +1,11 @@
 ﻿
 <div id="modal"></div>
 <div class="content">
+
+    <!-- Start Content-->
     <div class="container-fluid">
+
+        <!-- start page title -->
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
@@ -9,21 +13,23 @@
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
                             <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-                            <li class="breadcrumb-item active">Master Varient</li>
+                            <li class="breadcrumb-item active">Category</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Master Varient</h4>
+                    <h4 class="page-title">Category</h4>
                 </div>
             </div>
         </div>
+        <!-- end page title -->
+
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-sm-5">
-                                <button onclick="AddOrEditVarient(0)" href="javascript:void(0);" class="btn btn-danger mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Master Varient
+                                <button onclick="AddOrEdit(0)" href="javascript:void(0);" class="btn btn-danger mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Add Category
                                 </button>
                             </div>
                             <div class="col-sm-7">
@@ -37,59 +43,26 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive" id="grid">
+                        <div class="table-responsive">
                             <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
                                 <thead class="table-light">
                                     <tr>
                                         <th>Sr No.</th>
-                                        <th>Varient Name</th>
-                                        <th>Varient Type</th>
+                                        <th>Category Name</th>
+                                        <th>Category Image</th>
+                                        <th>Category Description</th>
                                         <th style="width: 85px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- Data will be loaded here dynamically using AJAX -->
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        loadData();
-    })
-    function loadData() {
-        $.post('/Varient/GetAll').done((response) => {
-            $("#grid tbody").html(response);
-        }).fail((error) => {
-            console.error("Error loading data: ", error);
-        });
-    }
-    var AddOrEditVarient = (VarientId) => {
-        $.post('/Varient/AddOrEditVarient', { Id: VarientId }).done((response) => {
-            $("#modal").html(response);
-            $("#exampleModalCenter").modal("show");
-        }).fail((res) => {
-            QAlert(res.status, res.responseText);
-        });
-    }
+                    </div> <!-- end card-body -->
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
 
-    var SaveVarient = () => {
-        let obj = {
-            VarientId: $("#VarientId").val(),
-            VarientName: $("#VarientName").val(),
-            VarientType: $("#VarientType").val()
-        };
-        $.post('/Varient/SaveVarient', obj).done((response) => {
-            QAlert(response.statusCode,response.responseText);
-            $("#exampleModalCenter").modal("hide");
-            loadData();
-        }).fail((res) => {
-            console.error(res.responseText);
-        })
-    }
-</script>
+    </div> <!-- end container-fluid -->
+</div> <!-- end content -->

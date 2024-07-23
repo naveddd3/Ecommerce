@@ -19,7 +19,6 @@ namespace Infrastucture.Services
             _dapper=dappers;
             _categoryService = categoryService;
         }
-
         public async Task<Response> SaveOrUpdateProduct(Product product)
         {
             var res = new Response()
@@ -47,12 +46,11 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-
-        public async Task<IEnumerable<Product>> GetProduct()
+        public async Task<dynamic> GetProduct()
         {
             try
             {
-                var list = await _dapper.GetAllAsync<Product>("SELECT p.*,c.CategoryName FROM tbl_Products p inner join Master_Category c on p.CategoryId = c.CategoryId", null, System.Data.CommandType.Text);
+                var list = await _dapper.GetMultipleAsync<Product, ProductImage>("PROC_GETPRODUCTS", null, System.Data.CommandType.StoredProcedure);
                 return list;
             }
             catch (Exception ex)
@@ -61,22 +59,20 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-
-        public async Task<ProductVM> GetProductById(int Id)
+        public async Task<ProductVM> GetProductById(int LoginId ,int Id)
         {
-            ProductVM productVM = new ProductVM();
+            var productVM = new ProductVM();
             try
             {
-
-               
-                var result = await _dapper.GetAsync<ProductVM>("SELECT * FROM tbl_Products WHERE ProductId = @Id", new
+                await Task.Delay(1000);
+                var result = await _dapper.GetMultipleAsync<Product, ProductImage>("PROC_GetProductById", new
                 {
-                    Id = Id,
-                }, System.Data.CommandType.Text);
-                if(result != null)
-                {
-                    productVM = result;
-                }
+                     Id,
+                     LoginId
+                }, System.Data.CommandType.StoredProcedure);
+                var product = (List<Product>)result.GetType().GetProperty("Table1").GetValue(result, null);
+                productVM.product = product.FirstOrDefault();
+                productVM.Images = (List<ProductImage>)result.GetType().GetProperty("Table2").GetValue(result, null);
             }
             catch (Exception ex)
             {
@@ -86,6 +82,39 @@ namespace Infrastucture.Services
             productVM.MasterCategories = await _categoryService.GetCategory();
             return productVM;
 
+        }
+        public async Task<List<ProductImage>> ShowImagesOfProduct(int ID)
+        {
+            try
+            {
+                var res = await _dapper.GetAllAsync<ProductImage>("SELECT ProductId,ImageURI FROM ProductImages  WHERE ProductId = @ID", new
+                {
+                    ID = ID,
+                },System.Data.CommandType.Text);
+                return res.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<Response> DeleteImageOfProduct(int Id)
+        {
+            try
+            {
+                var response = await _dapper.GetAsync<Response>("Proc_DeleteProductImage", new
+                {
+                    Id
+                });
+                return response;    
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }
