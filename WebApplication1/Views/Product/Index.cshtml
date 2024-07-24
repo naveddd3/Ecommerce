@@ -49,6 +49,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                 </tbody>
                             </table>
                         </div>
@@ -168,12 +169,61 @@
         $("#exampleModalCenter").modal("show");
     }
 
-
     var deleteImg = (Id) => {
         console.log(Id);
         $.post("/Product/DeleteImageOfProduct", { ID: Id }).done((response) => {
             $("#exampleModalCenter").modal("hide");
             QAlert(response.statusCode, response.responseText);
         })
+    }
+
+    var addVarient = (Id) => {
+        $.post('/Varient', {ProductId : Id}).done((response) => {
+            $("#modal").html(response);
+            $("#exampleModalCenter").modal("show");
+        })
+    } 
+
+    var saveVarient = () => {
+        debugger;
+        
+        if (!valiadteInputs()) {
+            return false;
+        }
+        let obj = {
+            ProductId: $("#ProductId").val(),
+            VarientTypeId: $("#VarientTypeId").val(),
+            MRP: $("#MRP").val(),
+            Discount: $("#Discount").val(),
+            Description: $("#Description").val()
+        }
+        var formData = new FormData();
+        formData.append("JsonData", JSON.stringify(obj));
+        var imageInput = $('#ImageUrl')[0];
+        if (imageInput.files.length > 0) {
+            for (var i = 0; i < imageInput.files.length; i++) {
+                var file = imageInput.files[i];
+                formData.append('productvarientImages', file);
+            }
+        }
+        $.ajax({
+            url: '/Product/SaveProductVarient',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $("#exampleModalCenter").modal("hide");
+                loadData();
+                QAlert(response.statusCode, response.responseText);
+            },
+            error: function (error) {
+                alert("Error saving product.");
+            }
+        });
+    }
+   
+    var varientDetails = (Id) => {
+        window.location.href = "/Product/VarientDetails?Id=" + Id;
     }
 </script>

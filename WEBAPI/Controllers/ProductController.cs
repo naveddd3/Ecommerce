@@ -74,5 +74,46 @@ namespace WEBAPI.Controllers
             var res = await _productService.DeleteImageOfProduct(Id);
             return Ok(res);
         }
+
+        [HttpPost(nameof(SaveProductVarient))]
+        public async Task<IActionResult> SaveProductVarient([FromForm] ProductVarientReq productVarient)
+        {
+            var res = new Response() { ResponseText=string.Empty, StatusCode= ResponseStatus.Failed };
+            if (!productVarient.productvarientImages.Any())
+            {
+                res.ResponseText = "Please Upload Images";
+                res.StatusCode = ResponseStatus.Failed;
+                return Ok(res);
+            }
+
+            List<string> imgPath = new List<string>();
+            if (productVarient.productvarientImages!=null)
+            {
+                foreach (var images in productVarient.productvarientImages)
+                {
+                    var files = _fileUploadService.UploadImage(images, FileUploadPath.ProductVarient);
+                    res.StatusCode = files.StatusCode;
+                    imgPath.Add(files.ResponseText);
+                }
+
+            }
+            productVarient.ImageUrl = string.Join(",", imgPath);
+            var response = await _productService.SaveProductVarient(productVarient);
+            return Ok(response);
+        }
+
+        [HttpPost(nameof(GetProductVarient)+"/{Id}")]
+        public async Task<IActionResult> GetProductVarient(int Id)
+        {
+            var res = await _productService.GetProductVarient(Id);
+            return Ok(res);
+        }
+
+        [HttpPost(nameof(GetProductVarientImage)+"/{Id}")]
+        public async Task<IActionResult> GetProductVarientImage(int Id)
+        {
+            var res = await _productService.GetProductVarientImage(Id);
+            return Ok(res);
+        }
     }
 }

@@ -14,5 +14,8 @@ namespace Application.Interfaces
         Task<ProductVM> GetProductById(int LoginId,int Id);
         Task<List<ProductImage>> ShowImagesOfProduct(int ID);
         Task<Response> DeleteImageOfProduct(int Id);
+        Task<Response> SaveProductVarient(ProductVarientReq productVarientVM);
+        Task<dynamic> GetProductVarient(int Id);
+        Task<dynamic> GetProductVarientImage(int Id);
     }
 }

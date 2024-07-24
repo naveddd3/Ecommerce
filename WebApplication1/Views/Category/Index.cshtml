@@ -124,8 +124,8 @@
             url: "/Category/SaveOrUpdateCategory",
             type: "POST",
             data: formData,
-            contentType: false, // Important to prevent jQuery from setting content type
-            processData: false, // Important to prevent jQuery from processing the data
+            contentType: false, 
+            processData: false, 
             success: function (response) {
                 $("#exampleModalCenter").modal("hide");
                 loadData();
