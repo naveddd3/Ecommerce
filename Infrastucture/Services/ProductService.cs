@@ -59,7 +59,7 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-        public async Task<ProductVM> GetProductById(int LoginId ,int Id)
+        public async Task<ProductVM> GetProductById(int LoginId, int Id)
         {
             var productVM = new ProductVM();
             try
@@ -67,8 +67,8 @@ namespace Infrastucture.Services
                 await Task.Delay(1000);
                 var result = await _dapper.GetMultipleAsync<Product, ProductImage>("PROC_GetProductById", new
                 {
-                     Id,
-                     LoginId
+                    Id,
+                    LoginId
                 }, System.Data.CommandType.StoredProcedure);
                 var product = (List<Product>)result.GetType().GetProperty("Table1").GetValue(result, null);
                 productVM.product = product.FirstOrDefault();
@@ -90,7 +90,7 @@ namespace Infrastucture.Services
                 var res = await _dapper.GetAllAsync<ProductImage>("SELECT ProductId,ImageURI FROM ProductImages  WHERE ProductId = @ID", new
                 {
                     ID = ID,
-                },System.Data.CommandType.Text);
+                }, System.Data.CommandType.Text);
                 return res.ToList();
             }
             catch (Exception ex)
@@ -99,7 +99,6 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-
         public async Task<Response> DeleteImageOfProduct(int Id)
         {
             try
@@ -108,7 +107,66 @@ namespace Infrastucture.Services
                 {
                     Id
                 });
-                return response;    
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public async Task<Response> SaveProductVarient(ProductVarientReq productVarientVM)
+        {
+            try
+            {
+                if(productVarientVM.ProductId==null|| productVarientVM.ProductId==0)
+                {
+                    var res = new Response() { ResponseText = "Temporary Error !",StatusCode = ResponseStatus.Failed};
+                    return res;
+                }
+               
+                var response = await _dapper.GetAsync<Response>("Proc_SaveProductVarient", new
+                {
+                    productVarientVM.ProductId,
+                    productVarientVM.Description,
+                    productVarientVM.ImageUrl,
+                    productVarientVM.MRP,
+                    productVarientVM.Discount,
+                    VarientId=productVarientVM.VarientTypeId
+                });
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public async Task<dynamic> GetProductVarient(int Id)
+        {
+            try
+            {
+                var list = await _dapper.GetAllAsync<ProductVarientRes>("SELECT * FROM Product_Varients where ProductId = @Id", new
+                {
+                    Id
+                }, System.Data.CommandType.Text);
+                return list;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public async Task<dynamic> GetProductVarientImage(int Id)
+        {
+            try
+            {
+                var list = await _dapper.GetAllAsync<ProductVarientImages>("select * from ProductVarientImages where ProductVarientId = @Id", new
+                {
+                    Id
+                }, System.Data.CommandType.Text);
+                return list;
             }
             catch (Exception ex)
             {

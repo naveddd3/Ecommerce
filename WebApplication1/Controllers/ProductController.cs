@@ -124,5 +124,59 @@ namespace WEBAPP.Controllers
             }
             return Json(res);
         }
+
+
+        [Route("Varient")]
+        public async Task<IActionResult> Varient(int ProductId)
+        {
+            var productVarientVM = new ProductVarientVM();
+            productVarientVM.ProductId = ProductId;
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
+            if (apiRes != null)
+            {
+                productVarientVM.varients = JsonConvert.DeserializeObject<List<Varient>>(apiRes.Result);
+            }
+
+            return PartialView(productVarientVM);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveProductVarient([FromForm] string JsonData, IEnumerable<IFormFile> productvarientImages)
+        {
+            var res = new Response()
+            {
+                ResponseText="An error Has Been Occured !",
+                StatusCode = ResponseStatus.Failed
+            };
+            try
+            {
+                var request = JsonConvert.DeserializeObject<ProductVarientReq>(JsonData);
+                request.productvarientImages = productvarientImages;
+                if (!productvarientImages.Any())
+                {
+                    res.ResponseText = "Please Upload Images!";
+                    return Json(res);
+                }
+                var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveProductVarient", User.GetLoggedInUserToken(), request);
+                var response = await apiRes.Content.ReadAsStringAsync();
+                if (apiRes != null)
+                {
+                    res = JsonConvert.DeserializeObject<Response>(response);
+                }
+                return Json(res);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+          
+        }
+
+        public async Task<IActionResult> VarientDetails(int Id)
+        {
+            return View();
+        }
     }
 }

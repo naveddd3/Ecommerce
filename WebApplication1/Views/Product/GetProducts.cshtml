@@ -18,8 +18,9 @@
                         <span class="visually-hidden">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu">
-                        <button class="dropdown-item"><i class="mdi mdi-plus-circle me-2"></i>Add Varient</button>
-                        <button onclick="AddOrEditProduct(@item.ProductId)" class="dropdown-item" href="#">Edit</button>
+                        <button class="dropdown-item" onclick="addVarient(@item.ProductId)"><i class="mdi mdi-plus-circle me-2"></i>Add Varient</button>
+                        <button onclick="AddOrEditProduct(@item.ProductId)" class="dropdown-item"><i class="mdi mdi-square-edit-outline"></i> Edit</button>
+                        <button onclick="varientDetails(@item.ProductId)" class="dropdown-item">Varient Details</button>
                     </div>
                 </div>
             </td>
