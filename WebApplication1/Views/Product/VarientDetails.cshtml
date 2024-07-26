@@ -1,4 +1,6 @@
-﻿<div id="modal"></div>
+﻿@using Domain.Entities;
+@model IEnumerable<ProductVarientRes>
+<div id="modal"></div>
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -21,8 +23,8 @@
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-sm-5">
-                                <button onclick="AddOrEditProduct(0)" s class="btn btn-danger mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Add Product
+                                <button type="button" class="btn btn-danger mb-2" onclick="addVarientmore()">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Add More Varient
                                 </button>
                             </div>
                             <div class="col-sm-7">
@@ -53,13 +55,114 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        int i = 0;
+                                        foreach (var item in Model)
+                                        {
+                                            i++;
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@item.ProductName</td>
+                                                <td>@item.Description</td>
+                                                <td><button id="test" class="btn" onclick="openImages(@item.ProductId)">Show Images</button></td>
+                                                <td>@item.CategoryName</td>
+                                                <td>@item.MRP</td>
+                                                <td>@item.Discount</td>
+                                                <td>@item.SellingPrice</td>
+                                                <td>@item.VarientType</td>
+                                                <td class="table-action">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-primary">Action</button>
+                                                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <span class="visually-hidden">Toggle Dropdown</span>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <button hidden class="dropdown-item" id="addMoreVarient" onclick="addVarient(@item.ProductId,'0')"><i class="mdi mdi-plus-circle me-2"></i>Add mO Varient</button>
+                                                            <button onclick="addVarient('0',@item.VarientId)" class="dropdown-item"><i class="mdi mdi-square-edit-outline"></i> Edit</button>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12" style="text-align:center" class="danger">Record Not Found!</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
-                    </div> <!-- end card-body -->
-                </div> <!-- end card -->
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-
-    </div> <!-- end container-fluid -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    var addVarient = (ProductId,VarientId) => {
+        console.log("ProductId : " + ProductId + "||" + "VarientId : " + VarientId);
+       
+        $.post('/Varient', { ProductId: ProductId, VarientId: VarientId }).done((response) => {
+            $("#modal").html(response);
+            $("#exampleModalCenter").modal("show");
+        })
+    }
+    var addVarientmore = () => {
+        $("#addMoreVarient").click();
+    }
+
+    var AddOrEditProductVarient = (Id) => {
+
+    }
+
+
+    var saveVarient = () => {
+        debugger;
+
+        if (!valiadteInputs()) {
+            return false;
+        }
+        let obj = {
+            ProductId: $("#ProductId").val(),
+            VarientTypeId: $("#VarientTypeId").val(),
+            MRP: $("#MRP").val(),
+            Discount: $("#Discount").val(),
+            Description: $("#Description").val()
+        }
+        var formData = new FormData();
+        formData.append("JsonData", JSON.stringify(obj));
+        var imageInput = $('#ImageUrl')[0];
+        if (imageInput.files.length > 0) {
+            for (var i = 0; i < imageInput.files.length; i++) {
+                var file = imageInput.files[i];
+                formData.append('productvarientImages', file);
+            }
+        }
+        $.ajax({
+            url: '/Product/SaveProductVarient',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $("#exampleModalCenter").modal("hide");
+                loadData();
+                QAlert(response.statusCode, response.responseText);
+            },
+            error: function (error) {
+                alert("Error saving product.");
+            }
+        });
+    }
+
+    var varientDetails = (Id) => {
+        window.location.href = "/Product/VarientDetails?Id=" + Id;
+    }
+</script>

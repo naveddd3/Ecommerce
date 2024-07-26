@@ -146,7 +146,7 @@ namespace Infrastucture.Services
         {
             try
             {
-                var list = await _dapper.GetAllAsync<ProductVarientRes>("SELECT * FROM Product_Varients where ProductId = @Id", new
+                var list = await _dapper.GetAllAsync<ProductVarientRes>("SELECT mc.CategoryName,pv.* FROM Product_Varients pv inner join Master_Category mc on mc.CategoryId = pv.CategoryId where ProductId = @Id", new
                 {
                     Id
                 }, System.Data.CommandType.Text);
@@ -168,6 +168,24 @@ namespace Infrastucture.Services
                 }, System.Data.CommandType.Text);
                 return list;
             }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public async Task<ProductVarientRes> GetProductVarientById(int Id)
+        {
+            try
+            {
+                string query = "select * from Product_Varients where VarientId =  @Id";
+                var res = await _dapper.GetAsync<ProductVarientRes>(query, new
+                {
+                    Id
+                }, System.Data.CommandType.Text);
+                return res;
+            }
+
             catch (Exception ex)
             {
 

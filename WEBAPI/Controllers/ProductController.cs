@@ -115,5 +115,12 @@ namespace WEBAPI.Controllers
             var res = await _productService.GetProductVarientImage(Id);
             return Ok(res);
         }
+
+        [HttpPost(nameof(GetProductVarientById)+"/{Id}")]
+        public async Task<IActionResult> GetProductVarientById(int Id)
+        {
+            var res = await _productService.GetProductVarientById(Id);
+            return Ok(res); 
+        }
     }
 }

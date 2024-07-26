@@ -127,14 +127,22 @@ namespace WEBAPP.Controllers
 
 
         [Route("Varient")]
-        public async Task<IActionResult> Varient(int ProductId)
+        public async Task<IActionResult> Varient(int ProductId, int VarientId) 
         {
             var productVarientVM = new ProductVarientVM();
             productVarientVM.ProductId = ProductId;
-            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
+            if (ProductId>0)
+            {
+                var apiRes1 = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
+                if (apiRes1 != null)
+                {
+                    productVarientVM.varients = JsonConvert.DeserializeObject<List<Varient>>(apiRes1.Result);
+                }
+            }
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarientById/{VarientId}", null, User.GetLoggedInUserToken());
             if (apiRes != null)
             {
-                productVarientVM.varients = JsonConvert.DeserializeObject<List<Varient>>(apiRes.Result);
+                productVarientVM = JsonConvert.DeserializeObject<ProductVarientVM>(apiRes.Result);
             }
 
             return PartialView(productVarientVM);
@@ -176,7 +184,25 @@ namespace WEBAPP.Controllers
 
         public async Task<IActionResult> VarientDetails(int Id)
         {
-            return View();
+            var list = new List<ProductVarientRes>();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarient/{Id}", null, User.GetLoggedInUserToken());
+            if(apiRes != null)
+            {
+                list = JsonConvert.DeserializeObject<List<ProductVarientRes>>(apiRes.Result);
+            }
+            return View(list);
         }
+
+        public async Task<IActionResult> GetProductVarientById(int Id)
+        {
+            var varient = new ProductVarientRes();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarientById/{Id}", null, User.GetLoggedInUserToken());
+            if (apiRes != null)
+            {
+                varient = JsonConvert.DeserializeObject<ProductVarientRes>(apiRes.Result);
+            }
+            return PartialView(varient);
+        }
+
     }
 }

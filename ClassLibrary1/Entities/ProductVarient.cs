@@ -33,6 +33,7 @@ namespace Domain.Entities
     {
         public int VarientId { get; set; }
         public string  ProductName { get; set; }
+        public string  CategoryName { get; set; }
         public int CategoryId { get; set; }
         public decimal SellingPrice { get; set; }
         public string VarientType { get; set; } 

@@ -17,5 +17,7 @@ namespace Application.Interfaces
         Task<Response> SaveProductVarient(ProductVarientReq productVarientVM);
         Task<dynamic> GetProductVarient(int Id);
         Task<dynamic> GetProductVarientImage(int Id);
+        Task<ProductVarientRes> GetProductVarientById(int Id);
+
     }
 }
