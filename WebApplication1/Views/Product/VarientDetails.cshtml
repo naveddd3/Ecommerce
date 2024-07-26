@@ -79,7 +79,7 @@
                                                         </button>
                                                         <div class="dropdown-menu">
                                                             <button hidden class="dropdown-item" id="addMoreVarient" onclick="addVarient(@item.ProductId,'0')"><i class="mdi mdi-plus-circle me-2"></i>Add mO Varient</button>
-                                                            <button onclick="addVarient('0',@item.VarientId)" class="dropdown-item"><i class="mdi mdi-square-edit-outline"></i> Edit</button>
+                                                            <button onclick="addVarients('0',@item.VarientId)" class="dropdown-item"><i class="mdi mdi-square-edit-outline"></i> Edit</button>
                                                            
                                                         </div>
                                                     </div>
@@ -106,10 +106,8 @@
 </div>
 
 <script>
-    var addVarient = (ProductId,VarientId) => {
-        console.log("ProductId : " + ProductId + "||" + "VarientId : " + VarientId);
-       
-        $.post('/Varient', { ProductId: ProductId, VarientId: VarientId }).done((response) => {
+    var addVarient = (ProductId) => {
+        $.post('/Varient', { ProductId: ProductId}).done((response) => {
             $("#modal").html(response);
             $("#exampleModalCenter").modal("show");
         })
