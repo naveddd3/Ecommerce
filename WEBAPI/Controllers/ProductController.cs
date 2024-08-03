@@ -57,7 +57,7 @@ namespace WEBAPI.Controllers
         [HttpPost(nameof(GetProductById)+"/{Id}")]
         public async Task<IActionResult> GetProductById(int Id)
         {
-            var res = await _productService.GetProductById(User.GetLoggedInUserId<int>(),Id);
+            var res = await _productService.GetProductById(User.GetLoggedInUserId<int>(), Id);
             return Ok(res);
         }
 
@@ -65,7 +65,7 @@ namespace WEBAPI.Controllers
         public async Task<IActionResult> ShowImagesOfProduct(int ID)
         {
             var res = await _productService.ShowImagesOfProduct(ID);
-            return Ok(res); 
+            return Ok(res);
         }
 
         [HttpPost(nameof(DeleteImageOfProduct)+"/{Id}")]
@@ -79,13 +79,15 @@ namespace WEBAPI.Controllers
         public async Task<IActionResult> SaveProductVarient([FromForm] ProductVarientReq productVarient)
         {
             var res = new Response() { ResponseText=string.Empty, StatusCode= ResponseStatus.Failed };
-            if (!productVarient.productvarientImages.Any())
+            if (productVarient.VarientId==0)
             {
-                res.ResponseText = "Please Upload Images";
-                res.StatusCode = ResponseStatus.Failed;
-                return Ok(res);
+                if (!productVarient.productvarientImages.Any())
+                {
+                    res.ResponseText = "Please Upload Images";
+                    res.StatusCode = ResponseStatus.Failed;
+                    return Ok(res);
+                }
             }
-
             List<string> imgPath = new List<string>();
             if (productVarient.productvarientImages!=null)
             {
@@ -120,7 +122,7 @@ namespace WEBAPI.Controllers
         public async Task<IActionResult> GetProductVarientById(int Id)
         {
             var res = await _productService.GetProductVarientById(Id);
-            return Ok(res); 
+            return Ok(res);
         }
     }
 }

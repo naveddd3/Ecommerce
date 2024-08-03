@@ -132,7 +132,10 @@ namespace Infrastucture.Services
                     productVarientVM.ImageUrl,
                     productVarientVM.MRP,
                     productVarientVM.Discount,
-                    VarientId=productVarientVM.VarientTypeId
+                    productVarientVM.VarientId,
+                    productVarientVM.VarientTypeId,
+                    productVarientVM.Quantity,
+                    productVarientVM.TotalQuantity
                 });
                 return response;
             }

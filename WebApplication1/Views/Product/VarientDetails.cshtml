@@ -26,14 +26,14 @@
                                 <button type="button" class="btn btn-danger mb-2" onclick="addVarientmore()">
                                     <i class="mdi mdi-plus-circle me-2"></i> Add More Varient
                                 </button>
+                              
                             </div>
+                           
                             <div class="col-sm-7">
                                 <div class="text-sm-end">
-                                    <button type="button" class="btn btn-success mb-2 me-1">
-                                        <i class="mdi mdi-cog-outline"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                                    <button type="button" class="btn btn-light mb-2">Export</button>
+                                    <a href="/Products" type="button" class="btn btn-success mb-2 me-1">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Back To Products
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -78,8 +78,8 @@
                                                             <span class="visually-hidden">Toggle Dropdown</span>
                                                         </button>
                                                         <div class="dropdown-menu">
-                                                            <button hidden class="dropdown-item" id="addMoreVarient" onclick="addVarient(@item.ProductId,'0')"><i class="mdi mdi-plus-circle me-2"></i>Add mO Varient</button>
-                                                            <button onclick="addVarients('0',@item.VarientId)" class="dropdown-item"><i class="mdi mdi-square-edit-outline"></i> Edit</button>
+                                                            <button hidden class="dropdown-item" id="addMoreVarient" onclick="addVarient(@item.ProductId)"><i class="mdi mdi-plus-circle me-2"></i>Add mO Varient</button>
+                                                            <button onclick="AddOrEditProductVarient(@item.VarientId)" class="dropdown-item"><i class="mdi mdi-square-edit-outline"></i> Edit</button>
                                                            
                                                         </div>
                                                     </div>
@@ -105,6 +105,7 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     var addVarient = (ProductId) => {
         $.post('/Varient', { ProductId: ProductId}).done((response) => {
@@ -117,20 +118,27 @@
     }
 
     var AddOrEditProductVarient = (Id) => {
-
+        debugger;
+        $.post('/Product/GetProductVarientById', { Id: Id }).done((response) => {
+            console.log(response)
+            debugger;
+            $("#modal").html(response);
+            $("#exampleModalCenter").modal("show");
+        })
     }
 
 
     var saveVarient = () => {
-        debugger;
-
         if (!valiadteInputs()) {
             return false;
         }
         let obj = {
+            VarientId: $("#VarientId").val(),
             ProductId: $("#ProductId").val(),
             VarientTypeId: $("#VarientTypeId").val(),
             MRP: $("#MRP").val(),
+            Quantity: $("#Quantity").val(),
+            TotalQuantity: $("#TotalQuantity").val(),
             Discount: $("#Discount").val(),
             Description: $("#Description").val()
         }

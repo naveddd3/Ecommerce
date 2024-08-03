@@ -20,6 +20,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="~/siteadmin/imgs/theme/favicon.svg" />
     <!-- Template CSS -->
     <link rel="stylesheet" href="~/siteadmin/css/plugins/slider-range.css" />
+    <link href="~/css/loader.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/siteadmin/css/main5103.css?v=6.0" />
 </head>
 
@@ -295,7 +296,10 @@
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                         <ul>
                                             <li>
-                                                <a href='/Account/UserLogin'><i class="fi fi-rs-user mr-10"></i>My Account</a>
+                                                <a href='/Login'><i class="fi fi-rs-user mr-10"></i>My Account</a>
+                                            </li>
+                                            <li>
+                                                <a href='/RegisterShop'><i class="fi fi-rs-user mr-10"></i>Register Your Shop</a>
                                             </li>
                                             <li>
                                                 <a href='page-account.html'><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
@@ -795,7 +799,11 @@
             </div>
         </div>
     </div>
-
+    <div id="alert-container" style="
+    position: fixed;
+    top: 65px;
+    right: 4px;
+    z-index: 1000"></div>
     <div>
         <main class="main">
             @RenderBody()
@@ -804,7 +812,7 @@
     <footer class="main">
         <section class="newsletter mb-15">
             <div class="container">
-                <div class="row">
+                <div class="row" id="footer-banner">
                     <div class="col-lg-12">
                         <div class="position-relative newsletter-inner">
                             <div class="newsletter-content">
@@ -1006,6 +1014,9 @@
             </div>
         </div>
     </footer>
+
+
+    <div id="loader" class="loader"></div>
     <!-- Preloader Start -->
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
@@ -1023,15 +1034,18 @@
     <script src="~/siteadmin/js/vendor/bootstrap.bundle.min.js"></script>
     <script src="~/siteadmin/js/plugins/slick.js"></script>
     <script src="~/siteadmin/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="~/js/alert.js"></script>
     <script src="~/siteadmin/js/plugins/wow.js"></script>
     <script src="~/siteadmin/js/plugins/slider-range.js"></script>
     <script src="~/siteadmin/js/plugins/perfect-scrollbar.js"></script>
     <script src="~/siteadmin/js/plugins/magnific-popup.js"></script>
+    <script src="~/js/loader.js"></script>
     <script src="~/siteadmin/js/plugins/select2.min.js"></script>
     <script src="~/siteadmin/js/plugins/waypoints.js"></script>
     <script src="~/siteadmin/js/plugins/counterup.js"></script>
     <script src="~/siteadmin/js/plugins/jquery.countdown.min.js"></script>
     <script src="~/siteadmin/js/plugins/images-loaded.js"></script>
+
     <script src="~/siteadmin/js/plugins/isotope.js"></script>
     <script src="~/siteadmin/js/plugins/scrollup.js"></script>
     <script src="~/siteadmin/js/plugins/jquery.vticker-min.js"></script>

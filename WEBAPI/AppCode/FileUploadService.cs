@@ -60,5 +60,6 @@ namespace Infrastucture.Services
         public static readonly string ProductImage = "ProductImages/";
         public static readonly string CategoryImage = "CategoryImages/";
         public static readonly string ProductVarient = "ProductVarientImages/";
+        public static readonly string BusinessLicense = "BusinessLicense/";
     }
 }

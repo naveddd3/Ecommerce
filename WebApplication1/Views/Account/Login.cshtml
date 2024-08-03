@@ -30,10 +30,10 @@
                 <div class="my-auto">
                     <h4 class="mt-0">Sign In</h4>
                     <p class="text-muted mb-4">Enter your email address and password to access account.</p>
-                    <form asp-action="Login" method="post">
+                    <form asp-action="DoLogin" method="post">
                         <div class="mb-3">
-                            <label asp-for="Email" class="form-label">Email address</label>
-                            <input class="form-control" type="email" asp-for="Email" required="" placeholder="Enter your email">
+                            <label asp-for="EmailOrMobile" class="form-label">Email address</label>
+                            <input class="form-control" type="email" asp-for="EmailOrMobile" required="" placeholder="Enter your email Or Registered Mobile No.">
                         </div>
                         <div class="mb-3">
                             <a href="pages-recoverpw-2.html" class="text-muted float-end"><small>Forgot your password?</small></a>

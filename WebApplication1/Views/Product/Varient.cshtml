@@ -5,8 +5,8 @@
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #313a46">              
-                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">ADD VARIENT</h5>
+            <div class="modal-header" style="background-color: #313a46">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">ADD VARIENT</h5>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -18,15 +18,25 @@
                         </select>
                     </div>
                     <div class="col-sm-6">
-                        <label asp-for="MRP">MRP:</label>
-                        <input class="form-control" type="number" placeholder="Enter MRP" asp-for="MRP" required>
+                        <label asp-for="Quantity">Quantity:</label>
+                        <input class="form-control" type="number" placeholder="Enter Quantiy" asp-for="Quantity" required>
                     </div>
-                </div>
 
+                </div>
                 <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="TotalQuantity">TotalQuantity:</label>
+                        <input class="form-control" type="number" placeholder="Enter Total Quantity" asp-for="TotalQuantity" required>
+                    </div>
                     <div class="col-sm-6">
                         <label asp-for="Discount">Discount:</label>
                         <input class="form-control" type="number" placeholder="Enter Discount" asp-for="Discount" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label asp-for="ImageUrl">Choose Images</label>
+                        <input asp-for="ImageUrl" type="file" class="form-control" name="images[]" multiple id="ImageUrl" required />
                     </div>
                     <div class="col-sm-6">
                         <label asp-for="Description">Description:</label>
@@ -35,19 +45,12 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-6">
-                        <label asp-for="ImageUrl">Choose Images</label>
-                        <input asp-for="ImageUrl" type="file" class="form-control" name="images[]" multiple id="ImageUrl" required />
-                    </div>
-                </div>
-
-                <div class="row">
                     <div class="col-sm-12">
                         <div class="img-thumbs img-thumbs-hidden" id="img-preview"></div>
                     </div>
                 </div>
-              
-                
+
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>

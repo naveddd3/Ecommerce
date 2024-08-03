@@ -1,0 +1,60 @@
+﻿@{
+    Layout = "_LayoutSiteAdmin";
+}
+
+<style>
+
+    #loginasShop:hover {
+        background-color: #3BB77E;
+    }
+
+    #registerasShop :hover {
+        background-color: #3e5379;
+    }
+</style>
+<div id="modal"></div>
+<section class="newsletter mb-15">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="position-relative newsletter-inner">
+                    <div class="newsletter-content">
+                        <h2 class="mb-20">
+                            Partner with Nest
+                        </h2>
+                        <p class="mb-45">
+                            at 0% commission for the 1st month!<br>
+                            And get ads worth INR 1500. Valid for new Shop partners in select cities.
+                        </p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button type="button" onclick="registerShop()" class="btn btn-primary btn-block" style="width : 20rem">Register Your Shop</button>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" id="loginasShop" class="btn btn-secondary btn-block" style=" width : 20rem">Login As Existing Shop</button>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="../siteadmin/imgs/banner/banner-9.png" alt="newsletter" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#footer-banner").hide();
+        $("#loginasShop").click(function () {
+            window.location.href = "/Login";
+        })
+    })
+    var registerShop = () => {
+        $.post("/Account/RegisterYourShop").done((response) => {
+            $("#modal").html(response);
+            $("#exampleModalCenter").modal('show');
+        })
+    }
+
+</script>
