@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 
 namespace Domain.AppCodeIdentity
@@ -10,5 +11,8 @@ namespace Domain.AppCodeIdentity
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
+
+
+      
     }
 }

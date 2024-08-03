@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,12 +16,16 @@ namespace Infrastucture.Services
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly RoleManager<ApplicationRoles> roleManager;
         private readonly IConfiguration configuration;
-        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRoles> roleManager, IConfiguration configuration)
+        private readonly IDapperRepository _dapper;
+        private readonly IUserManager _userManager1;
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRoles> roleManager, IConfiguration configuration, IDapperRepository dapper, IUserManager userManager1)
         {
             this.userManager=userManager;
             this.signInManager=signInManager;
             this.roleManager=roleManager;
             this.configuration=configuration;
+            _dapper=dapper;
+            _userManager1=userManager1;
         }
 
         public async Task<Domain.Entities.Response> SignUp(SignUpReq signUpReq)
@@ -62,6 +67,11 @@ namespace Infrastucture.Services
                         res.StatusCode = ResponseStatus.Success;
                     }
                 }
+                else
+                {
+                    res.ResponseText = result.Errors.FirstOrDefault().Description;
+                    res.StatusCode = ResponseStatus.Failed;
+                }
                 return res;
             }
             catch (Exception ex)
@@ -71,13 +81,13 @@ namespace Infrastucture.Services
             }
 
         }
-
         public async Task<Domain.Entities.Response<LoginResponse>> Login(LoginReq loginReq)
         {
             var response = new Domain.Entities.Response<LoginResponse>();
             try
             {
-                var userexists = await userManager.FindByEmailAsync(loginReq.Email);
+
+                var userexists = await _userManager1.FindUserAsync(loginReq.EmailOrMobile);
                 if (userexists != null)
                 {
                     var result = await userManager.CheckPasswordAsync(userexists, loginReq.Password);
@@ -124,6 +134,110 @@ namespace Infrastucture.Services
                 response.ResponseText = "User Not Exists Please Sign Up !";
                 response.StatusCode = ResponseStatus.Failed;
                 return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<Response> SaveShopOwner(ShopReq shopReq)
+        {
+            var res = new Response()
+            {
+                ResponseText = "An Error Has Occured",
+                StatusCode = ResponseStatus.Failed
+            };
+            try
+            {
+
+                res = await _dapper.GetAsync<Response>("Proc_CheckShopIsExistOrNot", new
+                {
+                    shopReq.OwnerEmail, 
+                    shopReq.OwnerContactNumber,
+                    shopReq.BusinessRegistrationNumber,
+                    shopReq.GSTNumber,
+                    shopReq.AccountNumber,
+                    shopReq.AdharNo,
+                    shopReq.Username
+                });
+                if(res.StatusCode == ResponseStatus.Success)
+                {
+                    ApplicationUser user = new ApplicationUser
+                    {
+                        UserName = shopReq.Username,
+                        Email = shopReq.OwnerEmail,
+                        FirstName = shopReq.OwnerName,
+                        LastName = shopReq.OwnerName,
+                        EmailConfirmed = true,
+                        MobileNo = shopReq.OwnerContactNumber,
+                    };
+                    var result = await userManager.CreateAsync(user, shopReq.Password);
+                    if (result.Succeeded)
+                    {
+                        if (!await roleManager.RoleExistsAsync(shopReq.Role))
+                        {
+                            await roleManager.CreateAsync(new ApplicationRoles(shopReq.Role));
+                        }
+                        if (await roleManager.RoleExistsAsync(shopReq.Role))
+                        {
+                            await userManager.AddToRoleAsync(user, shopReq.Role);
+                            var userexists = await userManager.FindByEmailAsync(shopReq.OwnerEmail);
+                            res = await SaveShop(shopReq, userexists.Id);
+                            res.ResponseText = "Shop Register Succesfull";
+                            res.StatusCode = ResponseStatus.Success;
+                            return res;
+                        }
+                    }
+                }
+                return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        private async Task<Response> SaveShop(ShopReq shop, int UserId)
+        {
+            var res = new Response()
+            {
+                ResponseText = "Error During Save Shop",
+                StatusCode = ResponseStatus.Failed
+            };
+            try
+            {
+                
+                res = await _dapper.GetAsync<Response>("Proc_SaveShop", new
+                {
+                    UserId,
+                    shop.ShopName,
+                    shop.ShopDescription,
+                    shop.OwnerName,
+                    shop.OwnerContactNumber,
+                    shop.OwnerEmail,
+                    shop.OwnerAddress,
+                    shop.BusinessRegistrationNumber,
+                    shop.GSTNumber,
+                    shop.BusinessLicensePath,
+                    shop.StreetAddress,
+                    shop.City,
+                    shop.State,
+                    shop.PostalCode,
+                    shop.Country,
+                    shop.BankName,
+                    shop.AccountNumber,
+                    shop.AccountHolder,
+                    shop.Branch,
+                    shop.IFSCCode,
+                    shop.Username,
+                    shop.Password,
+                    shop.AdharNo
+
+                });
+                return res;
+
             }
             catch (Exception ex)
             {

@@ -33,8 +33,8 @@ namespace WEBAPP.Controllers
                 var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProduct", null, User.GetLoggedInUserToken());
                 if (apiRes != null)
                 {
-                  list = JsonConvert.DeserializeObject<ApiResponseProduct>(apiRes.Result);
-                    
+                    list = JsonConvert.DeserializeObject<ApiResponseProduct>(apiRes.Result);
+
                 }
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace WEBAPP.Controllers
                         return Json(res);
                     }
                 }
-                var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveProduct",  User.GetLoggedInUserToken(), request);
+                var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveProduct", User.GetLoggedInUserToken(), request);
                 var response = await apiRes.Content.ReadAsStringAsync();
                 if (apiRes != null)
                 {
@@ -127,22 +127,15 @@ namespace WEBAPP.Controllers
 
 
         [Route("Varient")]
-        public async Task<IActionResult> Varient(int ProductId, int VarientId) 
+        public async Task<IActionResult> Varient(int ProductId)
         {
             var productVarientVM = new ProductVarientVM();
             productVarientVM.ProductId = ProductId;
-            if (ProductId>0)
+
+            var apiRes1 = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
+            if (apiRes1 != null)
             {
-                var apiRes1 = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
-                if (apiRes1 != null)
-                {
-                    productVarientVM.varients = JsonConvert.DeserializeObject<List<Varient>>(apiRes1.Result);
-                }
-            }
-            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarientById/{VarientId}", null, User.GetLoggedInUserToken());
-            if (apiRes != null)
-            {
-                productVarientVM = JsonConvert.DeserializeObject<ProductVarientVM>(apiRes.Result);
+                productVarientVM.varients = JsonConvert.DeserializeObject<List<Varient>>(apiRes1.Result);
             }
 
             return PartialView(productVarientVM);
@@ -159,12 +152,16 @@ namespace WEBAPP.Controllers
             };
             try
             {
+                
                 var request = JsonConvert.DeserializeObject<ProductVarientReq>(JsonData);
-                request.productvarientImages = productvarientImages;
-                if (!productvarientImages.Any())
+                if (request.VarientId==0 || request.VarientId ==null)
                 {
-                    res.ResponseText = "Please Upload Images!";
-                    return Json(res);
+                    if (!productvarientImages.Any())
+                    {
+                        res.ResponseText = "Please Upload Images!";
+                        return Json(res);
+                    }
+                    request.productvarientImages = productvarientImages;
                 }
                 var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveProductVarient", User.GetLoggedInUserToken(), request);
                 var response = await apiRes.Content.ReadAsStringAsync();
@@ -179,14 +176,14 @@ namespace WEBAPP.Controllers
 
                 throw;
             }
-          
+
         }
 
         public async Task<IActionResult> VarientDetails(int Id)
         {
             var list = new List<ProductVarientRes>();
             var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarient/{Id}", null, User.GetLoggedInUserToken());
-            if(apiRes != null)
+            if (apiRes != null)
             {
                 list = JsonConvert.DeserializeObject<List<ProductVarientRes>>(apiRes.Result);
             }
@@ -195,12 +192,21 @@ namespace WEBAPP.Controllers
 
         public async Task<IActionResult> GetProductVarientById(int Id)
         {
-            var varient = new ProductVarientRes();
+            var varient = new ProductVarientVM();
+
+           
             var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarientById/{Id}", null, User.GetLoggedInUserToken());
             if (apiRes != null)
             {
-                varient = JsonConvert.DeserializeObject<ProductVarientRes>(apiRes.Result);
+                varient = JsonConvert.DeserializeObject<ProductVarientVM>(apiRes.Result);
             }
+            var apiRes1 = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
+            if (apiRes1 != null)
+            {
+                varient.varients = JsonConvert.DeserializeObject<List<Varient>>(apiRes1.Result);
+            }
+
+
             return PartialView(varient);
         }
 

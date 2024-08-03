@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Net;
 using WEBAPP.Models.Helper;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace WEBAPP.Controllers
 {
@@ -19,13 +20,15 @@ namespace WEBAPP.Controllers
         {
             _BaseUrl = appSetting.WebApiBaseUrl;
         }
+
+        [Route("AdminLogin")]
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginReq loginReq)
+        public async Task<IActionResult> DoLogin(LoginReq loginReq)
         {
             var res = new Response()
             {
@@ -34,7 +37,7 @@ namespace WEBAPP.Controllers
             };
             try
             {
-               if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Account/Login", JsonConvert.SerializeObject(loginReq), null);
                     if (apiRes != null)
@@ -94,9 +97,72 @@ namespace WEBAPP.Controllers
         }
 
         [HttpGet]
-        public  IActionResult UserLogin()
+        public IActionResult UserLogin()
         {
             return View();
         }
+
+        [Route("RegisterShop")]
+        public IActionResult RegisterShop()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult RegisterYourShop()
+        {
+            return PartialView();
+        }
+
+        public async Task<IActionResult> SaveShop([FromForm] string Jsondata, [FromForm] IEnumerable<IFormFile> BusinessLicense)
+        {
+            var res = new Response()
+            {
+                ResponseText ="Something Went Wrong !",
+                StatusCode = ResponseStatus.Failed,
+            };
+            var request = JsonConvert.DeserializeObject<ShopReq>(Jsondata);
+            request.BusinessLicense = BusinessLicense;
+            var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Account/SaveShop", User.GetLoggedInUserToken(), request);
+            var response = await apiRes.Content.ReadAsStringAsync();
+            if (apiRes != null)
+            {
+                res = JsonConvert.DeserializeObject<Response>(response);
+            }
+            return Json(res);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SendOTP(string email)
+        {
+            var res = new Response() { };
+            var ve = new VerifyEmail();
+            ve.Email = email;
+            ve.OTP = 0;
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Account/VerifyEmail", JsonConvert.SerializeObject(ve), User.GetLoggedInUserRole());
+            if(apiRes != null)
+            {
+                res = JsonConvert.DeserializeObject<Response>(apiRes.Result);
+            }
+            return Json(res);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyEmail(int OTP , string email)
+        {
+            var res = new Response() { };
+            var ve = new VerifyEmail();
+            ve.Email = email;
+            ve.OTP = OTP;
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Account/VerifyEmail", JsonConvert.SerializeObject(ve), User.GetLoggedInUserRole());
+            if (apiRes != null)
+            {
+                res = JsonConvert.DeserializeObject<Response>(apiRes.Result);
+            }
+            return Json(res);
+        }
+
+
     }
 }

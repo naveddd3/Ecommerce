@@ -1,0 +1,349 @@
+﻿@{
+    Layout = null;
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">   
+<style>
+    .form-group input {
+        height: 49px !important;
+    }
+
+    #sendOTP {
+        display: none;
+    }
+
+    #enterotp, #spinner, #otpInvalid, #EmailVerified {
+        display: none;
+    }
+</style>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #3BB77E">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">Register Your Shop</h5>
+            </div>
+            <div class="modal-body">
+
+                <div id="shopRegistrationForm">
+                    <div class="step step-1">
+                        <h5>Shop Information</h5>
+                        <div class="row mt-4">
+                            <div class="form-group  col-sm-6">
+                                <label for="shopName">Shop Name</label>
+                                <input type="text" class="form-control" placeholder="Enter Shop Name" id="shopName" required>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="shopCategory">Shop Category</label>
+                                <select class="form-control" id="shopCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Groceries">Groceries</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label for="shopDescription">Shop Description</label>
+                            <textarea class="form-control" id="shopDescription" required placeholder="Enter Shop Description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="step step-2">
+                        <h5>Owner Information</h5>
+                        <div class="row mt-2">
+                            <div class="form-group col-sm-6">
+                                <label for="ownerName">Owner's Full Name</label>
+                                <input type="text" class="form-control" id="ownerName" required placeholder="Owner Name">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="ownerContact">Owner's Contact Number</label>
+                                <input type="number" class="form-control" id="ownerContact" required placeholder="Mobile No.">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="form-group col-sm-6">
+
+                                <label for="ownerEmail">Owner's Email Address</label>
+                                <div>
+                                    <span class="text-success" id="EmailVerified"></span>
+                                </div>
+                                <div class="input-group">
+
+                                    <input type="text" class="form-control" id="ownerEmail" required placeholder="Email Address">
+                                    <button type="button" class="btn btn-primary btn-sm" style="width: 3rem; height: 3.03rem;" title="Send OTP" id="sendOTP" onclick="sendOTP()">
+                                        <i class="fa-solid fa-envelope" style="font-size: 25px;margin-left: -7px;" id="mailicon"></i>
+                                        <i class="fa fa-spinner fa-spin" id="spinner" style="font-size: x-large;margin-left: -0.4rem;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="ownerAddress">Owner's Address</label>
+                                <textarea type="text" class="form-control" id="ownerAddress" required placeholder="Owner Address"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12" id="enterotp">
+                            <label for="otp">Enter OTP</label>
+                            <span class="text-danger" id="otpInvalid" style="float: right;"></span>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="otp" required placeholder="Enter OTP To Verify Your Email"></input>
+                                
+                                <button type="button" class="btn btn-primary btn-sm" style="width: 10rem; height: 3.03rem;" title="Send OTP" id="verifyEmail" onclick="verifyEmail()">
+                                     Verify Email
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label for="ownerAdhar">Owner's Adhar No</label>
+                            <input type="text" class="form-control" id="ownerAdhar" required placeholder="Email Adhar No">
+                        </div>
+                    </div>
+
+                    <div class="step step-3">
+                        <h5>Business Information</h5>
+                        <div class="form-group">
+                            <label for="businessRegistration">Business Registration Number</label>
+                            <input type="text" class="form-control" id="businessRegistration" required placeholder="Enter Business Registration Number">
+                        </div>
+                        <div class="form-group">
+                            <label for="tin">Tax Identification Number (TIN)</label>
+                            <input type="text" class="form-control" id="tin" required placeholder="Enter GST Number If Available (OPTIONAL)">
+                        </div>
+                        <div class="form-group">
+                            <label for="businessLicense">Business License Document</label>
+                            <input type="file" class="form-control-file" id="businessLicense" required>
+                        </div>
+                    </div>
+
+                    <div class="step step-4">
+                        <h5>Banking Information</h5>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="bankName">Bank Name</label>
+                                <input type="text" class="form-control" id="bankName" required placeholder="Enter Bank Name">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="accountNumber">Account Number</label>
+                                <input type="number" class="form-control" id="accountNumber" required placeholder="Enter Account Number">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="accountHolder">Account Holder's Name</label>
+                                <input type="text" class="form-control" id="accountHolder" required placeholder="Enter Account Holders Name">
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="bankBranch">Bank Branch</label>
+                                <input type="text" class="form-control" id="bankBranch" required placeholder="Enter Branch Name">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ifscCode">IFSC/SWIFT Code</label>
+                            <input type="text" class="form-control" id="ifscCode" required placeholder="Enter IFSC Code">
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="step step-5">
+                        <h5>Shop Address</h5>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="shopStreet">Street Address</label>
+                                <input type="text" class="form-control" id="shopStreet" required placeholder="Enter Street Address">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="shopCity">City</label>
+                                <input type="text" class="form-control" id="shopCity" required placeholder="Enter City">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="shopState">State/Province</label>
+                                <input type="text" class="form-control" id="shopState" required placeholder="Enter State">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="shopPostal">Postal/ZIP Code</label>
+                                <input type="number" class="form-control" id="shopPostal" required placeholder="ZIP Code">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="shopCountry">Country</label>
+                            <input type="text" class="form-control" id="shopCountry" required placeholder="Enter Country">
+                        </div>
+                    </div>
+
+                    <div class="step step-6">
+                        <h5>Login Credentials</h5>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                <button type="submit" class="btn btn-success" id="submitBtn" onclick="saveShop()" style="display: none;">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    jQuery(document).ready(function () {
+        jQuery("#ownerEmail").on("change", function () {
+            jQuery("#sendOTP").show();
+        });
+
+    })
+    let currentStep = 0;
+    showStep(currentStep);
+    function showStep(n) {
+        debugger;
+        const steps = document.querySelectorAll('.step');
+        steps.forEach((step, index) => {
+            step.style.display = index === n ? 'block' : 'none';
+        });
+
+        if (n === 0) {
+            document.getElementById('prevBtn').style.display = 'none';
+        } else {
+            document.getElementById('prevBtn').style.display = 'inline';
+        }
+        if (n === steps.length - 1) {
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('submitBtn').style.display = 'inline';
+        } else {
+            document.getElementById('nextBtn').style.display = 'inline';
+            document.getElementById('submitBtn').style.display = 'none';
+        }
+    }
+    function nextPrev(n) {
+        debugger;
+        const steps = document.querySelectorAll('.step');
+        if (n === 1 && !validateForm()) return false;
+        steps[currentStep].style.display = 'none';
+        currentStep = currentStep + n;
+        if (currentStep >= steps.length) {
+            //document.getElementById('shopRegistrationForm').submit();
+            return false;
+        }
+        showStep(currentStep);
+    }
+    function validateForm() {
+        const currentStepElements = document.querySelectorAll('.step')[currentStep];
+        const inputs = currentStepElements.querySelectorAll('input, textarea, select');
+        let valid = true;
+
+        inputs.forEach(input => {
+            if (input.hasAttribute('required') && !input.value) {
+                input.classList.add('is-invalid');
+                valid = false;
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return valid;
+    }
+
+    var saveShop = () => {
+        let obj = {
+            ShopName: $('#shopName').val(),
+            ShopDescription: $('#shopDescription').val(),
+            OwnerName: $('#ownerName').val(),
+            OwnerContactNumber: $('#ownerContact').val(),
+            OwnerEmail: $('#ownerEmail').val(),
+            OwnerAddress: $('#ownerAddress').val(),
+            AdharNo: $('#ownerAdhar').val(),
+            BusinessRegistrationNumber: $('#businessRegistration').val(),
+            GSTNumber: $('#tin').val(),
+            BankName: $('#bankName').val(),
+            AccountNumber: $('#accountNumber').val(),
+            AccountHolder: $('#accountHolder').val(),
+            Branch: $('#bankBranch').val(),
+            IFSCCode: $('#ifscCode').val(),
+            StreetAddress: $('#shopStreet').val(),
+            City: $('#shopCity').val(),
+            State: $('#shopState').val(),
+            PostalCode: $('#shopPostal').val(),
+            Country: $('#shopCountry').val(),
+            Username: $('#username').val(),
+            Password: $('#password').val()
+        }
+
+        var formData = new FormData();
+        formData.append('Jsondata', JSON.stringify(obj));
+        var imageInput = $('#businessLicense')[0];
+        if (imageInput.files.length > 0) {
+            for (var i = 0; i < imageInput.files.length; i++) {
+                var file = imageInput.files[i];
+                formData.append('BusinessLicense', file);
+            }
+        }
+        $.ajax({
+            url: '/Account/SaveShop',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $("#exampleModalCenter").modal("hide");
+                QAlert(response.statusCode, response.responseText);
+            },
+            error: function (error) {
+                alert("Error saving product.");
+            }
+        });
+    }
+
+    var sendOTP = () => {
+        $("#mailicon").hide();
+        $("#spinner").show();
+        var email = $("#ownerEmail").val();
+        $.post('/Account/SendOTP', { email: email }).done((response) => {
+            QAlert(response.statusCode, response.responseText);
+            if (response.statusCode == 1) {
+                $("#mailicon").show();
+                $("#spinner").hide();
+                $("#enterotp").show();
+                return;
+            }
+
+        })
+
+    }
+
+    var verifyEmail = () => {
+        var OTP = $("#otp").val();
+        var email = $("#ownerEmail").val();
+        $.post("/Account/VerifyEmail", { OTP:OTP,email:email }).done((response) => {
+            QAlert(response.statusCode, response.responseText);
+            if (response.statusCode == 1) {
+                $("#enterotp").hide();
+                $("#EmailVerified").text(response.responseText).show();
+                $("#ownerEmail").addClass('is-valid');
+                return;
+            }
+            $("#otp").addClass('is-invalid')
+            $("#otpInvalid").text(response.responseText).show();
+
+        })
+    }
+
+
+</script>

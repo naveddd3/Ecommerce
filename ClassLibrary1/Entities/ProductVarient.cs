@@ -16,17 +16,21 @@ namespace Domain.Entities
         public decimal Discount { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
+        public int? VarientId { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? TotalQuantity { get; set; }
 
     }
 
     public class ProductVarientVM : ProductVarient
     {
         public IEnumerable<Varient> varients{ get; set; }
+        
     }
 
     public class ProductVarientReq : ProductVarient
     {
-        public IEnumerable<IFormFile>? productvarientImages { get; set; }
+        public IEnumerable<IFormFile>? productvarientImages { get; set; }=null;
     }
 
     public class ProductVarientRes : ProductVarient
