@@ -85,7 +85,7 @@
                             <label for="otp">Enter OTP</label>
                             <span class="text-danger" id="otpInvalid" style="float: right;"></span>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="otp" required placeholder="Enter OTP To Verify Your Email"></input>
+                                <input type="number" class="form-control" id="otp"  placeholder="Enter OTP To Verify Your Email"></input>
                                 
                                 <button type="button" class="btn btn-primary btn-sm" style="width: 10rem; height: 3.03rem;" title="Send OTP" id="verifyEmail" onclick="verifyEmail()">
                                      Verify Email
@@ -211,6 +211,7 @@
 
     })
     let currentStep = 0;
+    let IsEmailVerified = 0;
     showStep(currentStep);
     function showStep(n) {
         debugger;
@@ -236,10 +237,17 @@
         debugger;
         const steps = document.querySelectorAll('.step');
         if (n === 1 && !validateForm()) return false;
+        if (currentStep == 1) {
+            if ($("#otp").val() == '' || $("#otp").val() == 0) {
+                if (IsEmailVerified == 0) {
+                    $("#EmailVerified").removeClass().addClass("is-invalid").css("color", "red").text("Please Verify Your Email First....").show();
+                    return false;
+                }
+            }
+        }
         steps[currentStep].style.display = 'none';
         currentStep = currentStep + n;
         if (currentStep >= steps.length) {
-            //document.getElementById('shopRegistrationForm').submit();
             return false;
         }
         showStep(currentStep);
@@ -334,6 +342,7 @@
         $.post("/Account/VerifyEmail", { OTP:OTP,email:email }).done((response) => {
             QAlert(response.statusCode, response.responseText);
             if (response.statusCode == 1) {
+                IsEmailVerified = response.statusCode;
                 $("#enterotp").hide();
                 $("#EmailVerified").text(response.responseText).show();
                 $("#ownerEmail").addClass('is-valid');

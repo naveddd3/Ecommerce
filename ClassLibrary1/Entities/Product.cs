@@ -15,6 +15,7 @@ namespace Domain.Entities
         public decimal Discount { get; set; }
         public decimal SellingPrice { get; set; }
         public int? ProductImageId { get; set; }
+        public int? VarientCount { get; set; }
     }
     public class ProductReq : Product
     {

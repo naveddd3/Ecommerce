@@ -20,6 +20,7 @@ namespace WEBAPP.Controllers
             _fileUploadService = fileUpload;
         }
 
+        #region ForAdmin
         [Route("Products")]
         public IActionResult Index()
         {
@@ -210,5 +211,8 @@ namespace WEBAPP.Controllers
             return PartialView(varient);
         }
 
+        #endregion
+
+       
     }
 }

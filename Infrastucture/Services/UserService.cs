@@ -28,7 +28,7 @@ namespace Infrastucture.Services
             _userManager1=userManager1;
         }
 
-        public async Task<Domain.Entities.Response> SignUp(SignUpReq signUpReq)
+        public async Task<Response> SignUp(SignUpReq signUpReq)
         {
             var res = new Domain.Entities.Response()
             {
@@ -81,7 +81,7 @@ namespace Infrastucture.Services
             }
 
         }
-        public async Task<Domain.Entities.Response<LoginResponse>> Login(LoginReq loginReq)
+        public async Task<Response<LoginResponse>> Login(LoginReq loginReq)
         {
             var response = new Domain.Entities.Response<LoginResponse>();
             try
@@ -141,7 +141,6 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-
         public async Task<Response> SaveShopOwner(ShopReq shopReq)
         {
             var res = new Response()

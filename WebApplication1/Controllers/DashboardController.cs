@@ -28,6 +28,13 @@ namespace WEBAPP.Controllers
             return View();
         }
 
+        [Route("Vendor")]
+        [Authorize(Roles = "Vendor")]
+        public IActionResult Vendor()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

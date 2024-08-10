@@ -35,3 +35,8 @@
     }
     return isValid;
 }
+
+
+var onCategory = (categoryId) => {
+    $.post("/")
+}

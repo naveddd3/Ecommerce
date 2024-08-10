@@ -96,6 +96,7 @@ namespace WEBAPP.Controllers
             return LocalRedirect(returnUrl);
         }
 
+        [Route("Login")]
         [HttpGet]
         public IActionResult UserLogin()
         {

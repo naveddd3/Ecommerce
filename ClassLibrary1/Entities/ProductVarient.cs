@@ -50,4 +50,10 @@ namespace Domain.Entities
         public int ProductId { get; set; }
         public string ImageUrl { get; set; }
     }
+
+    public class ProductVarientAPIRES
+    {
+        public IEnumerable<ProductVarientRes> ProductVarientRes { get; set; }
+        public IEnumerable<ProductVarientImages> ProductVarientImages { get; set; }
+    }
 }
