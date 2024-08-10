@@ -19,6 +19,8 @@ namespace Infrastucture.Services
             _dapper=dappers;
             _categoryService = categoryService;
         }
+
+        #region ForAdmin
         public async Task<Response> SaveOrUpdateProduct(Product product)
         {
             var res = new Response()
@@ -195,5 +197,10 @@ namespace Infrastucture.Services
                 throw;
             }
         }
+
+        #endregion
+
+       
+
     }
 }

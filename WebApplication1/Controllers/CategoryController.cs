@@ -65,6 +65,16 @@ namespace WEBAPP.Controllers
                 ResponseText="An error Has Been Occured !",
                 StatusCode = ResponseStatus.Failed
             };
+            if(CategoryImage !=null )
+            {
+                const long maxFileSize = 100 * 1024; // 100 KB in bytes
+                if (CategoryImage.Length > maxFileSize)
+                {
+                    res.ResponseText="File size must be under 100 KB.";
+                    res.StatusCode = ResponseStatus.Failed;
+                    return Json(res);
+                }
+            }
             var request = JsonConvert.DeserializeObject<MasterCategory>(Jsondata);
             request.ImagePath = CategoryImage;
             try

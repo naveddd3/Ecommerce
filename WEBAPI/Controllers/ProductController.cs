@@ -19,6 +19,7 @@ namespace WEBAPI.Controllers
             _productService=productService;
             _fileUploadService=fileUpload;
         }
+        #region ForAdmin
         [HttpPost(nameof(SaveProduct))]
         public async Task<IActionResult> SaveProduct([FromForm] ProductReq product)
         {
@@ -124,5 +125,9 @@ namespace WEBAPI.Controllers
             var res = await _productService.GetProductVarientById(Id);
             return Ok(res);
         }
+
+        #endregion
+
+       
     }
 }

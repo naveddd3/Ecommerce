@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WEBAPP.Controllers
 {
+    [Authorize(Roles = "Vendor")]
     public class VendorController : Controller
     {
-        [Route("Vendors")]
-        public IActionResult Index()
-        {
-            return View();
-        }
+      
     }
 }
