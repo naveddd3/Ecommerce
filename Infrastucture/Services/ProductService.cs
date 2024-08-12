@@ -136,6 +136,7 @@ namespace Infrastucture.Services
                     productVarientVM.Discount,
                     productVarientVM.VarientId,
                     productVarientVM.VarientTypeId,
+                    productVarientVM.ProductName,
                     productVarientVM.Quantity,
                     productVarientVM.TotalQuantity
                 });
