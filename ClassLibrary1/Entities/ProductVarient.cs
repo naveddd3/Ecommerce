@@ -11,6 +11,7 @@ namespace Domain.Entities
     {
         public int ProductVarientId { get; set; }
         public int ProductId { get; set; }
+        public string? ProductName { get; set; }
         public int VarientTypeId { get; set; }
         public decimal MRP { get; set; }
         public decimal Discount { get; set; }
@@ -53,7 +54,7 @@ namespace Domain.Entities
 
     public class ProductVarientAPIRES
     {
-        public IEnumerable<ProductVarientRes> ProductVarientRes { get; set; }
-        public IEnumerable<ProductVarientImages> ProductVarientImages { get; set; }
+        public IEnumerable<ProductVarientRes>? Table1 { get; set; }
+        public IEnumerable<ProductVarientImages>? Table2 { get; set; }
     }
 }
