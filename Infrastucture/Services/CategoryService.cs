@@ -1,15 +1,18 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Domain.Helper;
+using Microsoft.AspNetCore.Http;
 using System.Data;
 namespace Infrastucture.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly IDapperRepository _dapper;
-        public CategoryService(IDapperRepository dapper)
+        private readonly IHttpContextAccessor httpContextAccessor;
+        public CategoryService(IDapperRepository dapper, IHttpContextAccessor httpContextAccessor)
         {
             _dapper=dapper;
+            this.httpContextAccessor=httpContextAccessor;
         }
 
         public async Task<Response> SaveOrUpdateCategory(MasterCategory category)
@@ -42,6 +45,12 @@ namespace Infrastucture.Services
             try
             {
                 var list = await _dapper.GetAllAsync<MasterCategory>("SELECT * FROM Master_Category", null, CommandType.Text);
+                var url = Utitlity.O.GetBaseUrl();
+                if (!url.Contains("localhost"))
+                {
+
+                    return list;
+                }
                 return list;
             }
             catch (Exception)

@@ -9,7 +9,6 @@ namespace WEBAPP.Controllers
     public class HomeController : Controller
     {
         private readonly string _BaseUrl;
-
         public HomeController(AppSetting baseUrl)
         {
             _BaseUrl=baseUrl.WebApiBaseUrl;
