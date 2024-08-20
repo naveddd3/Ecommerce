@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Helper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System.Data;
 namespace Infrastucture.Services
 {
@@ -9,10 +10,12 @@ namespace Infrastucture.Services
     {
         private readonly IDapperRepository _dapper;
         private readonly IHttpContextAccessor httpContextAccessor;
-        public CategoryService(IDapperRepository dapper, IHttpContextAccessor httpContextAccessor)
+        private readonly IConfiguration configuration;
+        public CategoryService(IDapperRepository dapper, IHttpContextAccessor httpContextAccessor,IConfiguration configuration)
         {
             _dapper=dapper;
             this.httpContextAccessor=httpContextAccessor;
+            this.configuration=configuration;   
         }
 
         public async Task<Response> SaveOrUpdateCategory(MasterCategory category)
@@ -45,11 +48,21 @@ namespace Infrastucture.Services
             try
             {
                 var list = await _dapper.GetAllAsync<MasterCategory>("SELECT * FROM Master_Category", null, CommandType.Text);
-                var url = Utitlity.O.GetBaseUrl();
-                if (!url.Contains("localhost"))
-                {
+                //var url = Utitlity.O.GetBaseUrl();
+                var request = httpContextAccessor.HttpContext.Request;
+                var baseUrl = $"{request.Scheme}://{request.Host}";
 
-                    return list;
+                if (!baseUrl.Contains("localhost"))
+                {
+                    var liveDomain = configuration["Domain:LiveURL"];
+
+                    foreach (var item in list)
+                    {
+                        if (item.CategoryImage != null && item.CategoryImage.Contains("localhost"))
+                        {
+                            item.CategoryImage = item.CategoryImage.Replace("https://localhost:7035", liveDomain);
+                        }
+                    }
                 }
                 return list;
             }
