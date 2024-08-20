@@ -94,6 +94,7 @@ namespace WEBAPI.Extension
             services.AddScoped<INotifyService, NotifyService>();
             services.AddScoped<IProductVarientService, ProductVarientService>();
             services.AddScoped<FileUploadService>();
+            services.AddSingleton<Utitlity>();
             #endregion
         }
     }
