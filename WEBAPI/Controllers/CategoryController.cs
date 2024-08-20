@@ -25,7 +25,7 @@ namespace WEBAPI.Controllers
             var res = new Response() { ResponseText=string.Empty,StatusCode= ResponseStatus.Failed };
             if (category.ImagePath!=null)
             {
-                res = _fileUploadService.UploadImage(category.ImagePath, FileUploadPath.CategoryImage);
+                res.ResponseText = _fileUploadService.Image(category.ImagePath, FileUploadPath.CategoryImage);
 			
             }
             category.CategoryImage = res.ResponseText;

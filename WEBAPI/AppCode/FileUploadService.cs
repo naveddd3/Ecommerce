@@ -17,6 +17,35 @@ namespace Infrastucture.Services
             this.webHostEnvironment = webHostEnvironment;
             this.httpContextAccessor=httpContextAccessor;
         }
+
+        public string Image(IFormFile imageFile, string uploadFolderPath)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            var uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, uploadFolderPath);
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                imageFile.CopyTo(stream);
+            }
+
+            var request = httpContextAccessor.HttpContext.Request;
+            var baseUrl = $"{request.Scheme}://{request.Host}";
+
+            // Return the URL including the base URL
+            return $"{baseUrl}/{uploadFolderPath}{uniqueFileName}";
+        }
         public Response UploadImage(IFormFile ImagePath, string uploadFolderPath)
         {
             var res = new Response() { ResponseText = "Error in Ulpoad Image !" ,StatusCode = ResponseStatus.Failed };
