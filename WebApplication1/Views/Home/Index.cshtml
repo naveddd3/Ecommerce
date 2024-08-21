@@ -59,9 +59,9 @@
                 @foreach (var category in Model.Categories)
                 {
                     // https://localhost:7191/p/Milk?=1
-                    <div class="card-2 bg-@i wow animate__animated animate__fadeInUp" data-wow-delay=".1s">
+                    <div class="card-2 bg-@i wow animate__animated animate__fadeInUp" data-wow-delay=".1s" onclick="onCategory('@category.CategoryName','@category.CategoryId')">
                         <figure class="img-hover-scale overflow-hidden">
-                            <a onclick="onCategory('@category.CategoryName','@category.CategoryId')" id="category"><img src="@category.CategoryImage" alt="" /></a>
+                            <a  id="category"><img src="@category.CategoryImage" alt="" /></a>
                         </figure>
                         <h6><a class="">@category.CategoryName</a></h6>
                     </div>
