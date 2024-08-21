@@ -37,6 +37,3 @@
 }
 
 
-var onCategory = (categoryId) => {
-    $.post("/")
-}
