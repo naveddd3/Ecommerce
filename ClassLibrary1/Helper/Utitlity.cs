@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -8,31 +9,43 @@ using System.Threading.Tasks;
 
 namespace Domain.Helper
 {
-    public class Utitlity
+    //public class AppUtitlity
+    //{
+    //    public static AppUtitlity O => instance.Value;
+    //    private static Lazy<AppUtitlity> instance = new Lazy<AppUtitlity>(() => new AppUtitlity());
+    //    private AppUtitlity() { }
+
+    //    private  readonly IHttpContextAccessor _httpContextAccessor;
+    //    public  void SetHttpContextAccessor(IHttpContextAccessor httpContextAccessor)
+    //    {
+    //        _httpContextAccessor = httpContextAccessor;
+    //    }
+    //    public string GetBaseUrl()
+    //    {
+    //        var request = _httpContextAccessor.HttpContext.Request;
+    //        if (request == null)
+    //        {
+    //            throw new InvalidOperationException("HttpContext is not available.");
+    //        }
+
+    //        var baseUrl = $"{request.Scheme}://{request.Host}";
+    //        return baseUrl;
+    //    }
+    //}
+
+
+    public static class AppUtitlity
     {
-        // Singleton instance with lazy initialization
-        private static readonly Lazy<Utitlity> _instance = new Lazy<Utitlity>(() => new Utitlity());
-
-        // Singleton property
-        public static Utitlity O => _instance.Value;
-
-        // IHttpContextAccessor dependency
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        // Private constructor for lazy initialization
-        private Utitlity()
+        private static readonly IHttpContextAccessor httpContext;
+        public static void Initialize(IHttpContextAccessor httpContextAccessor)
         {
+            httpContext = httpContextAccessor;
         }
 
-        // Public constructor for dependency injection
-        public Utitlity(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-        }
 
-        public string GetBaseUrl()
+        public static string GetBaseUrl()
         {
-            var request = _httpContextAccessor.HttpContext?.Request;
+            var request = httpContext.HttpContext.Request;
             if (request == null)
             {
                 throw new InvalidOperationException("HttpContext is not available.");

@@ -12,5 +12,8 @@ namespace Application.Interfaces
         Task<Response> SaveOrUpdateCategory(MasterCategory category);
         Task<IEnumerable<MasterCategory>> GetCategory();
         Task<MasterCategory> AddOrEditCategory(int categoryId);
+        Task<SubCategory> SubCategoryById(int Id);
+        Task<IEnumerable<SubCategory>> GetSubCategory();
+        Task<Response> SaveSubCategory(SubCategory subCategory);
     }
 }
