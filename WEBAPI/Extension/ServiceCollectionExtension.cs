@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Infrastucture.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace WEBAPI.Extension
 {
@@ -94,7 +95,6 @@ namespace WEBAPI.Extension
             services.AddScoped<INotifyService, NotifyService>();
             services.AddScoped<IProductVarientService, ProductVarientService>();
             services.AddScoped<FileUploadService>();
-            services.AddSingleton<Utitlity>();
             #endregion
         }
     }

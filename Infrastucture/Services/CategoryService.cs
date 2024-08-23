@@ -11,11 +11,11 @@ namespace Infrastucture.Services
         private readonly IDapperRepository _dapper;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IConfiguration configuration;
-        public CategoryService(IDapperRepository dapper, IHttpContextAccessor httpContextAccessor,IConfiguration configuration)
+        public CategoryService(IDapperRepository dapper, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             _dapper=dapper;
             this.httpContextAccessor=httpContextAccessor;
-            this.configuration=configuration;   
+            this.configuration=configuration;
         }
 
         public async Task<Response> SaveOrUpdateCategory(MasterCategory category)
@@ -51,6 +51,7 @@ namespace Infrastucture.Services
                 //var url = Utitlity.O.GetBaseUrl();
                 var request = httpContextAccessor.HttpContext.Request;
                 var baseUrl = $"{request.Scheme}://{request.Host}";
+                string baseurl2 = AppUtitlity.GetBaseUrl();
 
                 if (!baseUrl.Contains("localhost"))
                 {
@@ -78,15 +79,67 @@ namespace Infrastucture.Services
             var category = new MasterCategory();
             try
             {
-                var res  = await _dapper.GetAsync<MasterCategory>("SELECT * FROM Master_Category WHERE CategoryId = @Id", new
+                var res = await _dapper.GetAsync<MasterCategory>("SELECT * FROM Master_Category WHERE CategoryId = @Id", new
                 {
-                    Id=Id
+                    Id = Id
                 }, CommandType.Text);
-                if(res != null)
+                if (res != null)
                 {
                     category = res;
                 }
-                return category; 
+                return category;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<Response> SaveSubCategory(SubCategory subCategory)
+        {
+            try
+            {
+                var res = await _dapper.GetAsync<Response>("Proc_SaveSubCategory", new
+                {
+                    subCategory.CategoryId,
+                    subCategory.SubCategoryId,
+                    subCategory.SubCategoryName,
+                    subCategory.SubCategoryDescription,
+                    subCategory.SubCategoryImage
+                });
+                return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<SubCategory>> GetSubCategory()
+        {
+            try
+            {
+                var list = await _dapper.GetAllAsync<SubCategory>("SELECT * FROM SubCategory", null, CommandType.Text);
+                return list;    
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<SubCategory> SubCategoryById(int Id)
+        {
+            try
+            {
+                var res = await _dapper.GetAsync<SubCategory>("SELECT * FROM SubCategory WHERE SubCategoryId = @Id", new
+                {
+                    Id
+                }, CommandType.Text);
+                return res;
             }
             catch (Exception ex)
             {
