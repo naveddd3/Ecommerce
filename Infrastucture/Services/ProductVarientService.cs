@@ -20,7 +20,7 @@ namespace Infrastucture.Services
             _categoryService = categoryService;
         }
 
-        public async Task<dynamic> ProductsOnCategory(int CategoryId)
+        public async Task<dynamic> SubCategoryOnCategory(int CategoryId)
         {
             try
             {

@@ -16,8 +16,14 @@ namespace Domain.Entities
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
+        public string? CategoryName { get; set; }
         public string SubCategoryDescription { get; set; }
         public string? SubCategoryImage { get; set; }
+    }
+
+    public class SubCategoryVM : SubCategory
+    {
+        public IEnumerable<MasterCategory>? MasterCategories { get; set; }
     }
 
     public class Image

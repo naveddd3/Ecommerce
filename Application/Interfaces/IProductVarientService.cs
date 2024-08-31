@@ -8,7 +8,7 @@ namespace Application.Interfaces
 {
     public interface IProductVarientService
     {
-        Task<dynamic> ProductsOnCategory(int CategoryId);
+        Task<dynamic> SubCategoryOnCategory(int CategoryId);
         Task<dynamic> VarientOnProduct(int ProductId);
     }
 }

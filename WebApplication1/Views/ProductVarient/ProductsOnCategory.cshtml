@@ -241,7 +241,7 @@
                 <ul>
                     @foreach(var product in Model.Products)
                     {
-                        <li id="    ">
+                        <li id="">
                             <a onclick="varientOnProduct('@product.ProductId')"> <img src="@product.ImageUrl" alt="" />@product.ProductName</a><span class="count">@product.VarientCount</span>
                         </li>
                     }

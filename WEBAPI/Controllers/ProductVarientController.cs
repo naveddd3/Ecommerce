@@ -15,10 +15,10 @@ namespace WEBAPI.Controllers
             _productVarientService=productVarientService;
         }
 
-        [HttpPost(nameof(ProductsOnCategoryId)+"/{CategoryId}")]
-        public async Task<IActionResult> ProductsOnCategoryId(int CategoryId)
+        [HttpPost(nameof(SubCategoryOnCategory) +"/{CategoryId}")]
+        public async Task<IActionResult> SubCategoryOnCategory(int CategoryId)
         {
-            var res = await _productVarientService.ProductsOnCategory(CategoryId);
+            var res = await _productVarientService.SubCategoryOnCategory(CategoryId);
             return Ok(res);
         }
 
