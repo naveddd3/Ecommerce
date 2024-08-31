@@ -24,10 +24,10 @@ namespace WEBAPP.Controllers
 
         #region ForWebsite
         [Route("p/{CategoryName?}/{CategoryId?}")]
-        public async Task<IActionResult> ProductsOnCategory( int CategoryId)
+        public async Task<IActionResult> SubCategoryOnCategory( int CategoryId)
         {
             var model = new WebsiteModel();
-            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductsOnCategoryId/{CategoryId}", null, null);
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/SubCategoryOnCategory/{CategoryId}", null, null);
             if (apiRes != null)
             {
                 model.Products = JsonConvert.DeserializeObject<List<Product>>(apiRes.Result);

@@ -1,0 +1,59 @@
+﻿@model Domain.Entities.SubCategoryVM
+@{
+    var list = new SelectList(Model.MasterCategories, "CategoryId", "CategoryName");
+}
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #313a46">
+                @if (Model.SubCategoryId > 0)
+                {
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">Edit Category</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">ADD Category</h5>
+                }
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="m-1">
+                            <input type="hidden" asp-for="SubCategoryId" />
+                            <label name="SubCategoryName">SubCategory Name :</label>
+                            <input class="form-control" type="text" placeholder="Enter Name" asp-for="SubCategoryName" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="m-1">
+                            <label name="categoryname" asp-for="CategoryId">Category:</label>
+                            <select asp-items="@list" class="form-control" id="categoryname" asp-for="CategoryId" required>
+                                <option value="0">::SELECT CATEGORY::</option>
+                            </select>
+                        </div>
+                      
+                    </div>
+                </div>
+              
+
+                <div class="m-1">
+                    <label name="SubCategoryDescription">SubCategory Discription :</label>
+                    <input class="form-control" type="text" placeholder="Enter Name" asp-for="SubCategoryDescription" required>
+                </div>
+
+                <div class="m-1">
+                    <label name="SubCategoryImage">SubCategory Image :</label>
+                    <input class="form-control" type="file" placeholder="Enter Name" asp-for="SubCategoryImage" required>
+                </div>
+                <div class="m-1">
+                    <label name="SubCategoryImage">SubCategory Image :</label>
+                    <input type="checkbox" checked data-toggle="toggle" data-size="sm">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveOrUpdateSubCategory()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

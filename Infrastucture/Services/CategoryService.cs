@@ -3,19 +3,18 @@ using Domain.Entities;
 using Domain.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 namespace Infrastucture.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly IDapperRepository _dapper;
-        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IConfiguration configuration;
-        public CategoryService(IDapperRepository dapper, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        public CategoryService(IDapperRepository dapper, IConfiguration configuration)
         {
-            _dapper=dapper;
-            this.httpContextAccessor=httpContextAccessor;
-            this.configuration=configuration;
+            _dapper = dapper;
+            this.configuration = configuration;
         }
 
         public async Task<Response> SaveOrUpdateCategory(MasterCategory category)
@@ -48,11 +47,7 @@ namespace Infrastucture.Services
             try
             {
                 var list = await _dapper.GetAllAsync<MasterCategory>("SELECT * FROM Master_Category", null, CommandType.Text);
-                //var url = Utitlity.O.GetBaseUrl();
-                var request = httpContextAccessor.HttpContext.Request;
-                var baseUrl = $"{request.Scheme}://{request.Host}";
-                string baseurl2 = AppUtitlity.GetBaseUrl();
-
+                var baseUrl = AppUtitlity.O.GetBaseUrl();
                 if (!baseUrl.Contains("localhost"))
                 {
                     var liveDomain = configuration["Domain:LiveURL"];
@@ -121,8 +116,8 @@ namespace Infrastucture.Services
         {
             try
             {
-                var list = await _dapper.GetAllAsync<SubCategory>("SELECT * FROM SubCategory", null, CommandType.Text);
-                return list;    
+                var list = await _dapper.GetAllAsync<SubCategory>("SELECT SC.*,MC.CategoryName FROM SubCategory SC INNER JOIN MASTER_CATEGORY MC ON SC.CategoryId = MC.CategoryId", null, CommandType.Text);
+                return list;
             }
             catch (Exception ex)
             {
@@ -131,15 +126,21 @@ namespace Infrastucture.Services
             }
         }
 
-        public async Task<SubCategory> SubCategoryById(int Id)
+        public async Task<SubCategoryVM> SubCategoryById(int Id)
         {
             try
             {
-                var res = await _dapper.GetAsync<SubCategory>("SELECT * FROM SubCategory WHERE SubCategoryId = @Id", new
+                var list = new SubCategoryVM();
+                var res  = await _dapper.GetAsync<SubCategoryVM>("SELECT SC.*,MC.CategoryName FROM SubCategory SC INNER JOIN MASTER_CATEGORY MC ON SC.CategoryId = MC.CategoryId WHERE SubCategoryId = @Id", new
                 {
                     Id
                 }, CommandType.Text);
-                return res;
+                if(res != null)
+                {
+                    list = res;
+                }
+                list.MasterCategories = await GetCategory();
+                return list;
             }
             catch (Exception ex)
             {

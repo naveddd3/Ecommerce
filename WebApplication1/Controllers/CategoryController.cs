@@ -15,6 +15,7 @@ namespace WEBAPP.Controllers
             _BaseUrl=baseUrl.WebApiBaseUrl;
         }
 
+        #region Category
         [Route("Category")]
         public IActionResult Index()
         {
@@ -84,5 +85,57 @@ namespace WEBAPP.Controllers
                 throw;
             }
         }
+
+        #endregion
+
+        #region SubCategory
+        [Route("SubCategory")]
+        public IActionResult SubCategory()
+        {
+            return View();  
+        }
+
+        public async Task<IActionResult> AllSubCategory()
+        {
+            var list = new List<SubCategory>();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Category/GetSubCategory", null, User.GetLoggedInUserToken());
+            if(apiRes != null)
+            {
+                list = JsonConvert.DeserializeObject<List<SubCategory>>(apiRes.Result);
+            }
+            return PartialView(list);
+        }
+        public async Task<IActionResult> AddOrEditSubCategory(int Id)
+        {
+            var list = new SubCategoryVM();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Category/GetSubcategoryById/{Id}", null, User.GetLoggedInUserToken());
+            if (apiRes != null)
+            {
+                list = JsonConvert.DeserializeObject<SubCategoryVM>(apiRes.Result);
+            }
+            return PartialView(list);
+        }
+        public async Task<IActionResult> SaveOrUpdateSubCategory(string JsonData , IFormFile SubCategoryImage)
+        {
+            var res = new Domain.Entities.Response()
+            {
+                ResponseText = "Server Error !",
+                StatusCode = ResponseStatus.Failed
+            };
+            var req = new SubCategory();
+            if (JsonData != null)
+            {
+                req = JsonConvert.DeserializeObject<SubCategory>(JsonData);
+                req.ImagePath = SubCategoryImage;
+            }
+            var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Category/SaveSubCategory", User.GetLoggedInUserToken(), req);
+            var response = await apiRes.Content.ReadAsStringAsync();
+            if (apiRes != null)
+            {
+                 res = JsonConvert.DeserializeObject<Domain.Entities.Response>(response);
+            }
+            return Json(res);
+        }
+        #endregion
     }
 }

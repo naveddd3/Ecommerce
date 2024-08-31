@@ -66,7 +66,7 @@ namespace WEBAPI.Controllers
             return Ok(list);
         }
 
-        [HttpPost(nameof(GetSubcategoryById))]
+        [HttpPost(nameof(GetSubcategoryById)+"/{Id}")]
         public async   Task<IActionResult> GetSubcategoryById(int Id)
         {
             var res = await _categoryService.SubCategoryById(Id);
