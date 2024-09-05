@@ -30,15 +30,15 @@ namespace WEBAPP.Controllers
             var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/SubCategoryOnCategory/{CategoryId}", null, null);
             if (apiRes != null)
             {
-                model.Products = JsonConvert.DeserializeObject<List<Product>>(apiRes.Result);
+                model.SubCategories = JsonConvert.DeserializeObject<List<SubCategory>>(apiRes.Result);
             }
             return View(model);
         }
 
-        public async Task<IActionResult> VarientOnProduct(int ProductId)
+        public async Task<IActionResult> ProductOnSubCategory(int SubCategoryId)
         {
             var model = new WebsiteModel();
-            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/VarientOnProductId/{ProductId}", null, null);
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/VarientOnProductId/{SubCategoryId}", null, null);
             if (apiRes != null)
             {
                 model.productVarientAPIRES = JsonConvert.DeserializeObject<ProductVarientAPIRES>(apiRes.Result);

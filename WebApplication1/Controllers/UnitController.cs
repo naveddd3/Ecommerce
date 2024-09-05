@@ -6,29 +6,29 @@ using WEBAPP.Models.Helper;
 
 namespace WEBAPP.Controllers
 {
-    public class VarientController : Controller
+    public class UnitController : Controller
     {
         private readonly string _BaseUrl;
 
-        public VarientController(AppSetting appSetting)
+        public UnitController(AppSetting appSetting)
         {
             _BaseUrl=appSetting.WebApiBaseUrl;
         }
 
-        [Route("MasterVarient")]
-        public IActionResult MasterVarient()
+        [Route("MasterUnit")]
+        public IActionResult MasterUnit()
         {
             return View();
         }
         public async Task<IActionResult> GetAll()
         {
-            var list = new List<Varient>();
+            var list = new List<MasterUnit>();
             try
             {
-                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
+                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Unit/GetUnit", null, User.GetLoggedInUserToken());
                 if (apiRes != null)
                 {
-                    list = JsonConvert.DeserializeObject<List<Varient>>(apiRes.Result);
+                    list = JsonConvert.DeserializeObject<List<MasterUnit>>(apiRes.Result);
                 }
                 return PartialView(list);
             }
@@ -38,17 +38,17 @@ namespace WEBAPP.Controllers
                 throw;
             }
         }
-        public async Task<IActionResult> AddOrEditVarient(int Id)
+        public async Task<IActionResult> AddOrEditUnit(int Id)
         {
-            Varient varient = new Varient();
+            MasterUnit Unit = new MasterUnit();
             try
             {
-                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetByIdVarient/{Id}", null, User.GetLoggedInUserToken());
+                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Unit/GetByIdUnit/{Id}", null, User.GetLoggedInUserToken());
                 if (apiRes != null)
                 {
-                    varient = JsonConvert.DeserializeObject<Varient>(apiRes.Result);
+                    Unit = JsonConvert.DeserializeObject<MasterUnit>(apiRes.Result);
                 }
-                return PartialView(varient);
+                return PartialView(Unit);
             }
             catch (Exception ex)
             {
@@ -56,12 +56,12 @@ namespace WEBAPP.Controllers
                 throw;
             }
         }
-        public async Task<IActionResult> SaveVarient(Varient varient)
+        public async Task<IActionResult> SaveUnit(MasterUnit Unit)
         {
             var res = new Response() { };
             try
             {
-                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/SaveVarient", JsonConvert.SerializeObject(varient), User.GetLoggedInUserToken());
+                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Unit/SaveUnit", JsonConvert.SerializeObject(Unit), User.GetLoggedInUserToken());
                 if (apiRes != null)
                 {
                     res = JsonConvert.DeserializeObject<Response>(apiRes.Result);   

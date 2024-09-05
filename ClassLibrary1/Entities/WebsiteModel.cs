@@ -9,7 +9,7 @@ namespace Domain.Entities
     public class WebsiteModel
     {
         public IEnumerable<MasterCategory> Categories { get; set; }
-        public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<SubCategory> SubCategories { get; set; }
 
         public ProductVarientAPIRES productVarientAPIRES { get; set; }
     }

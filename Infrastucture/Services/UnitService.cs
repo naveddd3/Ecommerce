@@ -5,25 +5,25 @@ using System.Data;
 
 namespace Infrastucture.Services
 {
-    public class VarientService : IVarientService
+    public class UnitService : IUnitService
     {
         private readonly IDapperRepository repository;
 
-        public VarientService(IDapperRepository repository)
+        public UnitService(IDapperRepository repository)
         {
             this.repository=repository;
         }
 
-        public async Task<Response> SaveOrUpdateVarient(Varient varient)
+        public async Task<Response> SaveOrUpdateUnit(MasterUnit Unit)
         {
-            var res = new Response() { ResponseText="An Error Occured During Save Varient !", StatusCode = ResponseStatus.Failed };
+            var res = new Response() { ResponseText="An Error Occured During Save Unit !", StatusCode = ResponseStatus.Failed };
             try
             {
-                res = await repository.GetAsync<Response>("Proc_SaveOrUpdateVarient", new
+                res = await repository.GetAsync<Response>("Proc_SaveOrUpdateUnit", new
                 {
-                    varient.VarientId,
-                    varient.VarientName,
-                    varient.VarientType
+                    Unit.UnitId,
+                    Unit.UnitName,
+                    Unit.UnitType
                 });
                 return res;
             }
@@ -35,11 +35,11 @@ namespace Infrastucture.Services
             }
         }
 
-        public async Task<Varient> AddOrEditVarient (int Id)
+        public async Task<MasterUnit> AddOrEditUnit (int Id)
         {
             try
             {
-                var res = await repository.GetAsync<Varient>("SELECT * FROM Master_Varient_Type WHERE Id = @Id", new
+                var res = await repository.GetAsync<MasterUnit>("SELECT Id as UnitId,* FROM Master_Unit WHERE Id = @Id", new
                 {
                     Id = Id,
                 },CommandType.Text);
@@ -52,11 +52,11 @@ namespace Infrastucture.Services
             }
         }
 
-        public async Task<IEnumerable<Varient>> GetAll()
+        public async Task<IEnumerable<MasterUnit>> GetAll()
         {
             try
             {
-                var list = await repository.GetAllAsync<Varient>("SELECT Id as VarientId,* FROM Master_Varient_Type", null, CommandType.Text);
+                var list = await repository.GetAllAsync<MasterUnit>("SELECT Id as UnitId,* FROM Master_Unit", null, CommandType.Text);
                 return list;    
             }
             catch (Exception ex)

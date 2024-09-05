@@ -1,25 +1,25 @@
-﻿@model Domain.Entities.Varient
+﻿@model Domain.Entities.MasterUnit
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #313a46">
-                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">Varient</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">Unit</h5>
             </div>
             <div class="modal-body">
                 <div class="m-1">
-                    <input type="hidden" asp-for="VarientId" />
-                    <label name="VarientName">Varient Name :</label>
-                    <input class="form-control" type="text" placeholder="Enter Varient Name" asp-for="VarientName">
+                    <input type="hidden" asp-for="UnitId" />
+                    <label name="UnitName">Unit Name :</label>
+                    <input class="form-control" type="text" placeholder="Enter Unit Name" asp-for="UnitName">
                 </div>
 
                 <div class="m-1">
-                    <label name="VarientType">Varient Type:</label>
-                    <input class="form-control" type="text" placeholder="Enter Varient Type" asp-for="VarientType">
+                    <label name="UnitType">Unit Type:</label>
+                    <input class="form-control" type="text" placeholder="Enter Unit Type" asp-for="UnitType">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
-                <button type="button" class="btn btn-primary" onclick="SaveVarient()">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="SaveUnit()">Save changes</button>
             </div>
         </div>
     </div>

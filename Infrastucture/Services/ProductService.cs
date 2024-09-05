@@ -36,7 +36,7 @@ namespace Infrastucture.Services
                     product.ProductName,
                     product.Description,
                     product.ImageUrl,
-                    product.CategoryId,
+                    product.SubCategoryId,
                     product.MRP,
                     product.Discount
                 });
@@ -81,7 +81,7 @@ namespace Infrastucture.Services
 
                 throw;
             }
-            productVM.MasterCategories = await _categoryService.GetCategory();
+            productVM.SubCategories = await _categoryService.GetSubCategory();
             return productVM;
 
         }

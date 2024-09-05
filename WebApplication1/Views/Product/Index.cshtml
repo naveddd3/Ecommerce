@@ -92,10 +92,11 @@
             ProductId: $("#product_ProductId").val(),
             ProductName: $("#product_ProductName").val(),
             Description: $("#product_Description").val(),
-            CategoryId: $("#product_CategoryId").val(),
+            SubCategoryId: $("#product_SubCategoryId").val(),
             MRP: $("#product_MRP").val(),
             Discount: $("#product_Discount").val()
         }
+        console.log(obj);
         if (obj.ProductId == "" || obj.ProductId == null) {
             obj.ProductId = 0;
         }

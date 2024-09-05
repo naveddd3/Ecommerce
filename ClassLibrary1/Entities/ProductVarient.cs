@@ -25,7 +25,7 @@ namespace Domain.Entities
 
     public class ProductVarientVM : ProductVarient
     {
-        public IEnumerable<Varient> varients{ get; set; }
+        public IEnumerable<MasterUnit> masterUnits{ get; set; }
         
     }
 
