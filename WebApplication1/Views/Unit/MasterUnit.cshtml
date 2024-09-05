@@ -9,10 +9,10 @@
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
                             <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
-                            <li class="breadcrumb-item active">Master Varient</li>
+                            <li class="breadcrumb-item active">Master Unit</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Master Varient</h4>
+                    <h4 class="page-title">Master Unit</h4>
                 </div>
             </div>
         </div>
@@ -22,8 +22,8 @@
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-sm-5">
-                                <button onclick="AddOrEditVarient(0)" href="javascript:void(0);" class="btn btn-danger mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Master Varient
+                                <button onclick="AddOrEditUnit(0)" href="javascript:void(0);" class="btn btn-danger mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Master Unit
                                 </button>
                             </div>
                             <div class="col-sm-7">
@@ -42,8 +42,8 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Sr No.</th>
-                                        <th>Varient Name</th>
-                                        <th>Varient Type</th>
+                                        <th>Unit Name</th>
+                                        <th>Unit Type</th>
                                         <th style="width: 85px;">Action</th>
                                     </tr>
                                 </thead>
@@ -63,14 +63,14 @@
         loadData();
     })
     function loadData() {
-        $.post('/Varient/GetAll').done((response) => {
+        $.post('/Unit/GetAll').done((response) => {
             $("#grid tbody").html(response);
         }).fail((error) => {
             console.error("Error loading data: ", error);
         });
     }
-    var AddOrEditVarient = (VarientId) => {
-        $.post('/Varient/AddOrEditVarient', { Id: VarientId }).done((response) => {
+    var AddOrEditUnit = (UnitId) => {
+        $.post('/Unit/AddOrEditUnit', { Id: UnitId }).done((response) => {
             $("#modal").html(response);
             $("#exampleModalCenter").modal("show");
         }).fail((res) => {
@@ -78,13 +78,13 @@
         });
     }
 
-    var SaveVarient = () => {
+    var SaveUnit = () => {
         let obj = {
-            VarientId: $("#VarientId").val(),
-            VarientName: $("#VarientName").val(),
-            VarientType: $("#VarientType").val()
+            UnitId: $("#UnitId").val(),
+            UnitName: $("#UnitName").val(),
+            UnitType: $("#UnitType").val()
         };
-        $.post('/Varient/SaveVarient', obj).done((response) => {
+        $.post('/Unit/SaveUnit', obj).done((response) => {
             QAlert(response.statusCode,response.responseText);
             $("#exampleModalCenter").modal("hide");
             loadData();

@@ -1,4 +1,4 @@
-﻿@model IEnumerable< Domain.Entities.Varient>
+﻿@model IEnumerable< Domain.Entities.MasterUnit>
 
 @if (Model != null && Model.Any())
 {
@@ -8,10 +8,10 @@
         i++;
         <tr>
             <td>@i</td>
-            <td>@item.VarientName</td>
-            <td>@item.VarientType</td>
+            <td>@item.UnitName</td>
+            <td>@item.UnitType</td>
             <td class="table-action">
-                <a href="javascript:void(0);" class="action-icon" onclick="AddOrEditVarient(@item.VarientId)"> <i class="mdi mdi-square-edit-outline"></i></a>
+                <a href="javascript:void(0);" class="action-icon" onclick="AddOrEditUnit(@item.UnitId)"> <i class="mdi mdi-square-edit-outline"></i></a>
 
             </td>
         </tr>

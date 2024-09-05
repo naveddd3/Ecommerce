@@ -1,7 +1,7 @@
 ﻿@using Domain.Entities
 @model ProductVM
 @{
-    var categories = new SelectList(Model.MasterCategories, "CategoryId", "CategoryName");
+    var categories = new SelectList(Model.SubCategories, "SubCategoryId", "SubCategoryName");
 }
 
 <style>
@@ -74,8 +74,8 @@
                         <input class="form-control" type="text" placeholder="Enter Name" asp-for="product.ProductName" required>
                     </div>
                     <div class="col-4">
-                        <label asp-for="product.CategoryId">Category:</label>
-                        <select asp-for="product.CategoryId" asp-items="@categories" class="form-control" required>
+                        <label asp-for="product.SubCategoryId">Category:</label>
+                        <select asp-for="product.SubCategoryId" asp-items="@categories" class="form-control" required>
                             <option value="0">Select a Category</option>
                         </select>
                     </div>

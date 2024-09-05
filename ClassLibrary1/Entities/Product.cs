@@ -8,8 +8,8 @@ namespace Domain.Entities
         public int ProductId { get; set; } = 0;
         public string ProductName { get; set; }
         public string Description { get; set; }
-        public int CategoryId { get; set; }
-        public string? CategoryName { get; set; }
+        public int SubCategoryId { get; set; }
+        public string? SubCategoryName { get; set; }
         public string? ImageUrl { get; set; }
         public decimal MRP { get; set; }
         public decimal Discount { get; set; }
@@ -36,7 +36,7 @@ namespace Domain.Entities
     }
     public class ProductVM 
     {
-        public IEnumerable<MasterCategory> MasterCategories { get; set; }
+        public IEnumerable<SubCategory> SubCategories{ get; set; }
 
         public IEnumerable<ProductImage>? Images { get; set; }
 

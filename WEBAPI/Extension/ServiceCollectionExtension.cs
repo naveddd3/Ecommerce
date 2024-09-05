@@ -89,7 +89,7 @@ namespace WEBAPI.Extension
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<ICategoryService,CategoryService>();
             services.AddScoped<IProductService,ProductService>();
-            services.AddScoped<IVarientService, VarientService>();
+            services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IOTPService, OTPService>();
             services.AddScoped<INotifyService, NotifyService>();

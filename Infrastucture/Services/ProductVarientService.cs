@@ -24,7 +24,7 @@ namespace Infrastucture.Services
         {
             try
             {
-                var res = await _dapper.GetAllAsync<Product>("Proc_GetProductOnCatgeoryId", new
+                var res = await _dapper.GetAllAsync<SubCategory>("Proc_GetSubCategoryOnCategory", new
                 {
                     CategoryId
                 });
@@ -37,13 +37,13 @@ namespace Infrastucture.Services
             }
         }
 
-        public async Task<dynamic> VarientOnProduct(int ProductId)
+        public async Task<dynamic> ProductOnSubCategoryId(int SubCategoryId)
         {
             try
             {
-                var res = await _dapper.GetMultipleAsync<ProductVarientRes, ProductVarientImages>("Proc_GetVarientOnProductId", new
+                var res = await _dapper.GetMultipleAsync<ProductVarientRes, ProductVarientImages>("Proc_GetProductOnSubCategoryId", new
                 {
-                    ProductId
+                    SubCategoryId
                 });
                 return res;
 

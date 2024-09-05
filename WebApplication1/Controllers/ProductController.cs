@@ -136,7 +136,7 @@ namespace WEBAPP.Controllers
             var apiRes1 = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
             if (apiRes1 != null)
             {
-                productVarientVM.varients = JsonConvert.DeserializeObject<List<Varient>>(apiRes1.Result);
+                productVarientVM.masterUnits = JsonConvert.DeserializeObject<List<MasterUnit>>(apiRes1.Result);
             }
 
             return PartialView(productVarientVM);
@@ -204,7 +204,7 @@ namespace WEBAPP.Controllers
             var apiRes1 = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
             if (apiRes1 != null)
             {
-                varient.varients = JsonConvert.DeserializeObject<List<Varient>>(apiRes1.Result);
+                varient.masterUnits = JsonConvert.DeserializeObject<List<MasterUnit>>(apiRes1.Result);
             }
 
 

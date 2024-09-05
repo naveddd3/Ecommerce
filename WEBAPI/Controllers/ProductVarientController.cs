@@ -22,10 +22,10 @@ namespace WEBAPI.Controllers
             return Ok(res);
         }
 
-        [HttpPost(nameof(VarientOnProductId)+"/{ProductId}")]
-        public async Task<IActionResult> VarientOnProductId(int ProductId)
+        [HttpPost(nameof(ProductOnSubCategoryId) + "/{SubCategoryId}")]
+        public async Task<IActionResult> ProductOnSubCategoryId(int SubCategoryId)
         {
-            var res = await _productVarientService.VarientOnProduct(ProductId);
+            var res = await _productVarientService.VarientOnProduct(SubCategoryId);
             return Ok(res);
         }
     }
