@@ -16,6 +16,9 @@ namespace Domain.Entities
         public decimal SellingPrice { get; set; }
         public int? ProductImageId { get; set; }
         public int? VarientCount { get; set; }
+        public int? UnitId { get; set; }
+        public int? UnitType { get; set; }
+        public int? Quantity { get; set; }
     }
     public class ProductReq : Product
     {
@@ -37,9 +40,8 @@ namespace Domain.Entities
     public class ProductVM 
     {
         public IEnumerable<SubCategory> SubCategories{ get; set; }
-
         public IEnumerable<ProductImage>? Images { get; set; }
-
         public Product product { get; set; }
+        public IEnumerable<MasterUnit> masterUnits { get; set; }
     }
 }

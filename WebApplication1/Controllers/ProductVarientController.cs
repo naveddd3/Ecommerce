@@ -38,7 +38,7 @@ namespace WEBAPP.Controllers
         public async Task<IActionResult> ProductOnSubCategory(int SubCategoryId)
         {
             var model = new WebsiteModel();
-            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/VarientOnProductId/{SubCategoryId}", null, null);
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductOnSubCategoryId/{SubCategoryId}", null, null);
             if (apiRes != null)
             {
                 model.productVarientAPIRES = JsonConvert.DeserializeObject<ProductVarientAPIRES>(apiRes.Result);
