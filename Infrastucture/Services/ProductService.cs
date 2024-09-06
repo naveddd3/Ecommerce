@@ -13,11 +13,14 @@ namespace Infrastucture.Services
     {
         private readonly IDapperRepository _dapper;
         private readonly ICategoryService _categoryService;
+        private readonly IUnitService _unitService;
 
-        public ProductService(IDapperRepository dappers, ICategoryService categoryService)
+        public ProductService(IDapperRepository dappers, ICategoryService categoryService,IUnitService unitService)
         {
             _dapper=dappers;
             _categoryService = categoryService;
+            _unitService = unitService;
+
         }
 
         #region ForAdmin
@@ -38,7 +41,9 @@ namespace Infrastucture.Services
                     product.ImageUrl,
                     product.SubCategoryId,
                     product.MRP,
-                    product.Discount
+                    product.Discount,
+                    product.UnitId,
+                    product.Quantity
                 });
                 return res;
             }
@@ -66,8 +71,7 @@ namespace Infrastucture.Services
             var productVM = new ProductVM();
             try
             {
-                await Task.Delay(1000);
-                var result = await _dapper.GetMultipleAsync<Product, ProductImage>("PROC_GetProductById", new
+                var result = await _dapper.GetMultipleAsync<Product, ProductImage>("Proc_GetProductById", new
                 {
                     Id,
                     LoginId
@@ -82,6 +86,7 @@ namespace Infrastucture.Services
                 throw;
             }
             productVM.SubCategories = await _categoryService.GetSubCategory();
+            productVM.masterUnits = await _unitService.GetAll();
             return productVM;
 
         }

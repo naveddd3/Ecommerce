@@ -2,6 +2,7 @@
 @model ProductVM
 @{
     var categories = new SelectList(Model.SubCategories, "SubCategoryId", "SubCategoryName");
+    var units = new SelectList(Model.masterUnits, "UnitId", "UnitType");
 }
 
 <style>
@@ -97,6 +98,19 @@
                     <div class="col-4">
                         <label asp-for="product.ImageUrl">Choose Images</label>
                         <input asp-for="product.ImageUrl" type="file" class="form-control" name="images[]" multiple id="ImageUrl" />
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-4">
+                        <label asp-for="product.UnitId">Unit:</label>
+                        <select asp-for="product.UnitId" asp-items="@units" class="form-control" required>
+                            <option value="0">::Select a UnitType::</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label asp-for="product.Quantity">Quantity:</label>
+                        <input asp-for="product.Quantity" class="form-control" type="number" placeholder="Enter Quantity of Product" required>
                     </div>
                 </div>
 

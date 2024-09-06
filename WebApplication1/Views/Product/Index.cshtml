@@ -66,6 +66,13 @@
 <script>
     $(document).ready(function () {
         loadData();
+        let pid = $("#product_ProductId").val();
+        if (pid == 0) {
+            $("#product_UnitId").change(() => {
+
+            })
+        }
+        
     });
     var loadData = () => {
         $.post("/Product/GetProducts").done((result) => {
@@ -94,6 +101,8 @@
             Description: $("#product_Description").val(),
             SubCategoryId: $("#product_SubCategoryId").val(),
             MRP: $("#product_MRP").val(),
+            UnitId: $("#product_UnitId").val(),
+            Quantity: $("#product_Quantity").val(),
             Discount: $("#product_Discount").val()
         }
         console.log(obj);
@@ -186,8 +195,6 @@
     } 
 
     var saveVarient = () => {
-        debugger;
-        
         if (!valiadteInputs()) {
             return false;
         }
@@ -228,4 +235,6 @@
     var varientDetails = (Id) => {
         window.location.href = "/Product/VarientDetails?Id=" + Id;
     }
+
+    
 </script>

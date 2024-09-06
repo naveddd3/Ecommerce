@@ -25,7 +25,7 @@ namespace WEBAPI.Controllers
         [HttpPost(nameof(ProductOnSubCategoryId) + "/{SubCategoryId}")]
         public async Task<IActionResult> ProductOnSubCategoryId(int SubCategoryId)
         {
-            var res = await _productVarientService.VarientOnProduct(SubCategoryId);
+            var res = await _productVarientService.ProductOnSubCategoryId(SubCategoryId);
             return Ok(res);
         }
     }
