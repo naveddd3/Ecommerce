@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Dapper;
 using Domain.Entities;
 using Domain.Helper;
 using System;
@@ -41,11 +42,14 @@ namespace Infrastucture.Services
         {
             try
             {
-                var res = await _dapper.GetMultipleAsync<ProductVarientRes, ProductVarientImages>("Proc_GetProductOnSubCategoryId", new
-                {
-                    SubCategoryId
-                });
-                return res;
+                var result = new ProductOnSubCategoryModel();
+                var parameters = new DynamicParameters();
+                parameters.Add("@SubCategoryId", SubCategoryId);
+                var res = await _dapper.GetMultipleAsync<Product, ProductVarientRes, ProductImage>("Proc_GetProductOnSubCategoryId", parameters,System.Data.CommandType.StoredProcedure);
+                result.Product = (List<Product>)res.GetType().GetProperty("Table1").GetValue(res, null);
+                result.ProductVarients = (List<ProductVarientRes>)res.GetType().GetProperty("Table2").GetValue(res, null);
+                result.ProductImages= (List<ProductImage>)res.GetType().GetProperty("Table3").GetValue(res, null);
+                return result;
 
             }
             catch (Exception ex)

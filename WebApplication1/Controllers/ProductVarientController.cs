@@ -41,7 +41,7 @@ namespace WEBAPP.Controllers
             var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductOnSubCategoryId/{SubCategoryId}", null, null);
             if (apiRes != null)
             {
-                model.productVarientAPIRES = JsonConvert.DeserializeObject<ProductVarientAPIRES>(apiRes.Result);
+                model.ProductOnSubCategoryAPIRES = JsonConvert.DeserializeObject<ProductOnSubCategoryModel>(apiRes.Result);
             }
             return PartialView(model);
         }

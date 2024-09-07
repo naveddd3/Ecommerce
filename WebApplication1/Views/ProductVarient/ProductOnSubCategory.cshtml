@@ -1,17 +1,17 @@
 ﻿@model Domain.Entities.WebsiteModel;
 
-@if(Model.productVarientAPIRES.Table1!=null && Model.productVarientAPIRES.Table1.Count() > 0)
+@if(Model.ProductOnSubCategoryAPIRES.Product!=null && Model.ProductOnSubCategoryAPIRES.Product.Count() > 0)
 {
-    @foreach (var product in Model.productVarientAPIRES.Table1)
+    @foreach (var product in Model.ProductOnSubCategoryAPIRES.Product)
     {
         <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
             <div class="product-cart-wrap mb-30">
                 <div class="product-img-action-wrap">
                     @{
-                        if (Model.productVarientAPIRES.Table2 != null && Model.productVarientAPIRES.Table2.Count() > 0)
+                        if (Model.ProductOnSubCategoryAPIRES.ProductImages != null && Model.ProductOnSubCategoryAPIRES.ProductImages.Count() > 0)
                         {
-                            var productImages = Model.productVarientAPIRES.Table2.Where(x => x.ProductVarientId == product.VarientId).FirstOrDefault();
-                            product.ImageUrl = productImages.ImageUrl;
+                            var productImages = Model.ProductOnSubCategoryAPIRES.ProductImages.Where(x => x.ProductId == product.ProductId).FirstOrDefault();
+                            product.ImageUrl = productImages.ImageURI;
                         }
                     }
                     <div class="product-img product-img-zoom">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="product-content-wrap">
                     <div class="product-category">
-                        <a href='shop-grid-right.html'>@product.CategoryName</a>
+                        <a href='shop-grid-right.html'>@product.SubCategoryName</a>
                     </div>
                     <h2><a href='shop-product-right.html'>@product.ProductName</a></h2>
                     <div class="product-rate-cover">

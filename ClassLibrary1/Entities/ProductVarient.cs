@@ -57,4 +57,11 @@ namespace Domain.Entities
         public IEnumerable<ProductVarientRes>? Table1 { get; set; }
         public IEnumerable<ProductVarientImages>? Table2 { get; set; }
     }
+
+    public class ProductOnSubCategoryModel
+    {
+        public IEnumerable<Product>? Product { get; set; }
+        public IEnumerable<ProductVarientRes>? ProductVarients { get; set; }
+        public IEnumerable<ProductImage>? ProductImages { get; set; }
+    }
 }

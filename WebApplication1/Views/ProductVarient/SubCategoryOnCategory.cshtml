@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row product-grid" id="varients">
+            <div class="row product-grid" id="products">
                 @* yaha pe  *@
                
             
@@ -239,11 +239,14 @@
             <div class="sidebar-widget widget-category-2 mb-30">
                 <h5 class="section-title style-1 mb-30">Category</h5>
                 <ul>
+                    @{int i = 1;}
                     @foreach (var subcategory in Model.SubCategories)
                     {
-                        <li id="subCategoryli">
-                            <a onclick="ProductOnSubCategory('@subcategory.SubCategoryId')"> <img src="@subcategory.SubCategoryImage" alt="" />@subcategory.SubCategoryName</a><span class="count">1</span>
+                        
+                        <li id="subCategoryli_@i">
+                            <a onclick="ProductOnSubCategory('@subcategory.SubCategoryId')" id="productonsubcateory_@i"> <img src="@subcategory.SubCategoryImage" alt="" />@subcategory.SubCategoryName</a><span class="count">1</span>
                         </li>
+                        i++;
                     }
                 </ul>
             </div>
@@ -346,12 +349,15 @@
 <script>
    
     $(document).ready(function () {
-        $("#subCategoryli").click();
-        ProductOnSubCategory(1).click();
+        $("#subCategoryli_1").click();
+        $("#productonsubcateory_1").click();
     })
     var ProductOnSubCategory = (subCategoryId) => {
         $.post("/ProductVarient/ProductOnSubCategory", { SubCategoryId: subCategoryId }).done((response) => {
-            $("#varients").html(response);
+            $("#products").html(response);
         })
     }
+    $("#quickViewModal").click(() => {
+
+    })
 </script>
