@@ -58,7 +58,7 @@ namespace WEBAPI.Controllers
         [HttpPost(nameof(GetProductById)+"/{Id}")]
         public async Task<IActionResult> GetProductById(int Id)
         {
-            var res = await _productService.GetProductById(User.GetLoggedInUserId<int>(), Id);
+            var res = await _productService.GetProductById(Id);
             return Ok(res);
         }
 

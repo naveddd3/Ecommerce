@@ -66,15 +66,14 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-        public async Task<ProductVM> GetProductById(int LoginId, int Id)
+        public async Task<ProductVM> GetProductById(int Id)
         {
             var productVM = new ProductVM();
             try
             {
                 var result = await _dapper.GetMultipleAsync<Product, ProductImage>("Proc_GetProductById", new
                 {
-                    Id,
-                    LoginId
+                    Id
                 }, System.Data.CommandType.StoredProcedure);
                 var product = (List<Product>)result.GetType().GetProperty("Table1").GetValue(result, null);
                 productVM.product = product.FirstOrDefault();

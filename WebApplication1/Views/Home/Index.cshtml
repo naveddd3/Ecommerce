@@ -4337,4 +4337,11 @@
         const formattedCategoryName = categoryName.replace(/[\s,]/g, '');
         window.location.href = `/p/${formattedCategoryName}/${categoryId}`;
     }
+
+    var productDetail = (productId)=>{
+        $.post("/ProductVarient/ProductDetail",{productId:productId}).done((res)=>{
+            $("#productDetail").html(res);
+            $("#quickViewModal").modal("show");
+        })
+    }
 </script>

@@ -58,5 +58,25 @@ namespace Infrastucture.Services
                 throw;
             }
         }
+
+        public async Task<dynamic> ProductDetailById(int ProductId)
+        {
+            try
+            {
+                var product = new ProductDetail();
+                var param = new DynamicParameters();
+                param.Add("@Id", ProductId);
+                var res = await _dapper.GetMultipleAsync<ProductDetail,ProductImage>("PROC_GetProductById",param);
+                var list = (List<ProductDetail>)res.GetType().GetProperty("Table1").GetValue(res, null);
+                product = list.FirstOrDefault();
+                product.productImages = (List<ProductImage>)res.GetType().GetProperty("Table2").GetValue(res, null);
+                return product;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }
