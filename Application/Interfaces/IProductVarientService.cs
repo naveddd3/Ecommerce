@@ -10,5 +10,6 @@ namespace Application.Interfaces
     {
         Task<dynamic> SubCategoryOnCategory(int CategoryId);
         Task<dynamic> ProductOnSubCategoryId(int ProductId);
+        Task<dynamic> ProductDetailById(int ProductId);
     }
 }

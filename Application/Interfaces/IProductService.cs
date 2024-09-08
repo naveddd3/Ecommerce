@@ -11,7 +11,7 @@ namespace Application.Interfaces
     {
         Task<Response> SaveOrUpdateProduct(Product product);
         Task<dynamic> GetProduct();
-        Task<ProductVM> GetProductById(int LoginId,int Id);
+        Task<ProductVM> GetProductById(int Id);
         Task<List<ProductImage>> ShowImagesOfProduct(int ID);
         Task<Response> DeleteImageOfProduct(int Id);
         Task<Response> SaveProductVarient(ProductVarientReq productVarientVM);

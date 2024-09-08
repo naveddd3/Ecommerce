@@ -45,6 +45,18 @@ namespace WEBAPP.Controllers
             }
             return PartialView(model);
         }
+
+        public async Task<IActionResult> ProductDetail(int ProductId)
+        {
+            var model = new WebsiteModel();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductDetailById/{ProductId}", null,null);
+            if(apiRes != null)
+            {
+                model.ProductDetail = JsonConvert.DeserializeObject<ProductDetail>(apiRes.Result);
+            }
+            return PartialView(model);
+
+        }
         #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,13 @@ namespace WEBAPI.Controllers
         public async Task<IActionResult> ProductOnSubCategoryId(int SubCategoryId)
         {
             var res = await _productVarientService.ProductOnSubCategoryId(SubCategoryId);
+            return Ok(res);
+        }
+
+        [HttpPost(nameof(ProductDetailById) + "/{ProductId}")]
+        public async Task<IActionResult> ProductDetailById(int ProductId)
+        {
+            var res = await _productVarientService.ProductDetailById(ProductId);
             return Ok(res);
         }
     }

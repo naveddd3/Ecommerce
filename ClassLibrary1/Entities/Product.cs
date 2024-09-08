@@ -25,6 +25,10 @@ namespace Domain.Entities
         public IEnumerable<IFormFile>? Images { get; set; }
     }
 
+    public class ProductDetail : Product
+    {
+        public IEnumerable<ProductImage> productImages { get; set; }
+    }
     public class ProductImage
     {
         public int ProductImageId { get; set; }
