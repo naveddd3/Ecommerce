@@ -34,7 +34,7 @@ namespace WEBAPI.Controllers
         public async Task<IActionResult> ProductDetailById(int ProductId)
         {
             var res = await _productVarientService.ProductDetailById(ProductId);
-            return Ok(res);
+            return Ok(res); 
         }
     }
 }
