@@ -22,7 +22,7 @@ namespace Domain.Entities
     }
     public class ProductReq : Product
     {
-        public IEnumerable<IFormFile>? Images { get; set; }
+        public IFormFile? ProductImage { get; set; }
     }
 
     public class ProductDetail : Product
@@ -47,5 +47,12 @@ namespace Domain.Entities
         public IEnumerable<ProductImage>? Images { get; set; }
         public Product product { get; set; }
         public IEnumerable<MasterUnit> masterUnits { get; set; }
+    }
+
+    public class ProductSliderImages
+    {
+        public int ProductId { get; set; }
+        public IEnumerable<IFormFile> SliderImages{ get; set; }
+        public string? Images{ get; set; }
     }
 }

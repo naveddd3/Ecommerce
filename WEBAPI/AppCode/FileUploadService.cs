@@ -91,5 +91,6 @@ namespace Infrastucture.Services
         public static readonly string SubCategoryImage = "SubCategoryImages/";
         public static readonly string ProductVarient = "ProductVarientImages/";
         public static readonly string BusinessLicense = "BusinessLicense/";
+        public static readonly string ProductSliderImages = "Images/ProductSliderImages";
     }
 }

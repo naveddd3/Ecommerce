@@ -1,0 +1,119 @@
+﻿
+<style>
+    .img-thumbs {
+        background: #eee;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        margin: 1.5rem 0;
+        padding: 0.75rem;
+    }
+
+    .img-thumbs-hidden {
+        display: none;
+    }
+
+    .wrapper-thumb {
+        position: relative;
+        display: inline-block;
+        margin: 1rem 0;
+        justify-content: space-around;
+    }
+
+    .img-preview-thumb {
+        background: #fff;
+        border: 1px solid none;
+        border-radius: 0.25rem;
+        box-shadow: 0.125rem 0.125rem 0.0625rem rgba(0, 0, 0, 0.12);
+        margin-right: 1rem;
+        max-width: 140px;
+        padding: 0.25rem;
+    }
+
+    .remove-btn {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: .7rem;
+        top: -5px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .remove-btn:hover {
+            box-shadow: 0px 0px 3px grey;
+            transition: all .3s ease-in-out;
+        }
+</style>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #313a46">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">ADD Slider Image</h5>
+            </div>
+            <div class="modal-body">
+               
+                <div class="row">
+                    <input type="number" class="form-control d-none"  id="productId" value="@ViewBag.Id"/>
+                    <div class="col-sm-12">
+
+                        <label >Choose Slider Images</label>
+                        <input type="file" class="form-control" name="images[]" id="SliderImageUrl" multiple />
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="img-thumbs img-thumbs-hidden" id="img-preview"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveOrUpdateSliderImage()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var imgUpload = document.getElementById('SliderImageUrl'),
+        imgPreview = document.getElementById('img-preview'),
+        totalFiles,
+        img;
+
+    imgUpload.addEventListener('change', previewImgs, true);
+
+    function previewImgs(event) {
+        totalFiles = imgUpload.files.length;
+
+        if (!!totalFiles) {
+            imgPreview.classList.remove('img-thumbs-hidden');
+        }
+
+        for (var i = 0; i < totalFiles; i++) {
+            wrapper = document.createElement('div');
+            wrapper.classList.add('wrapper-thumb');
+            removeBtn = document.createElement("span");
+            nodeRemove = document.createTextNode('x');
+            removeBtn.classList.add('remove-btn');
+            removeBtn.appendChild(nodeRemove);
+            img = document.createElement('img');
+            img.src = URL.createObjectURL(event.target.files[i]);
+            img.classList.add('img-preview-thumb');
+            wrapper.appendChild(img);
+            wrapper.appendChild(removeBtn);
+            imgPreview.appendChild(wrapper);
+
+            $('.remove-btn').click(function () {
+                $(this).parent('.wrapper-thumb').remove();
+            });
+
+        }
+
+    }
+</script>
