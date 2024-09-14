@@ -105,17 +105,13 @@
             Quantity: $("#product_Quantity").val(),
             Discount: $("#product_Discount").val()
         }
-        console.log(obj);
         if (obj.ProductId == "" || obj.ProductId == null) {
             obj.ProductId = 0;
         }
         formData.append('Jsondata', JSON.stringify(obj));
-        var imageInput = $('#ImageUrl')[0];
+        var imageInput = $('#productImage')[0];
         if (imageInput.files.length > 0) {
-            for (var i = 0; i < imageInput.files.length; i++) {
-                var file = imageInput.files[i];
-                formData.append('productImage', file);
-            }
+            formData.append('productImage', imageInput.files[0]);
         }
         $.ajax({
             url: '/Product/SaveOrUpdateProduct',
@@ -236,5 +232,43 @@
         window.location.href = "/Product/VarientDetails?Id=" + Id;
     }
 
+
+    addSliderImage = (Id) => {
+        preloader.load();
+        $.post('/Product/AddSliderImage', {Id:Id}).done((res) => {
+            preloader.remove();
+            $("#modal").html(res);
+            $("#exampleModalCenter").modal("show");
+        })
+    }
+
+    saveOrUpdateSliderImage = () => {
+        let ProductId = $("#productId").val();
+        var formData = new FormData();
+
+        var imageInput = $('#SliderImageUrl')[0];
+        if (imageInput.files.length > 0) {
+            for (var i = 0; i < imageInput.files.length; i++) {
+                var file = imageInput.files[i];
+                formData.append('images', file);
+            }
+        }
+        formData.append("ProductId", ProductId);
+
+        $.ajax({
+            url: '/Product/SaveOrUpdateSliderImage',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                QAlert(response.statusCode, response.responseText);
+                $("#exampleModalCenter").modal("hide");
+            },
+            error: function (response) {
+                QAlert(response.statusCode, response.responseText);
+            }
+        });
+    }
     
 </script>

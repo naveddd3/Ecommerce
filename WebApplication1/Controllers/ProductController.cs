@@ -65,7 +65,7 @@ namespace WEBAPP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveOrUpdateProduct([FromForm] string Jsondata, [FromForm] IEnumerable<IFormFile> productImage)
+        public async Task<IActionResult> SaveOrUpdateProduct([FromForm] string Jsondata, [FromForm] IFormFile productImage)
         {
             var res = new Response()
             {
@@ -75,10 +75,10 @@ namespace WEBAPP.Controllers
             try
             {
                 var request = JsonConvert.DeserializeObject<ProductReq>(Jsondata);
-                request.Images = productImage;
-                if (request.ProductId == 0)
+                request.ProductImage = productImage;
+                if (request.ProductId == null)
                 {
-                    if (!productImage.Any())
+                    if (productImage==null)
                     {
                         res.ResponseText = "Please Upload Images!";
                         return Json(res);
@@ -126,6 +126,35 @@ namespace WEBAPP.Controllers
             return Json(res);
         }
 
+        public IActionResult AddSliderImage(int Id)
+        {
+            ViewBag.Id = Id;
+            return PartialView();
+        }
+        public async Task<IActionResult> SaveOrUpdateSliderImage([FromForm] int ProductId, [FromForm] IEnumerable<IFormFile> images)
+        {
+            var req = new ProductSliderImages();
+            var res = new Response()
+            {
+                ResponseText = "Server Error !",
+                StatusCode = ResponseStatus.Failed  
+            };
+            if(images == null)
+            {
+                res.ResponseText = "Please Upload Images !";
+                res.StatusCode = ResponseStatus.Failed;
+                return Json(res);
+            }
+            req.ProductId = ProductId;  
+            req.SliderImages = images;
+            var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveOrUpdateSliderImage", User.GetLoggedInUserToken(),req);
+            var response = await apiRes.Content.ReadAsStringAsync();
+            if (apiRes != null)
+            {
+                res = JsonConvert.DeserializeObject<Response>(response);
+            }
+            return Json(res);
+        }
 
         [Route("Varient")]
         public async Task<IActionResult> Varient(int ProductId)

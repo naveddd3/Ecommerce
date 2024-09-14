@@ -15,9 +15,9 @@ namespace Infrastucture.Services
         private readonly ICategoryService _categoryService;
         private readonly IUnitService _unitService;
 
-        public ProductService(IDapperRepository dappers, ICategoryService categoryService,IUnitService unitService)
+        public ProductService(IDapperRepository dappers, ICategoryService categoryService, IUnitService unitService)
         {
-            _dapper=dappers;
+            _dapper = dappers;
             _categoryService = categoryService;
             _unitService = unitService;
 
@@ -125,12 +125,12 @@ namespace Infrastucture.Services
         {
             try
             {
-                if(productVarientVM.ProductId==null|| productVarientVM.ProductId==0)
+                if (productVarientVM.ProductId == null || productVarientVM.ProductId == 0)
                 {
-                    var res = new Response() { ResponseText = "Temporary Error !",StatusCode = ResponseStatus.Failed};
+                    var res = new Response() { ResponseText = "Temporary Error !", StatusCode = ResponseStatus.Failed };
                     return res;
                 }
-               
+
                 var response = await _dapper.GetAsync<Response>("Proc_SaveProductVarient", new
                 {
                     productVarientVM.ProductId,
@@ -202,10 +202,32 @@ namespace Infrastucture.Services
                 throw;
             }
         }
+        public async Task<Response> SaveOrUpdateProductSlider(ProductSliderImages productSliderImages)
+        {
+            var res = new Response()
+            {
+                ResponseText = "Temporary Error !",
+                StatusCode = ResponseStatus.Failed
+            };
+            try
+            {
+                res = await _dapper.GetAsync<Response>("Proc_SaveProductSlider", new
+                {
+                    productSliderImages.ProductId,
+                    ProductSliderImages = productSliderImages.Images
+                });
+                return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
 
         #endregion
 
-       
+
 
     }
 }

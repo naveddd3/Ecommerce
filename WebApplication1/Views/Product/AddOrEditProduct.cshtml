@@ -97,7 +97,8 @@
                     </div>
                     <div class="col-4">
                         <label asp-for="product.ImageUrl">Choose Images</label>
-                        <input asp-for="product.ImageUrl" type="file" class="form-control" name="images[]" multiple id="ImageUrl" />
+                        <input asp-for="product.ImageUrl" type="file" class="form-control" name="images[]" id="productImage" />
+                        <i class="fa-solid fa-image"></i>
                     </div>
                 </div>
 
@@ -147,42 +148,48 @@
 </div>
 
 
+
 <script>
-    var imgUpload = document.getElementById('ImageUrl'),
-        imgPreview = document.getElementById('img-preview'),
-        totalFiles,
-        img;
 
-    imgUpload.addEventListener('change', previewImgs, true);
+    $("#productImage").change(() => {
 
-    function previewImgs(event) {
-        totalFiles = imgUpload.files.length;
+    })
 
-        if (!!totalFiles) {
-            imgPreview.classList.remove('img-thumbs-hidden');
-        }
+    // var imgUpload = document.getElementById('ImageUrl'),
+    //     imgPreview = document.getElementById('img-preview'),
+    //     totalFiles,
+    //     img;
 
-        for (var i = 0; i < totalFiles; i++) {
-            wrapper = document.createElement('div');
-            wrapper.classList.add('wrapper-thumb');
-            removeBtn = document.createElement("span");
-            nodeRemove = document.createTextNode('x');
-            removeBtn.classList.add('remove-btn');
-            removeBtn.appendChild(nodeRemove);
-            img = document.createElement('img');
-            img.src = URL.createObjectURL(event.target.files[i]);
-            img.classList.add('img-preview-thumb');
-            wrapper.appendChild(img);
-            wrapper.appendChild(removeBtn);
-            imgPreview.appendChild(wrapper);
+    // imgUpload.addEventListener('change', previewImgs, true);
 
-            $('.remove-btn').click(function () {
-                $(this).parent('.wrapper-thumb').remove();
-            });
+    // function previewImgs(event) {
+    //     totalFiles = imgUpload.files.length;
 
-        }
+    //     if (!!totalFiles) {
+    //         imgPreview.classList.remove('img-thumbs-hidden');
+    //     }
 
-    }
+    //     for (var i = 0; i < totalFiles; i++) {
+    //         wrapper = document.createElement('div');
+    //         wrapper.classList.add('wrapper-thumb');
+    //         removeBtn = document.createElement("span");
+    //         nodeRemove = document.createTextNode('x');
+    //         removeBtn.classList.add('remove-btn');
+    //         removeBtn.appendChild(nodeRemove);
+    //         img = document.createElement('img');
+    //         img.src = URL.createObjectURL(event.target.files[i]);
+    //         img.classList.add('img-preview-thumb');
+    //         wrapper.appendChild(img);
+    //         wrapper.appendChild(removeBtn);
+    //         imgPreview.appendChild(wrapper);
+
+    //         $('.remove-btn').click(function () {
+    //             $(this).parent('.wrapper-thumb').remove();
+    //         });
+
+    //     }
+
+    // }
 
 
 </script>

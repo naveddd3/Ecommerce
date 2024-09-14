@@ -16,35 +16,29 @@ namespace WEBAPI.Controllers
         private readonly FileUploadService _fileUploadService;
         public ProductController(IProductService productService, FileUploadService fileUpload)
         {
-            _productService=productService;
-            _fileUploadService=fileUpload;
+            _productService = productService;
+            _fileUploadService = fileUpload;
         }
         #region ForAdmin
         [HttpPost(nameof(SaveProduct))]
         public async Task<IActionResult> SaveProduct([FromForm] ProductReq product)
         {
-            var res = new Response() { ResponseText=string.Empty, StatusCode= ResponseStatus.Failed };
-            if (product.ProductId==0)
+            var res = new Response() { ResponseText = string.Empty, StatusCode = ResponseStatus.Failed };
+            if (product.ProductId == 0)
             {
-                if (!product.Images.Any())
+                if (product.ProductImage == null)
                 {
                     res.ResponseText = "Please Upload Images";
                     res.StatusCode = ResponseStatus.Failed;
                     return Ok(res);
                 }
             }
-            List<string> imgPath = new List<string>();
-            if (product.Images!=null)
+            if (product.ProductImage != null)
             {
-                foreach (var images in product.Images)
-                {
-                    var files = _fileUploadService.Image(images, FileUploadPath.ProductImage);
-                    res.StatusCode = ResponseStatus.Success;
-                    imgPath.Add(files);
-                }
-
+                var files = _fileUploadService.Image(product.ProductImage, FileUploadPath.ProductImage);
+                res.StatusCode = ResponseStatus.Success;
+                product.ImageUrl = files;
             }
-            product.ImageUrl = string.Join(",", imgPath);
             var response = await _productService.SaveOrUpdateProduct(product);
             return Ok(response);
         }
@@ -55,21 +49,21 @@ namespace WEBAPI.Controllers
             return Ok(res);
         }
 
-        [HttpPost(nameof(GetProductById)+"/{Id}")]
+        [HttpPost(nameof(GetProductById) + "/{Id}")]
         public async Task<IActionResult> GetProductById(int Id)
         {
             var res = await _productService.GetProductById(Id);
             return Ok(res);
         }
 
-        [HttpPost(nameof(ShowImagesOfProduct)+"/{ID}")]
+        [HttpPost(nameof(ShowImagesOfProduct) + "/{ID}")]
         public async Task<IActionResult> ShowImagesOfProduct(int ID)
         {
             var res = await _productService.ShowImagesOfProduct(ID);
             return Ok(res);
         }
 
-        [HttpPost(nameof(DeleteImageOfProduct)+"/{Id}")]
+        [HttpPost(nameof(DeleteImageOfProduct) + "/{Id}")]
         public async Task<IActionResult> DeleteImageOfProduct(int Id)
         {
             var res = await _productService.DeleteImageOfProduct(Id);
@@ -79,8 +73,8 @@ namespace WEBAPI.Controllers
         [HttpPost(nameof(SaveProductVarient))]
         public async Task<IActionResult> SaveProductVarient([FromForm] ProductVarientReq productVarient)
         {
-            var res = new Response() { ResponseText=string.Empty, StatusCode= ResponseStatus.Failed };
-            if (productVarient.VarientId==0)
+            var res = new Response() { ResponseText = string.Empty, StatusCode = ResponseStatus.Failed };
+            if (productVarient.VarientId == 0)
             {
                 if (!productVarient.productvarientImages.Any())
                 {
@@ -90,7 +84,7 @@ namespace WEBAPI.Controllers
                 }
             }
             List<string> imgPath = new List<string>();
-            if (productVarient.productvarientImages!=null)
+            if (productVarient.productvarientImages != null)
             {
                 foreach (var images in productVarient.productvarientImages)
                 {
@@ -105,29 +99,48 @@ namespace WEBAPI.Controllers
             return Ok(response);
         }
 
-        [HttpPost(nameof(GetProductVarient)+"/{Id}")]
+        [HttpPost(nameof(GetProductVarient) + "/{Id}")]
         public async Task<IActionResult> GetProductVarient(int Id)
         {
             var res = await _productService.GetProductVarient(Id);
             return Ok(res);
         }
 
-        [HttpPost(nameof(GetProductVarientImage)+"/{Id}")]
+        [HttpPost(nameof(GetProductVarientImage) + "/{Id}")]
         public async Task<IActionResult> GetProductVarientImage(int Id)
         {
             var res = await _productService.GetProductVarientImage(Id);
             return Ok(res);
         }
 
-        [HttpPost(nameof(GetProductVarientById)+"/{Id}")]
+        [HttpPost(nameof(GetProductVarientById) + "/{Id}")]
         public async Task<IActionResult> GetProductVarientById(int Id)
         {
             var res = await _productService.GetProductVarientById(Id);
             return Ok(res);
         }
 
+
+        [HttpPost(nameof(SaveOrUpdateSliderImage))]
+        public async Task<IActionResult> SaveOrUpdateSliderImage(ProductSliderImages productSliderImages)
+        {
+            var res = new Response()
+            {
+                ResponseText = "An Error Has Been Occured !",
+                StatusCode = ResponseStatus.Failed
+            };
+            List<string> images = new List<string>();
+            foreach (var image in productSliderImages.SliderImages)
+            {
+                string file = _fileUploadService.Image(image, FileUploadPath.ProductSliderImages);
+                images.Add(file);
+            }
+            productSliderImages.Images = string.Join(",", images);
+            res = await _productService.SaveOrUpdateProductSlider(productSliderImages);
+            return Ok(res);
+        }
         #endregion
 
-       
+
     }
 }
