@@ -42,14 +42,9 @@ namespace Infrastucture.Services
         {
             try
             {
-                var result = new ProductOnSubCategoryModel();
-                var parameters = new DynamicParameters();
-                parameters.Add("@SubCategoryId", SubCategoryId);
-                var res = await _dapper.GetMultipleAsync<Product, ProductVarientRes, ProductImage>("Proc_GetProductOnSubCategoryId", parameters,System.Data.CommandType.StoredProcedure);
-                result.Product = (List<Product>)res.GetType().GetProperty("Table1").GetValue(res, null);
-                result.ProductVarients = (List<ProductVarientRes>)res.GetType().GetProperty("Table2").GetValue(res, null);
-                result.ProductImages= (List<ProductImage>)res.GetType().GetProperty("Table3").GetValue(res, null);
-                return result;
+               
+                var res = await _dapper.GetAllAsync<Product>("Proc_GetProductOnSubCategoryId", new {SubCategoryId},System.Data.CommandType.StoredProcedure);
+                return res;
 
             }
             catch (Exception ex)
@@ -66,10 +61,10 @@ namespace Infrastucture.Services
                 var product = new ProductDetail();
                 var param = new DynamicParameters();
                 param.Add("@Id", ProductId);
-                var res = await _dapper.GetMultipleAsync<ProductDetail,ProductImage>("PROC_GetProductById",param);
+                var res = await _dapper.GetMultipleAsync<ProductDetail, ProductSliderImages>("PROC_GetProductById",param);
                 var list = (List<ProductDetail>)res.GetType().GetProperty("Table1").GetValue(res, null);
                 product = list.FirstOrDefault();
-                product.productImages = (List<ProductImage>)res.GetType().GetProperty("Table2").GetValue(res, null);
+                product.productImages = (List<ProductSliderImages>)res.GetType().GetProperty("Table2").GetValue(res, null);
                 return product;
             }
             catch (Exception ex)

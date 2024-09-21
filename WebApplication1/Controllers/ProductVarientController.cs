@@ -41,13 +41,13 @@ namespace WEBAPP.Controllers
             var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductOnSubCategoryId/{SubCategoryId}", null, null);
             if (apiRes != null)
             {
-                model.ProductOnSubCategoryAPIRES = JsonConvert.DeserializeObject<ProductOnSubCategoryModel>(apiRes.Result);
+                model.Product = JsonConvert.DeserializeObject<List<Product>>(apiRes.Result);
             }
             return PartialView(model);
         }
 
         public async Task<IActionResult> ProductDetail(int ProductId)
-        {
+            {
             var model = new WebsiteModel();
             var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductDetailById/{ProductId}", null,null);
             if(apiRes != null)

@@ -19,6 +19,6 @@ namespace Application.Interfaces
         Task<dynamic> GetProductVarientImage(int Id);
         Task<ProductVarientRes> GetProductVarientById(int Id);
         Task<Response> SaveOrUpdateProductSlider(ProductSliderImages productSliderImages);
-
+        Task<IEnumerable<ProductSliderImages>> GetProductSliderImagesById(int Id);
     }
 }

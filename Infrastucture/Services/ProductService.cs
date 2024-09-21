@@ -211,11 +211,24 @@ namespace Infrastucture.Services
             };
             try
             {
-                res = await _dapper.GetAsync<Response>("Proc_SaveProductSlider", new
+                res = await _dapper.GetAsync<Response>("Proc_SaveProductSliderImages", new
                 {
                     productSliderImages.ProductId,
                     ProductSliderImages = productSliderImages.Images
                 });
+                return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public async Task<IEnumerable<ProductSliderImages>> GetProductSliderImagesById(int Id)
+        {
+            try
+            {
+                var res = await _dapper.GetAllAsync<ProductSliderImages>("SELECT Id ProductSliderImageId,ProductId,SliderImages Images FROM ProductSliderImages WHERE PRODUCTID = @Id", new { Id},System.Data.CommandType.Text);
                 return res;
             }
             catch (Exception ex)

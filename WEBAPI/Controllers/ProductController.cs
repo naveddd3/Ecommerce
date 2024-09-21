@@ -120,7 +120,6 @@ namespace WEBAPI.Controllers
             return Ok(res);
         }
 
-
         [HttpPost(nameof(SaveOrUpdateSliderImage))]
         public async Task<IActionResult> SaveOrUpdateSliderImage(ProductSliderImages productSliderImages)
         {
@@ -129,6 +128,13 @@ namespace WEBAPI.Controllers
                 ResponseText = "An Error Has Been Occured !",
                 StatusCode = ResponseStatus.Failed
             };
+            var sliderImages = await _productService.GetProductSliderImagesById(productSliderImages.ProductId);
+            if (sliderImages.Count() >= 4)
+            {
+                res.ResponseText = "Can Not Insert More than 4 Slider Images !";
+                res.StatusCode = ResponseStatus.Failed;
+                return Ok(res);
+            }
             List<string> images = new List<string>();
             foreach (var image in productSliderImages.SliderImages)
             {
@@ -138,6 +144,13 @@ namespace WEBAPI.Controllers
             productSliderImages.Images = string.Join(",", images);
             res = await _productService.SaveOrUpdateProductSlider(productSliderImages);
             return Ok(res);
+        }
+
+        [HttpPost(nameof(GetSliderImagesById)+"/{Id}")]
+        public async Task<IActionResult> GetSliderImagesById(int Id)
+        {
+            var res =  await _productService.GetProductSliderImagesById(Id);
+            return Ok(res); 
         }
         #endregion
 
