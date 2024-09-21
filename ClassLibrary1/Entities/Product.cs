@@ -17,7 +17,7 @@ namespace Domain.Entities
         public int? ProductImageId { get; set; }
         public int? VarientCount { get; set; }
         public int? UnitId { get; set; }
-        public int? UnitType { get; set; }
+        public string? UnitType { get; set; }
         public int? Quantity { get; set; }
     }
     public class ProductReq : Product
@@ -27,7 +27,7 @@ namespace Domain.Entities
 
     public class ProductDetail : Product
     {
-        public IEnumerable<ProductImage> productImages { get; set; }
+        public IEnumerable<ProductSliderImages> productImages { get; set; }
     }
     public class ProductImage
     {
@@ -51,8 +51,9 @@ namespace Domain.Entities
 
     public class ProductSliderImages
     {
+        public int? ProductSliderImageId { get; set; }
         public int ProductId { get; set; }
-        public IEnumerable<IFormFile> SliderImages{ get; set; }
+        public IEnumerable<IFormFile>? SliderImages{ get; set; }
         public string? Images{ get; set; }
     }
 }

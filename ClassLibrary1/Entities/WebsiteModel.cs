@@ -10,7 +10,7 @@ namespace Domain.Entities
     {
         public IEnumerable<MasterCategory> Categories { get; set; }
         public IEnumerable<SubCategory> SubCategories { get; set; }
-        public ProductOnSubCategoryModel ProductOnSubCategoryAPIRES { get; set; }
+        public IEnumerable<Product>? Product { get; set; }
         public ProductDetail ProductDetail { get; set; }
     }
 }
