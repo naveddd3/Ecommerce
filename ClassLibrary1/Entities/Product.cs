@@ -55,5 +55,6 @@ namespace Domain.Entities
         public int ProductId { get; set; }
         public IEnumerable<IFormFile>? SliderImages{ get; set; }
         public string? Images{ get; set; }
+        public string? ProductName{ get; set; }
     }
 }

@@ -131,7 +131,18 @@ namespace WEBAPP.Controllers
             ViewBag.Id = Id;
             return PartialView();
         }
-        public async Task<IActionResult> SaveOrUpdateSliderImage([FromForm] int ProductId, [FromForm] IEnumerable<IFormFile> images)
+
+        public async Task<IActionResult> EditSliderImages(int Id)
+        {
+            var res = new List<ProductSliderImages>();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetSliderImagesById/{Id}", null, User.GetLoggedInUserToken());
+            if(apiRes != null)
+            {
+                res = JsonConvert.DeserializeObject<List<ProductSliderImages>>(apiRes.Result);
+            }
+            return View(res);
+        } 
+        public async Task<IActionResult> SaveOrUpdateSliderImage([FromForm] int ProductId, [FromForm] IEnumerable<IFormFile> images,int ProductSliderImageId)
         {
             var req = new ProductSliderImages();
             var res = new Response()
@@ -147,6 +158,7 @@ namespace WEBAPP.Controllers
             }
             req.ProductId = ProductId;  
             req.SliderImages = images;
+            req.ProductSliderImageId = ProductSliderImageId;
             var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveOrUpdateSliderImage", User.GetLoggedInUserToken(),req);
             var response = await apiRes.Content.ReadAsStringAsync();
             if (apiRes != null)

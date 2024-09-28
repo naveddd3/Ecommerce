@@ -1,0 +1,112 @@
+﻿@using Domain.Entities;
+@model IEnumerable<ProductSliderImages>
+<div id="modal"></div>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                            <li class="breadcrumb-item active">Products</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Products</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <div class="text-sm-end">
+                                    <a href="/Products" type="button" class="btn btn-success mb-2 me-1">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Back To Products
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hidden-content" style="display:none;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
+                                <thead class="table-light  text-nowrap">
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Product Name</th>
+                                        <th>Slider Images</th>
+                                        <th style="width: 158px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        int i = 0;
+                                        foreach (var item in Model)
+                                        {
+                                            i++;
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@item.ProductName</td>
+                                                <td>
+                                                    <img src="@item.Images" width="100" alt="SliderImage_@i" height="100" />
+                                                </td>
+                                                <td>
+                                                    <input type="file" class="d-none" id="changeSliderImg_@item.ProductSliderImageId" onchange="changeSliderImage(@item.ProductSliderImageId)" />
+                                                    <label for="changeSliderImg_@item.ProductSliderImageId" class="btn btn-danger">Upload Image</label>
+                                                </td>
+
+                                            </tr>
+
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12" style="text-align:center" class="danger">Record Not Found!</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var changeSliderImage = (Id) => {
+        var formData = new FormData();
+
+        var inputId = '#changeSliderImg_' + Id;
+        var imageInput = $(inputId)[0];
+        var file = imageInput.files[0];
+        formData.append('images', file);
+        formData.append("ProductId", 0);
+        formData.append("ProductSliderImageId", Id);
+
+        $.ajax({
+            url: '/Product/SaveOrUpdateSliderImage',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                QAlert(response.statusCode, response.responseText);
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000);
+            },
+            error: function (response) {
+                QAlert(response.statusCode, response.responseText);
+            }
+        });
+    }
+</script>
