@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Helper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -214,7 +215,8 @@ namespace Infrastucture.Services
                 res = await _dapper.GetAsync<Response>("Proc_SaveProductSliderImages", new
                 {
                     productSliderImages.ProductId,
-                    ProductSliderImages = productSliderImages.Images
+                    ProductSliderImages = productSliderImages.Images,
+                    productSliderImages.ProductSliderImageId
                 });
                 return res;
             }
@@ -228,7 +230,8 @@ namespace Infrastucture.Services
         {
             try
             {
-                var res = await _dapper.GetAllAsync<ProductSliderImages>("SELECT Id ProductSliderImageId,ProductId,SliderImages Images FROM ProductSliderImages WHERE PRODUCTID = @Id", new { Id},System.Data.CommandType.Text);
+                string query = "SELECT i.Id ProductSliderImageId,i.ProductId,i.SliderImages Images,p.ProductName ProductName FROM ProductSliderImages i INNER JOIN tbl_Products p ON p.ProductId=i.ProductId WHERE i.PRODUCTID = @Id";
+                var res = await _dapper.GetAllAsync<ProductSliderImages>(query, new { Id},System.Data.CommandType.Text);
                 return res;
             }
             catch (Exception ex)

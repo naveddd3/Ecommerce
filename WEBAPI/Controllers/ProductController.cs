@@ -128,12 +128,15 @@ namespace WEBAPI.Controllers
                 ResponseText = "An Error Has Been Occured !",
                 StatusCode = ResponseStatus.Failed
             };
-            var sliderImages = await _productService.GetProductSliderImagesById(productSliderImages.ProductId);
-            if (sliderImages.Count() >= 4)
+            if (productSliderImages.ProductSliderImageId == 0 || productSliderImages.ProductSliderImageId == null)
             {
-                res.ResponseText = "Can Not Insert More than 4 Slider Images !";
-                res.StatusCode = ResponseStatus.Failed;
-                return Ok(res);
+                var sliderImages = await _productService.GetProductSliderImagesById(productSliderImages.ProductId);
+                if (sliderImages.Count() >= 4)
+                {
+                    res.ResponseText = "Can Not Insert More than 4 Slider Images !";
+                    res.StatusCode = ResponseStatus.Failed;
+                    return Ok(res);
+                }
             }
             List<string> images = new List<string>();
             foreach (var image in productSliderImages.SliderImages)

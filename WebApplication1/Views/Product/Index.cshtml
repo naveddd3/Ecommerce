@@ -242,6 +242,11 @@
         })
     }
 
+    editSliderImage = (Id) => {
+        preloader.load();
+        window.location.href = "/Product/EditSliderImages?Id=" + Id;
+    }
+
     saveOrUpdateSliderImage = () => {
         let ProductId = $("#productId").val();
         var formData = new FormData();
@@ -254,6 +259,7 @@
             }
         }
         formData.append("ProductId", ProductId);
+        formData.append("ProductSliderImageId", 0);
 
         $.ajax({
             url: '/Product/SaveOrUpdateSliderImage',
