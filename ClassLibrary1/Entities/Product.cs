@@ -44,7 +44,6 @@ namespace Domain.Entities
     public class ProductVM 
     {
         public IEnumerable<SubCategory> SubCategories{ get; set; }
-        public IEnumerable<ProductImage>? Images { get; set; }
         public Product product { get; set; }
         public IEnumerable<MasterUnit> masterUnits { get; set; }
     }

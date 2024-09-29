@@ -47,15 +47,15 @@ namespace WEBAPP.Controllers
         }
         public async Task<IActionResult> AddOrEditProduct(int Id)
         {
-            ProductVM category = new ProductVM();
+            ProductVM product = new ProductVM();
             try
             {
                 var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductById/{Id}", null, User.GetLoggedInUserToken());
                 if (apiRes.Result != null)
                 {
-                    category = JsonConvert.DeserializeObject<ProductVM>(apiRes.Result);
+                    product = JsonConvert.DeserializeObject<ProductVM>(apiRes.Result);
                 }
-                return PartialView(category);
+                return PartialView(product);
             }
             catch (Exception ex)
             {
@@ -171,21 +171,22 @@ namespace WEBAPP.Controllers
         [Route("Varient")]
         public async Task<IActionResult> Varient(int ProductId)
         {
-            var productVarientVM = new ProductVarientVM();
+            var productVarientVM = new ProductVarientRes();
             productVarientVM.ProductId = ProductId;
 
-            var apiRes1 = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Varient/GetVarient", null, User.GetLoggedInUserToken());
-            if (apiRes1 != null)
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarientById/{ProductId}", null, User.GetLoggedInUserToken());
+            if (apiRes != null)
             {
-                productVarientVM.masterUnits = JsonConvert.DeserializeObject<List<MasterUnit>>(apiRes1.Result);
+                productVarientVM = JsonConvert.DeserializeObject<ProductVarientRes>(apiRes.Result);
             }
 
-            return PartialView(productVarientVM);
+            return View(productVarientVM);
 
         }
 
         [HttpPost]
         public async Task<IActionResult> SaveProductVarient([FromForm] string JsonData, IEnumerable<IFormFile> productvarientImages)
+        
         {
             var res = new Response()
             {

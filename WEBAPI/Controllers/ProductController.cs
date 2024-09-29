@@ -88,9 +88,8 @@ namespace WEBAPI.Controllers
             {
                 foreach (var images in productVarient.productvarientImages)
                 {
-                    var files = _fileUploadService.UploadImage(images, FileUploadPath.ProductVarient);
-                    res.StatusCode = files.StatusCode;
-                    imgPath.Add(files.ResponseText);
+                    var files = _fileUploadService.Image(images, FileUploadPath.ProductVarient);
+                    imgPath.Add(files);
                 }
 
             }

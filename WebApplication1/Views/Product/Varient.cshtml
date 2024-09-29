@@ -1,105 +1,123 @@
-﻿@model Domain.Entities.ProductVarientVM
+﻿@using Domain.Entities
+@model ProductVarientRes
 @{
-    var varientlist = new SelectList(Model.masterUnits, "VarientId", "VarientType");
+    var units = new SelectList(Model.masterUnits, "UnitId", "UnitType");
 }
-
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #313a46">
-                <h5 class="modal-title" id="exampleModalLongTitle" style="color: white">ADD VARIENT</h5>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                            <li class="breadcrumb-item active">Product Varient</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Product Varient</h4>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <input type="hidden" asp-for="ProductId" />
-                        <label asp-for="VarientTypeId">Varient :</label>
-                        <select asp-for="VarientTypeId" asp-items="@varientlist" class="form-control" required>
-                            <option value="0">Select Varient Type</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-6">
-                        <label asp-for="Quantity">Quantity:</label>
-                        <input class="form-control" type="number" placeholder="Enter Quantiy" asp-for="Quantity" required>
-                    </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="/Products" class="btn btn-success mb-2 me-1">
+                            <i class="ri-arrow-left-line"></i>
+                            Back To List
+                        </a>
+                        <ul class="nav nav-tabs nav-bordered mb-3">
+                        </ul>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="hidden" asp-for="ProductId" />
+                                <label name="ProductName">Product Name :</label>
+                                <input class="form-control" type="text" placeholder="Enter Name" asp-for="ProductName" required>
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="MRP">MRP:</label>
+                                <input asp-for="MRP" class="form-control" type="number" placeholder="Enter MRP of Product" required>
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="SubCategoryId">Category:</label>
+                                <select asp-for="SubCategoryId" class="form-control" disabled>
+                                    <option value="@Model.SubCategoryId">@Model.SubCategoryName</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-4">
+                                <label asp-for="Discount">Discount in Percentage (%) :</label>
+                                <input class="form-control" type="number" placeholder="Enter Discount in Percentage" asp-for="Discount" maxlength="3" max="100" required>
+                                <span id="error-message" style="color:red; display:none;">Value cannot be greater than 100</span>
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="Description">Description:</label>
+                                <input asp-for="Description" class="form-control" type="text" placeholder="Enter Description of Product" required>
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="ImageUrl">Choose Images</label>
+                                <input asp-for="ImageUrl" type="file" class="form-control" name="images[]"/>
+                                <i class="fa-solid fa-image"></i>
+                            </div>
+                        </div>
 
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 mb-3">
-                        <label asp-for="ProductName">ProductName:</label>
-                        <input class="form-control" type="text" placeholder="Enter Total Quantity" asp-for="ProductName" required>
-                       
-                    </div>
-                    <div class="col-sm-6">
-                        <label asp-for="TotalQuantity">TotalQuantity:</label>
-                        <input class="form-control" type="number" placeholder="Enter Total Quantity" asp-for="TotalQuantity" required>
-                        <label asp-for="Discount">Discount:</label>
-                        <input class="form-control" type="number" placeholder="Enter Discount" asp-for="Discount" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <label asp-for="ImageUrl">Choose Images</label>
-                        <input asp-for="ImageUrl" type="file" class="form-control" name="images[]" multiple id="ImageUrl" required />
-                    </div>
-                    <div class="col-sm-6">
-                        <label asp-for="Description">Description:</label>
-                        <textarea asp-for="Description" class="form-control" type="text" placeholder="Enter Description of Product" required></textarea>
+                        <div class="row mt-2">
+                            <div class="col-4">
+                                <label asp-for="UnitId">Unit:</label>
+                                <select asp-for="UnitId" asp-items="@units" class="form-control" required>
+                                    <option value="0">::Select a UnitType::</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label asp-for="Quantity">Quantity:</label>
+                                <input asp-for="Quantity" class="form-control" type="number" placeholder="Enter Quantity of Product" required>
+                            </div>
+                        </div>
+                        <div style="display: flex;justify-content: end;">
+                            <button onclick="saveVarient()" type="button" class="btn btn-success mb-2 me-1" style="margin-top: 2rem;">
+                                Save Product
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="img-thumbs img-thumbs-hidden" id="img-preview"></div>
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
-                <button type="button" class="btn btn-primary" onclick="saveVarient()">Save changes</button>
             </div>
         </div>
     </div>
 </div>
-
 <script>
-    var imgUpload = document.getElementById('ImageUrl'),
-        imgPreview = document.getElementById('img-preview'),
-        totalFiles,
-        img;
-
-    imgUpload.addEventListener('change', previewImgs, true);
-
-    function previewImgs(event) {
-        totalFiles = imgUpload.files.length;
-
-        if (!!totalFiles) {
-            imgPreview.classList.remove('img-thumbs-hidden');
+    var saveVarient = () => {
+        if (!valiadteInputs()) {
+            return false;
         }
-
-        for (var i = 0; i < totalFiles; i++) {
-            wrapper = document.createElement('div');
-            wrapper.classList.add('wrapper-thumb');
-            removeBtn = document.createElement("span");
-            nodeRemove = document.createTextNode('x');
-            removeBtn.classList.add('remove-btn');
-            removeBtn.appendChild(nodeRemove);
-            img = document.createElement('img');
-            img.src = URL.createObjectURL(event.target.files[i]);
-            img.classList.add('img-preview-thumb');
-            wrapper.appendChild(img);
-            wrapper.appendChild(removeBtn);
-            imgPreview.appendChild(wrapper);
-
-            $('.remove-btn').click(function () {
-                $(this).parent('.wrapper-thumb').remove();
-            });
-
+        var obj = {
+            ProductId: $("#ProductId").val(),
+            ProductName: $("#ProductName").val(),
+            Description: $("#Description").val(),
+            SubCategoryId: $("#SubCategoryId").val(),
+            MRP: $("#MRP").val(),
+            UnitId: $("#UnitId").val(),
+            Quantity: $("#Quantity").val(),
+            Discount: $("#Discount").val()
         }
-
-    }
-
-
+        var formData = new FormData();
+        formData.append("JsonData", JSON.stringify(obj));
+        var imageInput = $('#ImageUrl')[0];
+        var file = imageInput.files[0];
+        formData.append('productvarientImages', file);
+        $.ajax({
+            url: '/Product/SaveProductVarient',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                QAlert(response.statusCode, response.responseText);
+            },
+            error: function (error) {
+                alert("Error saving product.");
+            }
+        });
+    }   
 </script>
