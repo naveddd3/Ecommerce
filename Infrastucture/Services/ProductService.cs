@@ -72,21 +72,19 @@ namespace Infrastucture.Services
             var productVM = new ProductVM();
             try
             {
-                var result = await _dapper.GetMultipleAsync<Product, ProductImage>("Proc_GetProductById", new
+                var result = await _dapper.GetAsync<Product>("Proc_GetProductById", new
                 {
                     Id
                 }, System.Data.CommandType.StoredProcedure);
-                var product = (List<Product>)result.GetType().GetProperty("Table1").GetValue(result, null);
-                productVM.product = product.FirstOrDefault();
-                productVM.Images = (List<ProductImage>)result.GetType().GetProperty("Table2").GetValue(result, null);
+                productVM.product = result;
+                productVM.SubCategories = await _categoryService.GetSubCategory();
+                productVM.masterUnits = await _unitService.GetAll();
             }
             catch (Exception ex)
             {
 
                 throw;
             }
-            productVM.SubCategories = await _categoryService.GetSubCategory();
-            productVM.masterUnits = await _unitService.GetAll();
             return productVM;
 
         }
@@ -140,10 +138,10 @@ namespace Infrastucture.Services
                     productVarientVM.MRP,
                     productVarientVM.Discount,
                     productVarientVM.VarientId,
-                    productVarientVM.VarientTypeId,
+                    productVarientVM.UnitId,
                     productVarientVM.ProductName,
                     productVarientVM.Quantity,
-                    productVarientVM.TotalQuantity
+                    productVarientVM.SubCategoryId,
                 });
                 return response;
             }
@@ -189,11 +187,12 @@ namespace Infrastucture.Services
         {
             try
             {
-                string query = "select * from Product_Varients where VarientId =  @Id";
-                var res = await _dapper.GetAsync<ProductVarientRes>(query, new
+                string proc = "Proc_GetProductVarientById";
+                var res = await _dapper.GetAsync<ProductVarientRes>(proc, new
                 {
-                    Id
-                }, System.Data.CommandType.Text);
+                    ProductId = Id
+                });
+                res.masterUnits = await _unitService.GetAll();
                 return res;
             }
 

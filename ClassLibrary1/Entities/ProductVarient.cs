@@ -9,17 +9,16 @@ namespace Domain.Entities
 {
     public class ProductVarient
     {
-        public int ProductVarientId { get; set; }
+        public int? VarientId { get; set; }
         public int ProductId { get; set; }
+        public int SubCategoryId { get; set; }
         public string? ProductName { get; set; }
-        public int VarientTypeId { get; set; }
+        public int UnitId { get; set; }
         public decimal MRP { get; set; }
         public decimal Discount { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
-        public int? VarientId { get; set; }
-        public decimal? Quantity { get; set; }
-        public decimal? TotalQuantity { get; set; }
+        public decimal? Quantity { get; set; }  
 
     }
 
@@ -36,12 +35,13 @@ namespace Domain.Entities
 
     public class ProductVarientRes : ProductVarient
     {
-        public int VarientId { get; set; }
-        public string  ProductName { get; set; }
+        
         public string  CategoryName { get; set; }
         public int CategoryId { get; set; }
-        public decimal SellingPrice { get; set; }
-        public string VarientType { get; set; } 
+        public int SubCategoryId { get; set; }
+        public string UnitType { get; set; }
+        public string SubCategoryName { get; set; }
+        public IEnumerable<MasterUnit> masterUnits { get; set; }
     }
 
     public class ProductVarientImages

@@ -115,25 +115,18 @@
                     </div>
                 </div>
 
-                @if (Model.Images.Any() || Model.Images.Count()>0)
-                {
-                    <div class="img-thumbs img-thumbs" id="img-preview">
-                            @foreach (var image in Model.Images)
-                            {
-                                <div class="wrapper-thumb">
-                                <label for="ImageUrl" style="cursor:pointer;margin-right: 1rem;">
-                                    <img src="@image.ImageURI" class="img-preview-thumb" style="width: 9rem">
-                                        <div class="mt-2">
-                                            <button onclick="removeImagePopUp(@image.ProductImageId)" type="button" class="btn btn-danger" style="">
-                                                Delete This Image
-                                            </button>
-                                        </div>
-                                    </label>
-                                </div>
-                            }
+                <div class="img-thumbs img-thumbs" id="img-preview">
+                    <div class="wrapper-thumb">
+                        <label for="ImageUrl" style="cursor:pointer;margin-right: 1rem;">
+                            <img src="@Model.product.ImageUrl" class="img-preview-thumb" style="width: 9rem">
+                            <div class="mt-2">
+                              @*   <button onclick="removeImagePopUp(@Model.product.ImageUrl)" type="button" class="btn btn-danger" style="">
+                                    Delete This Image
+                                </button> *@
+                            </div>
+                        </label>
                     </div>
-                }
-
+                </div>
                 <div class="img-thumbs img-thumbs-hidden" id="img-preview"></div>
                 <div style="display: flex;justify-content: end;">
                     <button onclick="SaveOrUpdate()" type="button" class="btn btn-success mb-2 me-1" style="margin-top: 2rem;">

@@ -61,7 +61,7 @@ namespace Infrastucture.Services
                 var product = new ProductDetail();
                 var param = new DynamicParameters();
                 param.Add("@Id", ProductId);
-                var res = await _dapper.GetMultipleAsync<ProductDetail, ProductSliderImages>("PROC_GetProductById",param);
+                var res = await _dapper.GetMultipleAsync<ProductDetail, ProductSliderImages>("PROC_GetProductDetailById", param);
                 var list = (List<ProductDetail>)res.GetType().GetProperty("Table1").GetValue(res, null);
                 product = list.FirstOrDefault();
                 product.productImages = (List<ProductSliderImages>)res.GetType().GetProperty("Table2").GetValue(res, null);
