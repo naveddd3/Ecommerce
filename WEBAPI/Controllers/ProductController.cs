@@ -112,10 +112,10 @@ namespace WEBAPI.Controllers
             return Ok(res);
         }
 
-        [HttpPost(nameof(GetProductVarientById) + "/{Id}")]
-        public async Task<IActionResult> GetProductVarientById(int Id)
+        [HttpPost(nameof(GetProductVarientById) + "/{ProductId}"+ "/{VarientId}")]
+        public async Task<IActionResult> GetProductVarientById(int ProductId,int VarientId)
         {
-            var res = await _productService.GetProductVarientById(Id);
+            var res = await _productService.GetProductVarientById(ProductId, VarientId);
             return Ok(res);
         }
 

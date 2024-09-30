@@ -1,15 +1,16 @@
-﻿@model Domain.Entities.ApiResponseProduct
-@if (Model.Table1 != null && Model.Table1.Any())
+﻿@using Domain.Entities;
+@model List<Product>
+@if (Model != null && Model.Any())
 {
     int i = 0;
-    foreach (var item in Model.Table1)
+    foreach (var item in Model)
     {
         i++;
         <tr>
             <td>@i</td>
             <td>@item.ProductName</td>
             <td>@item.Description</td>
-            <td><button id="test" class="btn" onclick="openImages(@item.ProductId)">Show Images</button></td>
+            <td><img src="@item.ImageUrl" alt="ProductImage" width="100" height="100"/></td>
             <td>@item.SubCategoryName</td>
             <td class="table-action">
                 <div class="btn-group">
