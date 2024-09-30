@@ -17,8 +17,8 @@ namespace Application.Interfaces
         Task<Response> SaveProductVarient(ProductVarientReq productVarientVM);
         Task<dynamic> GetProductVarient(int Id);
         Task<dynamic> GetProductVarientImage(int Id);
-        Task<ProductVarientRes> GetProductVarientById(int Id);
-        Task<Response> SaveOrUpdateProductSlider(ProductSliderImages productSliderImages);
+        Task<ProductVarientRes> GetProductVarientById(int ProductId, int VarientId);
+		Task<Response> SaveOrUpdateProductSlider(ProductSliderImages productSliderImages);
         Task<IEnumerable<ProductSliderImages>> GetProductSliderImagesById(int Id);
     }
 }

@@ -58,7 +58,7 @@ namespace Infrastucture.Services
         {
             try
             {
-                var list = await _dapper.GetMultipleAsync<Product, ProductImage>("PROC_GETPRODUCTS", null, System.Data.CommandType.StoredProcedure);
+                var list = await _dapper.GetAllAsync<Product>("PROC_GETPRODUCTS", null, System.Data.CommandType.StoredProcedure);
                 return list;
             }
             catch (Exception ex)
@@ -155,7 +155,7 @@ namespace Infrastucture.Services
         {
             try
             {
-                var list = await _dapper.GetAllAsync<ProductVarientRes>("SELECT mc.CategoryName,pv.* FROM Product_Varients pv inner join Master_Category mc on mc.CategoryId = pv.CategoryId where ProductId = @Id", new
+                var list = await _dapper.GetAllAsync<ProductVarientRes>("SELECT sc.SubCategoryName,pv.* FROM Product_Varients pv inner join SubCategory sc on sc.SubCategoryId = pv.CategoryId where ProductId = @Id", new
                 {
                     Id
                 }, System.Data.CommandType.Text);
@@ -183,15 +183,16 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-        public async Task<ProductVarientRes> GetProductVarientById(int Id)
+        public async Task<ProductVarientRes> GetProductVarientById(int ProductId,int VarientId)
         {
             try
             {
                 string proc = "Proc_GetProductVarientById";
                 var res = await _dapper.GetAsync<ProductVarientRes>(proc, new
                 {
-                    ProductId = Id
-                });
+                    ProductId,
+					VarientId
+				});
                 res.masterUnits = await _unitService.GetAll();
                 return res;
             }

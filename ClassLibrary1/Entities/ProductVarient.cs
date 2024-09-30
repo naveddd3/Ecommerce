@@ -41,6 +41,7 @@ namespace Domain.Entities
         public int SubCategoryId { get; set; }
         public string UnitType { get; set; }
         public string SubCategoryName { get; set; }
+        public string? SellingPrice { get; set; }
         public IEnumerable<MasterUnit> masterUnits { get; set; }
     }
 

@@ -12,7 +12,7 @@ namespace WEBAPP.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly string _BaseUrl;
+        private readonly string _BaseUrl;   
         private readonly FileUploadService _fileUploadService;
         public ProductController(AppSetting appSetting, FileUploadService fileUpload)
         {
@@ -28,13 +28,13 @@ namespace WEBAPP.Controllers
         }
         public async Task<IActionResult> GetProducts()
         {
-            var list = new ApiResponseProduct();
+            var list = new List<Product>();
             try
             {
                 var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProduct", null, User.GetLoggedInUserToken());
                 if (apiRes != null)
                 {
-                    list = JsonConvert.DeserializeObject<ApiResponseProduct>(apiRes.Result);
+                    list = JsonConvert.DeserializeObject<List<Product>>(apiRes.Result);
 
                 }
             }
@@ -169,12 +169,12 @@ namespace WEBAPP.Controllers
         }
 
         [Route("Varient")]
-        public async Task<IActionResult> Varient(int ProductId)
+        public async Task<IActionResult> Varient(int ProductId,int VarientId)
         {
             var productVarientVM = new ProductVarientRes();
             productVarientVM.ProductId = ProductId;
 
-            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarientById/{ProductId}", null, User.GetLoggedInUserToken());
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarientById/{ProductId}/{VarientId}", null, User.GetLoggedInUserToken());
             if (apiRes != null)
             {
                 productVarientVM = JsonConvert.DeserializeObject<ProductVarientRes>(apiRes.Result);
@@ -197,7 +197,7 @@ namespace WEBAPP.Controllers
             {
                 
                 var request = JsonConvert.DeserializeObject<ProductVarientReq>(JsonData);
-                if (request.VarientId==0 || request.VarientId ==null)
+                if (productvarientImages==null || productvarientImages.Count()==0)
                 {
                     if (!productvarientImages.Any())
                     {
