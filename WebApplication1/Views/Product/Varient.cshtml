@@ -23,7 +23,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <a href="/Products" class="btn btn-success mb-2 me-1">
+                        <a id="btP"class="btn btn-success mb-2 me-1">
                             <i class="ri-arrow-left-line"></i>
                             Back To List
                         </a>
@@ -87,7 +87,13 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(()=>{
+        $("#btP").click(() => {
+            window.history.back();
+        })
+    })
     var saveVarient = () => {
         if (!valiadteInputs()) {
             return false;
