@@ -186,7 +186,6 @@ namespace WEBAPP.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SaveProductVarient([FromForm] string JsonData, IEnumerable<IFormFile> productvarientImages)
-        
         {
             var res = new Response()
             {
@@ -204,8 +203,8 @@ namespace WEBAPP.Controllers
                         res.ResponseText = "Please Upload Images!";
                         return Json(res);
                     }
-                    request.productvarientImages = productvarientImages;
                 }
+                request.productvarientImages = productvarientImages;
                 var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveProductVarient", User.GetLoggedInUserToken(), request);
                 var response = await apiRes.Content.ReadAsStringAsync();
                 if (apiRes != null)
