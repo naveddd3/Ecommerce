@@ -42,9 +42,12 @@ namespace Infrastucture.Services
         {
             try
             {
-               
-                var res = await _dapper.GetAllAsync<Product>("Proc_GetProductOnSubCategoryId", new {SubCategoryId},System.Data.CommandType.StoredProcedure);
-                return res;
+
+                var product = new ProductVarientAPIRES();
+                var res = await _dapper.GetMultipleAsync<Product, ProductVarientRes>("Proc_GetProductOnSubCategoryId", new {SubCategoryId},System.Data.CommandType.StoredProcedure);
+                product.Products = (List<Product>)res.GetType().GetProperty("Table1").GetValue(res, null);
+                product.ProductVarients = (List<ProductVarientRes>)res.GetType().GetProperty("Table2").GetValue(res, null);
+                return product;
 
             }
             catch (Exception ex)
