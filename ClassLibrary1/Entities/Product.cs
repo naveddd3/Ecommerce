@@ -19,6 +19,7 @@ namespace Domain.Entities
         public int? UnitId { get; set; }
         public string? UnitType { get; set; }
         public int? Quantity { get; set; }
+        public bool IsVarient { get; set; }
     }
     public class ProductReq : Product
     {

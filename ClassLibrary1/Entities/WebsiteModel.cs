@@ -12,5 +12,6 @@ namespace Domain.Entities
         public IEnumerable<SubCategory> SubCategories { get; set; }
         public IEnumerable<Product>? Product { get; set; }
         public ProductDetail ProductDetail { get; set; }
+        public ProductVarientAPIRES ProductVarientAPIRES { get; set;}
     }
 }

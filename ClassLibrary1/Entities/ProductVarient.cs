@@ -55,8 +55,8 @@ namespace Domain.Entities
 
     public class ProductVarientAPIRES
     {
-        public IEnumerable<ProductVarientRes>? Table1 { get; set; }
-        public IEnumerable<ProductVarientImages>? Table2 { get; set; }
+        public IEnumerable<Product>? Products { get; set; }
+        public IEnumerable<ProductVarientRes>? ProductVarients { get; set; }
     }
 
 }

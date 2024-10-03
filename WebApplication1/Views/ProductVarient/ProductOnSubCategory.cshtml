@@ -1,8 +1,17 @@
 ﻿@model Domain.Entities.WebsiteModel;
+<style>
+    #variantDetailsTable {
+        border-collapse: collapse;
+    }
 
-@if(Model.Product!=null && Model.Product.Count() > 0)
+        #variantDetailsTable th,
+        #variantDetailsTable td {
+            border: none !important;
+        }
+</style>
+@if (Model.ProductVarientAPIRES != null && Model.ProductVarientAPIRES.Products.Count() > 0)
 {
-    @foreach (var product in Model.Product)
+    @foreach (var product in Model.ProductVarientAPIRES.Products)
     {
         <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
             <div class="product-cart-wrap mb-30">
@@ -28,16 +37,29 @@
                     </div>
                     <h2><a href='shop-product-right.html'>@product.ProductName</a></h2>
                     <p>@product.Quantity@product.UnitType.ToLower()</p>
-                   @*  <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select> *@
+                    @if (product.IsVarient)
+                    {
+                        var list = Model.ProductVarientAPIRES.ProductVarients.Where(p => p.ProductId == product.ProductId);
+                        if (list != null && list.Count() > 0)
+                        {
+                            <select id="variantSelect" class="form-select" aria-label="Default select example">
+                                @foreach (var varients in list)
+                                {
+                                    <option value="@varients.VarientId" data-quantity="@varients.Quantity"
+                                            data-unittype="@varients.UnitType"
+                                            data-price="@varients.SellingPrice"
+                                            data-description="@varients.Description"
+                                            data-img="@varients.ImageUrl"
+                                            data-name= "@varients.ProductName">@Convert.ToInt32(varients.Quantity)@varients.UnitType</option>
+                                }
+                            </select>
+                        }
+
+                    }
                     <div class="product-card-bottom">
                         <div class="product-price">
-                            <span>@product.SellingPrice</span>
-                            <span class="old-price">@product.MRP</span>
+                            <span>&#8377;@product.SellingPrice</span>
+                            <span class="old-price">&#8377;@product.MRP</span>
                         </div>
                         <div class="add-cart">
                             <a class='add' href='shop-cart.html'><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
@@ -48,12 +70,56 @@
         </div>
     }
 }
+<div class="modal fade" id="variantModal" tabindex="-1" aria-labelledby="variantModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="variantModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="variantDetailsTable">
+                    <tbody id="variantDetails"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    $(document).ready(function () {
+        $('#variantSelect').click(function () {
+            debugger;
+            var allOptions = $(this).find('option');
+            var modalContent = '';
+            var name = $('option:selected').data('name');
+            allOptions.each(function () {
+                var variantId = $(this).val();
+                if (variantId) { 
+                    var quantity = $(this).data('quantity');
+                    var unitType = $(this).data('unittype');
+                    var price = $(this).data('price');
+                    var description = $(this).data('description');
+                    var image = $(this).data('img');
+                    modalContent += `
+                                <tr>
+                                    <td><img src="${image}" alt="Variant Image" style="width: 100px; height: auto;"></td>
+                                                <td>${parseInt(quantity)}${ unitType.toLowerCase() } </td>
+                                        <td>₹${price} </td>
+                                </tr>
+                            `;
+                }
+            });
+            $('#variantDetails').html(modalContent);
+            $('#variantModal').modal('show');
+            
+            $('#variantModalLabel').html(name);
+        });
+    });
     var productDetail = (productId) => {
         $.post("/ProductVarient/ProductDetail", { productId: productId }).done((res) => {
             $("#productDetail").html(res);
             $("#quickViewModal").modal("show");
         })
     }
-    
+
 </script>
