@@ -18,7 +18,7 @@
                 <div class="product-img-action-wrap">
                     <div class="product-img product-img-zoom">
                         <a href='shop-product-right.html'>
-                            <img class="default-img" src="@product.ImageUrl" alt="" />
+                            <img class="default-img productImage" src="@product.ImageUrl"  alt="" />
                             <img class="hover-img" src="@product.ImageUrl" alt="" />
                         </a>
                     </div>
@@ -33,16 +33,24 @@
                 </div>
                 <div class="product-content-wrap">
                     <div class="product-category">
-                        <a href='shop-grid-right.html'>@product.SubCategoryName</a>
+                        <a>@product.SubCategoryName</a>
                     </div>
-                    <h2><a href='shop-product-right.html'>@product.ProductName</a></h2>
-                    <p>@product.Quantity@product.UnitType.ToLower()</p>
+                    <h2><a class="productname">@product.ProductName</a></h2>
                     @if (product.IsVarient)
                     {
                         var list = Model.ProductVarientAPIRES.ProductVarients.Where(p => p.ProductId == product.ProductId);
                         if (list != null && list.Count() > 0)
                         {
-                            <select id="variantSelect" class="form-select" aria-label="Default select example">
+                            <select class="form-select variantSelect">
+                                <option value="@product.ProductId" data-quantity="@product.Quantity"
+                                        data-unittype="@product.UnitType"
+                                        data-price="@product.SellingPrice"
+                                        data-description="@product.Description"
+                                        data-img="@product.ImageUrl"
+                                        data-name="@product.ProductName"
+                                        data-productId="@product.ProductId">
+                                    @Convert.ToInt32(product.Quantity)@product.UnitType
+                                </option>
                                 @foreach (var varients in list)
                                 {
                                     <option value="@varients.VarientId" data-quantity="@varients.Quantity"
@@ -50,11 +58,18 @@
                                             data-price="@varients.SellingPrice"
                                             data-description="@varients.Description"
                                             data-img="@varients.ImageUrl"
-                                            data-name= "@varients.ProductName">@Convert.ToInt32(varients.Quantity)@varients.UnitType</option>
+                                            data-name= "@varients.ProductName"
+                                            data-productId ="@varients.ProductId"
+                                            data-varientId="@varients.VarientId">@Convert.ToInt32(varients.Quantity)@varients.UnitType
+                                    </option>
                                 }
                             </select>
                         }
 
+                    }
+                    else
+                    {
+                        <p class="unit">@product.Quantity@product.UnitType.ToLower()</p>
                     }
                     <div class="product-card-bottom">
                         <div class="product-price">
@@ -62,7 +77,7 @@
                             <span class="old-price">&#8377;@product.MRP</span>
                         </div>
                         <div class="add-cart">
-                            <a class='add' href='shop-cart.html'><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                            <a class='add addtoCart' onclick="addToCart('@product.ProductId', this)"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
                         </div>
                     </div>
                 </div>
@@ -85,34 +100,45 @@
         </div>
     </div>
 </div>
+<script src="~/js/cart.js"></script>
 <script>
     $(document).ready(function () {
-        $('#variantSelect').click(function () {
-            debugger;
+        $('.variantSelect').on('mousedown',function (event) {
+            debugger
+            event.preventDefault();
             var allOptions = $(this).find('option');
             var modalContent = '';
-            var name = $('option:selected').data('name');
+            var name = $(this).closest('.product-cart-wrap').find('.productname').text();
             allOptions.each(function () {
                 var variantId = $(this).val();
                 if (variantId) { 
+                    debugger
                     var quantity = $(this).data('quantity');
                     var unitType = $(this).data('unittype');
                     var price = $(this).data('price');
                     var description = $(this).data('description');
                     var image = $(this).data('img');
+                    var productId = $(this).data('productid');
+                    var varientId = $(this).data('varientid');
                     modalContent += `
                                 <tr>
-                                    <td><img src="${image}" alt="Variant Image" style="width: 100px; height: auto;"></td>
+                                    <td><img src="${image}" alt="Variant Image" style="width: 100px; height: 100px;"></td>
                                                 <td>${parseInt(quantity)}${ unitType.toLowerCase() } </td>
                                         <td>₹${price} </td>
+                                            <td hidden>${varientId} </td>
+                                            <td><div class="product-extra-link2 ms-3">
+                                                <button type="submit" onclick="addToCart(${productId},this)" class="button button-add-to-cart">
+                                            <i class="fi-rs-shopping-cart"></i>Add
+                                        </button>
+                                    </div>
+                                        </td>
                                 </tr>
-                            `;
+                    `;
                 }
             });
             $('#variantDetails').html(modalContent);
             $('#variantModal').modal('show');
-            
-            $('#variantModalLabel').html(name);
+            $('#variantModalLabel').text(name);
         });
     });
     var productDetail = (productId) => {
@@ -121,5 +147,7 @@
             $("#quickViewModal").modal("show");
         })
     }
+
+
 
 </script>
