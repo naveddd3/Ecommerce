@@ -1,12 +1,14 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Infrastucture.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 
 namespace WEBAPI.Controllers
 {
+    [EnableCors("AllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
