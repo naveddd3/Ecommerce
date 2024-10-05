@@ -3,7 +3,16 @@ using Infrastucture.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7191")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 string baseurl = builder.Configuration["WEBAPIURL:BaseUrl"];
 var bs = new AppSetting { WebApiBaseUrl = baseurl };
 builder.Services.AddSingleton<AppSetting>(bs);

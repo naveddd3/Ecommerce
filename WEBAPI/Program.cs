@@ -2,6 +2,16 @@ using WEBAPI.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7191")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 // Add services to the container.
 ServiceCollectionExtension.RegisteredServices(builder.Services, builder.Configuration);
 builder.Services.AddControllers();
@@ -17,6 +27,7 @@ var app = builder.Build();
 //{
 
 //}
+app.UseCors("AllowSpecificOrigins");
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseStaticFiles();

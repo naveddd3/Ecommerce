@@ -4,7 +4,7 @@
     let productDetails = {};
     if ($(element).closest('.product-cart-wrap').length > 0) {
         let productElement = $(element).closest('.product-cart-wrap');
-        productDetails = {
+        productDetails = { 
             productid: productId,
             name: productElement.find('.productname').text(),
             image: productElement.find('.productImage').attr('src'),
@@ -15,7 +15,7 @@
         if (variantSelect.length > 0) {
             let selectedVariant = variantSelect.find('option:selected');
             productDetails.quantity = parseInt(selectedVariant.attr('data-quantity'));
-            productDetails.unitType = selectedVariant.attr('data-unittype');
+            productDetails.unitType = selectedVariant.attr('data-unittype'); 
         }
     } else if ($(element).closest('tr').length > 0) {
         let rowElement = $(element).closest('tr');
