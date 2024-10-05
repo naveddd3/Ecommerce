@@ -4,7 +4,7 @@
     let productDetails = {};
     if ($(element).closest('.product-cart-wrap').length > 0) {
         let productElement = $(element).closest('.product-cart-wrap');
-        productDetails = {
+        productDetails = { 
             productid: productId,
             name: productElement.find('.productname').text(),
             image: productElement.find('.productImage').attr('src'),
