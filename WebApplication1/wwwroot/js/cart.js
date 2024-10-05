@@ -15,7 +15,7 @@
         if (variantSelect.length > 0) {
             let selectedVariant = variantSelect.find('option:selected');
             productDetails.quantity = parseInt(selectedVariant.attr('data-quantity'));
-            productDetails.unitType = selectedVariant.attr('data-unittype');
+            productDetails.unitType = selectedVariant.attr('data-unittype'); 
         }
     } else if ($(element).closest('tr').length > 0) {
         let rowElement = $(element).closest('tr');
