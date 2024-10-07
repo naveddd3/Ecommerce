@@ -57,6 +57,17 @@ namespace WEBAPP.Controllers
             return PartialView(model);
 
         }
+        public async Task<IActionResult> GetProductVarientById(int ProductId)
+        {
+            var list = new List<ProductVarientRes>();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProductVarient/{ProductId}", null, null);
+            if (apiRes != null)
+            {
+                list = JsonConvert.DeserializeObject<List<ProductVarientRes>>(apiRes.Result);
+            }
+            return PartialView(list);
+
+        }
         #endregion
     }
 }

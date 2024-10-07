@@ -13,5 +13,6 @@ namespace Domain.Entities
         public IEnumerable<Product>? Product { get; set; }
         public ProductDetail ProductDetail { get; set; }
         public ProductVarientAPIRES ProductVarientAPIRES { get; set;}
+        public IEnumerable<ProductVarientRes>? ProductVarients { get; set; }
     }
 }
