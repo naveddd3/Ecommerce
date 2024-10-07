@@ -1,11 +1,11 @@
 ﻿@model Domain.Entities.WebsiteModel
 
 <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-sm">
         <!-- Using modal-lg for a wider view -->
         <div class="modal-content">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            <div class="modal-body">
+            <div class="modal-body productDetail">
                 <div class="row">
                     <!-- Image Slider Section -->
                     <div class="col-md-6 col-sm-12 mb-md-0 mb-4">
@@ -56,11 +56,11 @@
                             </div>
                             <div class="clearfix product-price-cover mt-3">
                                 <div class="product-price primary-color float-left">
-                                    <span class="current-price text-brand">$@Model.ProductDetail.SellingPrice</span>
+                                    <span class="current-price text-brand">₹@Model.ProductDetail.SellingPrice</span>
                                     @if (Model.ProductDetail.Discount > 0)
                                     {
                                         <span class="save-price font-md text-success ms-2">@Model.ProductDetail.Discount% Off</span>
-                                        <span class="old-price font-md ms-2 text-muted">$@Model.ProductDetail.MRP</span>
+                                        <span class="old-price font-md ms-2 text-muted">₹@Model.ProductDetail.MRP</span>
                                     }
                                 </div>
                             </div>
@@ -68,12 +68,17 @@
                                 <div class="detail-qty border radius">
                                     <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
                                     <span class="qty-val">1</span>
-                                    <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                    <input id="unit" type="hidden" value="@Convert.ToInt32(Model.ProductDetail.Quantity)@Model.ProductDetail.UnitType.ToLower()">                                    <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                 </div>
                                 <div class="product-extra-link2 ms-3">
-                                    <button type="submit" class="button button-add-to-cart" onclick="addToCart(@Model.ProductDetail.ProductId,this)">
+                                    <button type="submit" id="addToCart-@Model.ProductDetail.ProductId" class="button button-add-to-cart" onclick="addToCart(@Model.ProductDetail.ProductId,this)">
                                         <i class="fi-rs-shopping-cart"></i> Add to cart
                                     </button>
+                                    <div class="button button-add-to-cart quantity-buttons d-none d-flex ms-3" id="quantity-buttons-@Model.ProductDetail.ProductId">
+                                        <span class="decrement-btn" onclick="updateQuantity('@Model.ProductDetail.ProductId', -1)" style="margin-right: 45px;font-size: 18px;font-weight: bold;"><strong>-</strong></span>
+                                        <span id="quantity-@Model.ProductDetail.ProductId" style="font-size: 15px;font-weight: bold;">1</span>
+                                        <span class="increment-btn" onclick="updateQuantity('@Model.ProductDetail.ProductId', 1)" style="margin-left: 45px;font-size: 18px;font-weight: bold;    "><strong>+</strong></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="font-xs mt-4">
@@ -88,3 +93,8 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(() => {
+        initializeCart();
+    })
+</script>
