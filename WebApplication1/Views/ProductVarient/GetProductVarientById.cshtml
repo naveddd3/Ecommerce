@@ -1,6 +1,6 @@
 ﻿@using Domain.Entities;
 @model List<ProductVarientRes>;
-<div class="modal fade" id="variantModal" tabindex="-1" aria-labelledby="variantModalLabel" aria-hidden="true">
+<div class="modal fade" id="variantModal" tabindex="-1" aria-labelledby="variantModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -31,9 +31,9 @@
                                     <div class="add-cart">
                                         <a class="add addtoCart" id="addToCart-@($"{v.ProductId}V{v.VarientId}")" onclick="addToCart(@v.ProductId,this)"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
                                         <div class="add quantity-buttons d-none d-flex" id="quantity-buttons-@($"{v.ProductId}V{v.VarientId}")">
-                                            <span class="decrement-btn" onclick="updateQuantity('@v.VarientId', -1)" style="margin-right: 6px;font-size: 18px;font-weight: bold;"><strong>-</strong></span>
+                                            <span class="decrement-btn" onclick="updateQuantity('@($"{v.ProductId}V{v.VarientId}")', -1)" style="margin-right: 6px;font-size: 18px;font-weight: bold;"><strong>-</strong></span>
                                             <span id="quantity-@($"{v.ProductId}V{v.VarientId}")" style="font-size: 15px;font-weight: bold;">1</span>
-                                            <span class="increment-btn" onclick="updateQuantity('@v.VarientId', 1)" style="margin-left: 6px;font-size: 18px;font-weight: bold;    "><strong>+</strong></span>
+                                            <span class="increment-btn" onclick="updateQuantity('@($"{v.ProductId}V{v.VarientId}")', 1)" style="margin-left: 6px;font-size: 18px;font-weight: bold;    "><strong>+</strong></span>
                                         </div>
                                     </div>
                                 </div>
