@@ -64,7 +64,7 @@
     $(element).addClass('d-none');
     $(`#quantity-buttons-${productId}`).removeClass('d-none');
     $(`#quantity-${productId}`).text(cart.items[uniqueKey].quantity);
-    QAlert(1, 'Product added to cart successfully!');
+    QAlert(1, 'Product added to cart successfully!');   
 }
 
 function initializeCart() {
@@ -85,6 +85,7 @@ function updateQuantity(productId, change) {
     if (cart && cart.items[productId]) {
         cart.items[productId].quantity += change;
         if (cart.items[productId].quantity <= 0) {
+            cart.total -= cart.items[productId].product.price
             delete cart.items[productId];
             cart.count -= 1;
             $(`#quantity-buttons-${productId}`).addClass('d-none');
