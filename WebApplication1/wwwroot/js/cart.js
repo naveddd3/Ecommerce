@@ -1,4 +1,38 @@
-﻿function addToCart(productId, element) {
+﻿
+function cartInitialize() {
+    debugger;
+    let cart = JSON.parse(localStorage.getItem('cart')) || {
+        count: 0,
+        total: 0,
+        items: {}
+    }
+    $(".cartcount").html(cart.count)
+    $(".total-cart-amount").text('₹' + cart.total);
+    let cartItemsContainer = $(".cart-dropdown-ul");
+    cartItemsContainer.html('');
+    for (let [key, item] of Object.entries(cart.items)) {
+        let itemHtml = `
+                    <li>
+                        <div class="shopping-cart-img">
+                            <a href="#">
+                               <img alt="${item.product.name}" src="${item.product.image_url}" />
+                            </a>
+                        </div>
+                        <div class="shopping-cart-title">
+                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;"><a href="#">${item.product.name}</a></h4>
+                            <h4><span>${item.quantity} × </span>₹${item.product.price}</h4>
+                        </div>
+                        <div class="shopping-cart-delete">
+                            <a href="#" onclick="removeCartItem('${key}')">
+                                <i class="fi-rs-cross-small"></i>
+                            </a>
+                        </div>
+                    </li>
+                `;
+        cartItemsContainer.append(itemHtml);
+    }
+}
+function addToCart(productId, element) {
     debugger;
     var uniqueKey = productId;
     let cart = JSON.parse(localStorage.getItem('cart')) || {
@@ -64,7 +98,8 @@
     $(element).addClass('d-none');
     $(`#quantity-buttons-${productId}`).removeClass('d-none');
     $(`#quantity-${productId}`).text(cart.items[uniqueKey].quantity);
-    QAlert(1, 'Product added to cart successfully!');   
+    QAlert(1, 'Product added to cart successfully!');  
+    cartInitialize();
 }
 
 function initializeCart() {
@@ -101,7 +136,31 @@ function updateQuantity(productId, change) {
             }
         }
         localStorage.setItem('cart', JSON.stringify(cart));
+        cartInitialize();
     }
 }
+
+function removeCartItem(itemId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || {
+        count: 0,
+        total: 0,
+        items: {}
+    };
+
+    if (cart.items[itemId]) {
+        const itemPrice = cart.items[itemId].product.price;
+        const itemQuantity = cart.items[itemId].quantity;
+
+        cart.total -= itemPrice * itemQuantity;
+        cart.count -= itemQuantity; 
+
+        delete cart.items[itemId];
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    cartInitialize();
+}
+
 
 $(document).ready(initializeCart);
