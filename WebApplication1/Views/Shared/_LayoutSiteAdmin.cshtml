@@ -892,6 +892,7 @@
     <script src="~/siteadmin/js/vendor/jquery-migrate-3.3.0.min.js"></script>
     <script src="~/siteadmin/js/vendor/bootstrap.bundle.min.js"></script>
     <script src="~/siteadmin/js/plugins/slick.js"></script>
+    <script src="~/js/cart.js"></script>
     <script src="~/siteadmin/js/plugins/jquery.syotimer.min.js"></script>
     <script src="~/js/alert.js"></script>
     <script src="~/siteadmin/js/plugins/wow.js"></script>
@@ -916,10 +917,10 @@
     <script>
         $(document).ready(function () {
             Category();
-            cart();
+            cartInitialize();
         });
         function Category() {
-            var url = '@apiBaseUrl.ToString()';
+            var url = '@apiBaseUrl?.ToString()';
             $.post(url + '/api/Category/GetCategory').done(function (res) {
                 $.each(res, function (index, item) {
                     var listItem = $(`<li onclick="onCategory('${item.categoryName.replace(/\s+/g, '')}', ${item.categoryId})"></li>`);
@@ -939,39 +940,9 @@
             })
         }
        
-        function cart() {
-            debugger;
-            let cart = JSON.parse(localStorage.getItem('cart')) || {
-                count: 0,
-                total: 0,
-                items: {}
-            }
-            $(".cartcount").html(cart.count)
-            $(".total-cart-amount").text('₹'+cart.total);
-            let cartItemsContainer = $(".cart-dropdown-ul");
-            cartItemsContainer.html('');
-            for (let [key, item] of Object.entries(cart.items)) {
-                let itemHtml = `
-                    <li>
-                        <div class="shopping-cart-img">
-                            <a href="#">
-                               <img alt="${item.product.name}" src="${item.product.image_url}" />
-                            </a>
-                        </div>
-                        <div class="shopping-cart-title">
-                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;"><a href="shop-product-right.html">${item.product.name}</a></h4>
-                            <h4><span>${item.quantity} × </span>₹${item.product.price}</h4>
-                        </div>
-                        <div class="shopping-cart-delete">
-                            <a href="#" onclick="removeCartItem('${key}')">
-                                <i class="fi-rs-cross-small"></i>
-                            </a>
-                        </div>
-                    </li>
-                `;
-                cartItemsContainer.append(itemHtml);
-            }
-        }
+       
+
+
 
     </script>
 </body>
