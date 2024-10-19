@@ -1,5 +1,4 @@
-﻿
-function cartInitialize() {
+﻿function cartInitialize() {
     debugger;
     let cart = JSON.parse(localStorage.getItem('cart')) || {
         count: 0,
@@ -8,30 +7,56 @@ function cartInitialize() {
     }
     $(".cartcount").html(cart.count)
     $(".total-cart-amount").text('₹' + cart.total);
-    let cartItemsContainer = $(".cart-dropdown-ul");
+    let cartItemsContainer = $(".cart-container_Product");
     cartItemsContainer.html('');
-    for (let [key, item] of Object.entries(cart.items)) {
-        let itemHtml = `
-                    <li>
-                        <div class="shopping-cart-img">
-                            <a href="#">
-                               <img alt="${item.product.name}" src="${item.product.image_url}" />
-                            </a>
-                        </div>
-                        <div class="shopping-cart-title">
-                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;"><a href="#">${item.product.name}</a></h4>
-                            <h4><span>${item.quantity} × </span>₹${item.product.price}</h4>
-                        </div>
-                        <div class="shopping-cart-delete">
-                            <a href="#" onclick="removeCartItem('${key}')">
-                                <i class="fi-rs-cross-small"></i>
-                            </a>
-                        </div>
-                    </li>
+    if (cart.count > 0) {
+        for (let [key, item] of Object.entries(cart.items)) {
+            let itemHtml = `
+            <div class="card">
+                                                    <div class="card-body">
+                                                        <ul class="list-group cart-dropdown-ul">
+                                                            <li style="display: flex;align-items: center;margin-bottom: 4%;">
+    <div class="shopping-cart-img" style="margin-right: 10px;">
+        <a href="#">
+            <img alt="${item.product.name}" src="${item.product.image_url}" style="max-width: 50px; max-height: 50px;" />
+        </a>
+    </div>
+    <div class="shopping-cart-title" style="flex-grow: 1; min-width: 0;">
+        <span style="white-space: normal; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+            <a href="#" style="display: block;">${item.product.name}</a>
+            <h6><span>${item.quantity} × </span>₹${item.product.price}</h4>
+        </span>
+    </div>
+    <div class="shopping-cart-quantity" style="display: flex; align-items: center; margin-right: 10px;">
+         
+<div class="detail-extralink mr-15">
+    <div class="detail-qty border radius">
+        <a href="#" onclick="updateQuantity(${item.product.product_id}, -1)" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+        <span id="quantity-${item.product.product_id}" class="qty-val" style="margin-right: 10px;">${item.quantity}</span>
+            <a href="#"  onclick="updateQuantity(${item.product.product_id}, 1)"class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+    </div>
+</div>
+
+   
+    </div>
+</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                   
+
+
                 `;
-        cartItemsContainer.append(itemHtml);
+            cartItemsContainer.append(itemHtml);
+        }
+       
+        $('#billing-details').removeClass('d-none');
     }
+   
 }
+
+
 function addToCart(productId, element) {
     debugger;
     var uniqueKey = productId;
@@ -50,7 +75,7 @@ function addToCart(productId, element) {
                 image_url: productElement.find('.productImage').attr('src'),
                 price: parseFloat(productElement.find('.product-price span').text().replace('₹', '')),
                 unit: productElement.find('.unit').text(),
-                varientId : '0'
+                varientId: '0'
             },
             quantity: 1
         };
@@ -98,7 +123,7 @@ function addToCart(productId, element) {
     $(element).addClass('d-none');
     $(`#quantity-buttons-${productId}`).removeClass('d-none');
     $(`#quantity-${productId}`).text(cart.items[uniqueKey].quantity);
-    QAlert(1, 'Product added to cart successfully!');  
+    QAlert(1, 'Product added to cart successfully!');
     cartInitialize();
 }
 
@@ -113,9 +138,8 @@ function initializeCart() {
         }
     }
 }
-
 function updateQuantity(productId, change) {
-    debugger    
+    debugger
     let cart = JSON.parse(localStorage.getItem('cart'));
     if (cart && cart.items[productId]) {
         cart.items[productId].quantity += change;
@@ -140,27 +164,6 @@ function updateQuantity(productId, change) {
     }
 }
 
-function removeCartItem(itemId) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || {
-        count: 0,
-        total: 0,
-        items: {}
-    };
-
-    if (cart.items[itemId]) {
-        const itemPrice = cart.items[itemId].product.price;
-        const itemQuantity = cart.items[itemId].quantity;
-
-        cart.total -= itemPrice * itemQuantity;
-        cart.count -= itemQuantity; 
-
-        delete cart.items[itemId];
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    cartInitialize();
-}
 
 
 $(document).ready(initializeCart);
