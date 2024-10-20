@@ -7,14 +7,12 @@
     }
     $(".cartcount").html(cart.count)
     $(".total-cart-amount").text('₹' + cart.total);
-    let cartItemsContainer = $(".cart-container_Product");
+    let cartItemsContainer = $(".cart-dropdown-ul");
     cartItemsContainer.html('');
     if (cart.count > 0) {
         for (let [key, item] of Object.entries(cart.items)) {
             let itemHtml = `
-            <div class="card">
-                                                    <div class="card-body">
-                                                        <ul class="list-group cart-dropdown-ul">
+           
                                                             <li style="display: flex;align-items: center;margin-bottom: 4%;">
     <div class="shopping-cart-img" style="margin-right: 10px;">
         <a href="#">
@@ -40,9 +38,7 @@
    
     </div>
 </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                                      
 
                    
 
@@ -123,7 +119,6 @@ function addToCart(productId, element) {
     $(element).addClass('d-none');
     $(`#quantity-buttons-${productId}`).removeClass('d-none');
     $(`#quantity-${productId}`).text(cart.items[uniqueKey].quantity);
-    QAlert(1, 'Product added to cart successfully!');
     cartInitialize();
 }
 
@@ -146,9 +141,13 @@ function updateQuantity(productId, change) {
         if (cart.items[productId].quantity <= 0) {
             cart.total -= cart.items[productId].product.price
             delete cart.items[productId];
+            if (cart.count == 1 && change == -1) {
+                $('#billing-details').addClass('d-none');
+            }
             cart.count -= 1;
             $(`#quantity-buttons-${productId}`).addClass('d-none');
             $(`#addToCart-${productId}`).removeClass('d-none');
+           
         }
         else {
             $(`#quantity-${productId}`).text(cart.items[productId].quantity);

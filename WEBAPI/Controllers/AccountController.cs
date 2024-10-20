@@ -70,6 +70,44 @@ namespace WEBAPI.Controllers
             return Ok(res);
         }
 
+        [HttpPost(nameof(LoginviaOTP))]
+        public async Task<IActionResult> LoginviaOTP(LoginviaOTPReq loginviaOTPReq)
+        {
+            var response = new Response()
+            {
+                ResponseText = "An Error has been Occured",
+                StatusCode = ResponseStatus.Failed
+            };
+            if(loginviaOTPReq.OTP == 0 || loginviaOTPReq.OTP == null)
+            {
+                 response = await _oTPService.EmailVerificationViaOTP(new VerifyEmail
+                {
+                    Email = loginviaOTPReq.EmailOrMobile,
+                    OTP = loginviaOTPReq.OTP
+                });
+                return Ok(response);
+            }
+            else
+            {
+                if(loginviaOTPReq.OTP!=null || loginviaOTPReq.OTP != 0)
+                {
+                    var IsValid = await _oTPService.EmailVerificationViaOTP(new VerifyEmail
+                    {
+                        Email = loginviaOTPReq.EmailOrMobile,
+                        OTP = loginviaOTPReq.OTP
+                    });
+                    if(IsValid.StatusCode == ResponseStatus.Success)
+                    {
+                        var res = await _userService.LoginviaOTP(loginviaOTPReq);
+                        return Ok(res);
+                    }
+                   
+                }
+                
+            }
+            return BadRequest(response);
+
+        }
 
     }
 }

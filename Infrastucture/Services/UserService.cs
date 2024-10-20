@@ -18,14 +18,16 @@ namespace Infrastucture.Services
         private readonly IConfiguration configuration;
         private readonly IDapperRepository _dapper;
         private readonly IUserManager _userManager1;
-        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRoles> roleManager, IConfiguration configuration, IDapperRepository dapper, IUserManager userManager1)
+        private readonly IOTPService _oTPService;
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRoles> roleManager, IConfiguration configuration, IDapperRepository dapper, IUserManager userManager1, IOTPService oTPService)
         {
-            this.userManager=userManager;
-            this.signInManager=signInManager;
-            this.roleManager=roleManager;
-            this.configuration=configuration;
-            _dapper=dapper;
-            _userManager1=userManager1;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.roleManager = roleManager;
+            this.configuration = configuration;
+            _dapper = dapper;
+            _userManager1 = userManager1;
+            _oTPService = oTPService;
         }
 
         public async Task<Response> SignUp(SignUpReq signUpReq)
@@ -191,6 +193,61 @@ namespace Infrastucture.Services
                     }
                 }
                 return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<Response<LoginResponse>> LoginviaOTP(LoginviaOTPReq loginviaOTPReq)
+        {
+            var response = new Domain.Entities.Response<LoginResponse>();
+            try
+            {
+               
+                var userexists = await _userManager1.FindUserAsync(loginviaOTPReq.EmailOrMobile);
+                if (userexists != null)
+                {
+
+                    await signInManager.SignInAsync(userexists, isPersistent: true);
+                    var roledetails = await userManager.GetRolesAsync(userexists);
+                    var claimlist = new List<Claim>
+                       {
+                        new Claim(ClaimTypes.Name, userexists.UserName),
+                        new Claim("UserId", userexists.Id.ToString()),
+                        new Claim(ClaimTypes.MobilePhone, userexists.MobileNo),
+                        new Claim(ClaimTypes.Role, roledetails.FirstOrDefault()??""),
+                      };
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Secretkey"]));
+                    var token = new JwtSecurityToken(
+                        issuer: configuration["AuthSettings:Issuer"],
+                        audience: configuration["AuthSettings:Audience"],
+                        claims: claimlist,
+                        expires: DateTime.Now.AddDays(30),
+                        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+                        );
+
+                    string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
+                    response.StatusCode = ResponseStatus.Success;
+                    response.ResponseText = ResponseStatus.Success.ToString();
+                    response.Result = new LoginResponse
+                    {
+                        Email = userexists.Email,
+                        UserId = userexists.Id.ToString(),
+                        UserName = userexists.UserName,
+                        Name = userexists.UserName,
+                        Token = tokenAsString,
+                        Role = roledetails.FirstOrDefault(),
+                    };
+                    response.ResponseText = "Login Succesfull";
+                    response.StatusCode = ResponseStatus.Success;
+                    return response;
+                }
+                response.ResponseText = "User Not Exists Please Sign Up !";
+                response.StatusCode = ResponseStatus.Failed;
+                return response;
             }
             catch (Exception ex)
             {
