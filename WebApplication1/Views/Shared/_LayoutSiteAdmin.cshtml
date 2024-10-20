@@ -1,13 +1,13 @@
 ﻿@{
-    @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
-    var apiBaseUrl = Configuration["WEBAPIURL:BaseUrl"];
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+    bool IsLogin = User.Identity.IsAuthenticated;
 }
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
     <meta charset="utf-8" />
-    <title>Nest - Multipurpose eCommerce HTML Template</title>
+    <title>QuickCart - 10 Min Instant Delivery</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,16 +24,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-PgkDo+swW7dTjKvXHjGVr01S5tPo0IaaLbbZb4v2xjQ0UFSRJxkZoZeoZ04F5pmhA2aVfm0seFSfZMdRJAbpHg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
 
-            body.modal-open .content {
-                filter: blur(2px); /* Apply blur effect */
-            pointer-events: none; /* Disable all clicks */
-            }
+            /* body.modal-open .content {
+                filter: blur(2px); /* Apply blur effect 
+            pointer-events: none; /* Disable all clicks 
+            } */
         .modal-custom {
             position: fixed;
             top: 0;
             right: 0;
             height: 100%; /* Full height */
-            width: 32%; /* 20% of the viewport width */
+            width: 30%; /* 20% of the viewport width */
             background: white; /* White background */
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5); /* Optional shadow */
             display: none; /* Hide by default */
@@ -123,6 +123,7 @@
                     </div>
                 </div>
             </div>
+            @* change header  *@
             <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
                 <div class="container">
                     <div class="header-wrap">
@@ -171,7 +172,7 @@
                                         </a>
                                         <a href='shop-wishlist.html'><span class="lable">Wishlist</span></a>
                                     </div>
-                                    <div class="header-action-icon-2">
+                                    <div class="header-action-icon-2" id="openModal">
                                         <a class='' href='#'>
                                             <img alt="Nest" src="~/siteadmin/imgs/theme/icons/icon-cart.svg" />
                                             <span class="pro-count blue cartcount"></span>
@@ -205,7 +206,7 @@
                                                     <a href='page-account.html'><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
                                                 </li>
                                                 <li>
-                                                    <a href='page-login.html'><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a>
+                                                    <a href='/Account/Logout'><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -864,7 +865,7 @@
             </div>
         </footer>
     </div>
-
+    
     <div class="modal-custom" id="myModal" style="background: #f4fffa;">
         <div class="modal-header mb-4 mt-2">
             <h5 class="modal-title" style="margin-left: 3%;">
@@ -874,27 +875,42 @@
         </div>
         <div class="modal-body">
             <div class="container ">
-                <div class="cart-container_Product"></div>
+                <div class="cart-container_Product">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="modal-title" style="display: flex;align-items: center;margin-bottom: 4%;">
+                                <div class="shopping-cart-img" style="margin-right: 10px;">
+                                    <a href="#">
+                                        <img alt="min-img" src="/images/min-img.png" style="max-width: 50px; max-height: 50px;">
+                                    </a>
+                                </div>
+                                <div class="shopping-cart-title" style="flex-grow: 1; min-width: 0;">
+                                    <span style="white-space: normal; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+                                        <a href="#" style="display: block;"><h5>Delivery in 10 minutes</h5></a>
+                                        <span>Shipment of <span class="cartcount"></span> item</span>
+                                    </span>
+                                </div>
+                            </div>   
+                            <ul class="list-group cart-dropdown-ul">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="card d-none" id="billing-details">
-                    <div class="card-header">
+                    <div class="card-body">
                         <h5 class="modal-title">
                             Billing Details
                         </h5>
-                    </div>
-                    <div class="card-body">
                         <p>Subtotal: <span class="total-cart-amount">₹0.00</span></p>
                         <p>Tax (5%): <span class="tax-amount">₹0.00</span></p>
                         <h5>Total: <span class="total-cart-amount">₹0.00</span></h5>
-                        <button class="btn btn-success btn-block mt-4">Checkout</button>
                     </div>
                 </div>
                 <div class="card" id="tip-parter">
-                    <div class="card-header">
+                    <div class="card-body">
                         <h5 class="modal-title">
                             Tip your delivery partner
                         </h5>
-                    </div>
-                    <div class="card-body">
                         <div class="tip-options">
                             <p>Your kindness means a lot! 100% of your tip will go directly to your delivery partner.</p>
                             <button class="btn btn-outline-primary">₹20</button>
@@ -906,8 +922,35 @@
                             </div>
                         </div>
                     </div>
+                   
                 </div>
-
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="modal-title">
+                            Cancellation Policy
+                        </h5>
+                        <div class="tip-options">
+                            <p>Orders cannot be cancelled once packed for delivery. In case of unexpected delays, a refund will be provided, if applicable.</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer" style="width: 30%; position: fixed; bottom: 0; right: 0; background-color: #fff; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); z-index: 10; margin: auto;">
+            <div class="container card" style="margin-bottom: 0;">
+                <div class="card-body" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="total-items">
+                        <h5>Total: <span class="total-cart-amount">0</span></h5>
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                       <button class="btn btn-primary" id="ProceedtoCheckout">CheckOut</button>
+                    }else{
+                       <button class="btn btn-primary" id="loginToProceed">Login to Proceed</button>
+                    }
+                   
+                </div>
             </div>
         </div>
     </div>
@@ -922,7 +965,51 @@
             </div>
         </div>
     </div>
-    <!-- Vendor JS-->
+
+    <style>
+        .otp-box {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            margin: 0 5px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+    </style>
+
+    <div class="modal" id="logintopoceedModal" tabindex="-1" role="dialog" aria-labelledby="logintopoceedModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="logo text-center">
+                        <a href="index.html"><img src="/siteadmin/imgs/theme/logo.svg" alt="logo"></a>
+                    </div>
+                    <h5 class=" text-center" id="logintopoceedModalTitle">Login To Proceed</h5>
+                    <div class="text-center emails">
+                        <label for="emiallp">Login or Signup</label>
+                        <input type="email" class="form-control" id="emiallp" placeholder="Enter Email Address">
+                  </div>
+                    <div class="text-center mt-3" id="otpSection" style="display: none;">
+                        <label for="otpInput"></label>
+                        <div id="otpInputs" class="d-flex justify-content-center">
+                            <input type="text" maxlength="1" class="otp-box" />
+                            <input type="text" maxlength="1" class="otp-box" />
+                            <input type="text" maxlength="1" class="otp-box" />
+                            <input type="text" maxlength="1" class="otp-box" />
+                            <input type="text" maxlength="1" class="otp-box" />
+                            <input type="text" maxlength="1" class="otp-box" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveLgnreq">Send OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" integrity="sha512-TX8lDz+Jka3IT8BuE6s8M4wAa8GzPRGGrD7FjYZZyBCmNZdmAvBzJYqT4B1O9/INJfs5nV5/5ItnD9ErTuzcDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="~/siteadmin/js/vendor/modernizr-3.6.0.min.js"></script>
@@ -943,69 +1030,106 @@
     <script src="~/siteadmin/js/plugins/counterup.js"></script>
     <script src="~/siteadmin/js/plugins/jquery.countdown.min.js"></script>
     <script src="~/siteadmin/js/plugins/images-loaded.js"></script>
-
     <script src="~/siteadmin/js/plugins/isotope.js"></script>
     <script src="~/siteadmin/js/plugins/scrollup.js"></script>
     <script src="~/siteadmin/js/plugins/jquery.vticker-min.js"></script>
     <script src="~/siteadmin/js/plugins/jquery.theia.sticky.js"></script>
     <script src="~/siteadmin/js/plugins/jquery.elevatezoom.js"></script>
-    <!-- Template  JS -->
     <script src="~/siteadmin/js/main5103.js?v=6.0"></script>
     <script src="~/siteadmin/js/shop5103.js?v=6.0"></script>
     <script>
+        var Email = ''; 
         $(document).ready(function () {
-            Category();
+            handleOtpInput();
             cartInitialize();
-        });
-        function Category() {
-            var url = '@apiBaseUrl?.ToString()';
-            $.post(url + '/api/Category/GetCategory').done(function (res) {
-                $.each(res, function (index, item) {
-                    var listItem = $(`<li onclick="onCategory('${item.categoryName.replace(/\s+/g, '')}', ${item.categoryId})"></li>`);
-                    var link = $('<a></a>').html(`<img src="${item.categoryImage}" alt="${item.categoryDescription}" /> ${item.categoryName}`);
-                    listItem.append(link);
-                    if (index < 3) {
-                        $('.start').append(listItem);
-                    } else if (index < 6) {
-                        $('.end').append(listItem);
-                    } else if (index < 12) {
-                        $('.more-start').append(listItem);
-                    } else {
-                        $('.more-end').append(listItem);
-                    }
-                });
-
+            $('#loginToProceed').click(()=>{
+                $('#logintopoceedModal').modal('show');
             })
-        }
-        const openModal = document.getElementById('openModal');
-        const modal = document.getElementById('myModal');
-        const closeModalButtons = document.querySelectorAll('#closeModal, #closeModalFooter');
+            $('#saveLgnreq').click(() => {  
+                Email = $('#emiallp').val();
+                let obj = {
+                    EmailOrMobile: Email,
+                    OTP : $('#lgnOTP').val()
+                }
+                $.post('/Account/LoginViaOTP',obj).done((res) => {
+                    if(res.statusCode==1){
+                        $('.emails').addClass('d-none')
+                        $('#saveLgnreq').addClass('d-none')
+                        document.getElementById('otpSection').style.display = 'block';
+                        $('label[for="otpInput"]').text('Enter the 6-digit OTP We have sent a verification code to ' + obj.EmailOrMobile);
+                        const otpInputs = document.querySelectorAll('.otp-box');
+                        otpInputs.forEach((input, index) => {
+                            input.addEventListener('input', () => {
+                                if (input.value.length === 1 && index < otpInputs.length - 1) {
+                                    otpInputs[index + 1].focus();
+                                }
+                            });
+                        });
 
-        // Open modal
-        openModal.addEventListener('click', () => {
-            modal.style.display = 'block';
-            document.body.classList.add('modal-open');
-        });
+                    }
+                })
+            });
+            
+            const $modal = $('#myModal');
 
-        // Close modal
-        closeModalButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                modal.style.display = 'none';
-                document.body.classList.remove('modal-open');
+            $('#openModal').on('click', function () {
+                $modal.show();
+                $('body').addClass('modal-open');
+            });
+
+            $('#closeModal, #closeModalFooter').on('click', function () {
+                $modal.hide();
+                $('body').removeClass('modal-open');
+            });
+
+            $(window).on('click', function (event) {
+                if (event.target === $modal[0]) {
+                    $modal.hide();
+                    $('body').removeClass('modal-open');
+                }
             });
         });
 
-        // Close modal when clicking outside of modal content
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-                document.body.classList.remove('modal-open');
+        function handleOtpInput() {
+            const otpInputs = $('.otp-box'); 
+            otpInputs.on('input', function () {
+                let otpValue = '';
+                let allFilled = true;
+                otpInputs.each(function () {
+                    if ($(this).val().length === 0) {
+                        allFilled = false;
+                    }
+                    otpValue += $(this).val();
+                });
+                if (allFilled && otpValue.length === 6) {
+                    matchOtp(otpValue);
+                }
+            });
+        }
+
+        function matchOtp(otp){
+            let obj = {
+                EmailOrMobile: Email,
+                OTP: otp
             }
-        });
-       
+            $.post('/Account/LoginViaOTP', obj).done((res) => {
+                if (res.statusCode == 1) {
+                    let lgnsucss = `
+                    <div class="logo text-center">
+                        <a href="index.html">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Eo_circle_green_checkmark.svg" alt="logo" style="width: 50px;">
+                        </a>
+                    </div>
+                    <h5 class="text-center" id="lgnSuccess">Login Successfull</h5>`;
+                    $('#logintopoceedModal .modal-footer').addClass('d-none');
+                    $('#logintopoceedModal .modal-body').html(lgnsucss);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                }
+            });
 
-
-
+        }
     </script>
 </body>
 

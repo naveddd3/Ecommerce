@@ -67,6 +67,7 @@ namespace WEBAPP.Controllers
             }
         }
 
+        
         [HttpGet]
         public IActionResult SignUp()
         {
@@ -88,8 +89,12 @@ namespace WEBAPP.Controllers
             }
             return Redirect("/Account/Login");
         }
-        public async Task<IActionResult> Logout(string returnUrl = "/Account/Login")
+        public async Task<IActionResult> Logout(string returnUrl = "/Home/Index")
         {
+            if (User.IsInRole("Admin"))
+            {
+                returnUrl = "/AdminLogin";
+            }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
             HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
@@ -160,6 +165,28 @@ namespace WEBAPP.Controllers
             if (apiRes != null)
             {
                 res = JsonConvert.DeserializeObject<Response>(apiRes.Result);
+            }
+            return Json(res);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoginViaOTP(LoginviaOTPReq loginviaOTPReq)
+        {
+            var res = new Response<LoginResponse>();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Account/LoginviaOTP", JsonConvert.SerializeObject(loginviaOTPReq),null);
+            if (apiRes.Result != null)
+            {
+                res = JsonConvert.DeserializeObject<Response<LoginResponse>>(apiRes.Result);
+                if (res.Result != null)
+                {
+                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    identity.AddClaim(new Claim("Token", res.Result.Token));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, res.Result.Role));
+                    identity.AddClaim(new Claim(ClaimTypes.Name, res.Result.Name));
+                    identity.AddClaim(new Claim("UserId", res.Result.UserId.ToString()));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                    res.Result =null;
+                }
             }
             return Json(res);
         }

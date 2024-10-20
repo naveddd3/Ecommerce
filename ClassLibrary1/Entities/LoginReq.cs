@@ -15,4 +15,11 @@ namespace Domain.Entities
         [Required]
         public string? Password { get; set; }
     }
+    public class LoginviaOTPReq
+    {
+        [Required]
+        public string EmailOrMobile { get; set; }
+        [Required]
+        public int OTP { get; set; }
+    }
 }

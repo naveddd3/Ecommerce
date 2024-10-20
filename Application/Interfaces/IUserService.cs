@@ -8,5 +8,6 @@ namespace Application.Interfaces
         Task<Response> SignUp(SignUpReq signUpReq);
         Task<Response<LoginResponse>> Login(LoginReq loginReq);
         Task<Response> SaveShopOwner(ShopReq shopReq);
+        Task<Response<LoginResponse>> LoginviaOTP(LoginviaOTPReq loginviaOTPReq);
     }
 }
