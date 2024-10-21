@@ -1,5 +1,5 @@
 ﻿@{
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+    @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
     bool IsLogin = User.Identity.IsAuthenticated;
 }
 <!DOCTYPE html>
@@ -1042,6 +1042,11 @@
         $(document).ready(function () {
             handleOtpInput();
             cartInitialize();
+            if (@User.Identity.IsAuthenticated.ToString().ToLower()) {
+                $('#ProceedtoCheckout').click(() => {
+                    window.location.href = '/Checkout'
+                })
+            }
             $('#loginToProceed').click(()=>{
                 $('#logintopoceedModal').modal('show');
             })

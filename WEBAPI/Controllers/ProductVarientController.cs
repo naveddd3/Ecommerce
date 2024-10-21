@@ -36,5 +36,12 @@ namespace WEBAPI.Controllers
             var res = await _productVarientService.ProductDetailById(ProductId);
             return Ok(res); 
         }
+
+        [HttpPost(nameof(PlaceOrder))]
+        public async Task<IActionResult> PlaceOrder(int ProductId)
+        {
+            var res = await _productVarientService.ProductDetailById(ProductId);
+            return Ok(res);
+        }
     }
 }

@@ -1,17 +1,18 @@
 ﻿using Domain.Entities;
 using Domain.Helper;
 using Infrastucture.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WEBAPP.Models.Helper;
 
 namespace WEBAPP.Controllers
 {
-    public class ProductVarientController : Controller
+    public class WebsiteController : Controller
     {
         private readonly string _BaseUrl;
         private readonly FileUploadService _fileUploadService;
-        public ProductVarientController(AppSetting appSetting, FileUploadService fileUpload)
+        public WebsiteController(AppSetting appSetting, FileUploadService fileUpload)
         {
             _BaseUrl=appSetting.WebApiBaseUrl;
             _fileUploadService = fileUpload;
@@ -66,6 +67,24 @@ namespace WEBAPP.Controllers
                 list = JsonConvert.DeserializeObject<List<ProductVarientRes>>(apiRes.Result);
             }
             return PartialView(list);
+
+        }
+
+        [Route("Checkout")]
+        [Authorize]
+        public async Task<IActionResult> Checkout()
+        {
+            var addrslist = new List<SavedAddress>();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/SavedAddress/GetAddressByUserId", null, User.GetLoggedInUserToken());
+            if (apiRes != null)
+            {
+                addrslist = JsonConvert.DeserializeObject<List<SavedAddress>>(apiRes.Result);
+            }
+            return PartialView(addrslist);
+        }
+
+        public async Task<IActionResult> PlaceOrder(SavedAddress savedAddress)
+        {
 
         }
         #endregion
