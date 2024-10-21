@@ -163,6 +163,4 @@ function updateQuantity(productId, change) {
     }
 }
 
-
-
 $(document).ready(initializeCart);
