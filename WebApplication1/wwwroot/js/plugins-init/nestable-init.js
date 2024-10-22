@@ -3,7 +3,7 @@
 
 
 /*******************
-Nestable
+QuickCartable
 *******************/
 	
 	var e = function (e) {

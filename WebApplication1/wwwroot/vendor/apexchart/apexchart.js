@@ -24273,7 +24273,7 @@
       var element; // adopt with element-specific settings
 
       if (node.nodeName == 'svg') {
-        element = node.parentNode instanceof window.SVGElement ? new SVG.Nested() : new SVG.Doc();
+        element = node.parentNode instanceof window.SVGElement ? new SVG.QuickCarted() : new SVG.Doc();
       } else if (node.nodeName == 'linearGradient') {
         element = new SVG.Gradient('linear');
       } else if (node.nodeName == 'radialGradient') {
@@ -25780,7 +25780,7 @@
              This is needed because FF does not return the transformation matrix
              for the inner coordinate system when getScreenCTM() is called on nested svgs.
              However all other Browsers do that */
-          if (this instanceof SVG.Nested) {
+          if (this instanceof SVG.QuickCarted) {
             var rect = this.rect(1, 1);
             var m = rect.node.getScreenCTM();
             rect.remove();
@@ -27180,7 +27180,7 @@
         }
       }
     });
-    SVG.Nested = SVG.invent({
+    SVG.QuickCarted = SVG.invent({
       // Initialize node
       create: function create() {
         this.constructor.call(this, SVG.create('svg'));
@@ -27192,7 +27192,7 @@
       construct: {
         // Create nested svg document
         nested: function nested() {
-          return this.put(new SVG.Nested());
+          return this.put(new SVG.QuickCarted());
         }
       }
     }); // Define list of available attributes for stroke and fill
@@ -27763,7 +27763,7 @@
         return this.defs().filter(block)
       }
     });
-    SVG.extend(SVG.Element, SVG.G, SVG.Nested, {
+    SVG.extend(SVG.Element, SVG.G, SVG.QuickCarted, {
       // Create filter element in defs and store reference
       filter: function(block) {
         this.filterer = block instanceof SVG.Element ?
@@ -28704,9 +28704,9 @@
 
       var box = this.el.bbox();
 
-      if(this.el instanceof SVG.Nested) box = this.el.rbox();
+      if(this.el instanceof SVG.QuickCarted) box = this.el.rbox();
 
-      if (this.el instanceof SVG.G || this.el instanceof SVG.Use || this.el instanceof SVG.Nested) {
+      if (this.el instanceof SVG.G || this.el instanceof SVG.Use || this.el instanceof SVG.QuickCarted) {
         box.x = this.el.x();
         box.y = this.el.y();
       }
@@ -28738,7 +28738,7 @@
 
       // search for parent on the fly to make sure we can call
       // draggable() even when element is not in the dom currently
-      this.parent = this.parent || this.el.parent(SVG.Nested) || this.el.parent(SVG.Doc);
+      this.parent = this.parent || this.el.parent(SVG.QuickCarted) || this.el.parent(SVG.Doc);
       this.p = this.parent.node.createSVGPoint();
 
       // save current transformation matrix

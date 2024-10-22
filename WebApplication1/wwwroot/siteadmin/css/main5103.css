@@ -1,5 +1,5 @@
 /***
- Theme Name: Nest
+ Theme Name: QuickCart
  Description: Grocery, Super Market, eCommerce HTML Template
  Version: 6.0
  License: GNU General Public License v2 or later
@@ -1560,7 +1560,7 @@ input.qty-val {
 }
 .hero-slider-1 .single-hero-slider {
   height: 538px;
-  border-radius: 30px;
+  /*border-radius: 30px;*/
   background-size: cover;
   background-position: center center;
 }
@@ -2837,7 +2837,7 @@ table .product-thumbnail img {
   position: relative;
   background: #F4F6FA;
   padding: 20px;
-  border-radius: 10px;
+ /* border-radius: 10px;*/
 }
 .banner-left-icon:hover .banner-icon {
   transform: translateY(-5px);
@@ -3260,7 +3260,7 @@ table .product-thumbnail img {
   position: relative;
   background-color: #fff;
   border: 1px solid #ececec;
-  border-radius: 15px;
+  /*border-radius: 15px;*/
   overflow: hidden;
   transition: 0.2s;
   -moz-transition: 0.2s;
@@ -3424,7 +3424,7 @@ table .product-thumbnail img {
   display: inline-block;
   font-size: 12px;
   line-height: 1;
-  border-radius: 15px 0 20px 0;
+  /*border-radius: 15px 0 20px 0;*/
   color: #fff;
   padding: 9px 20px 10px 20px;
 }
@@ -3444,7 +3444,7 @@ table .product-thumbnail img {
   background-color: #f59758;
 }
 .product-cart-wrap .product-content-wrap {
-  padding: 0 20px 20px 20px;
+  padding: 0 10px 20px 10px;
 }
 .product-cart-wrap .product-content-wrap .product-category {
   margin-bottom: 5px;
@@ -3461,9 +3461,15 @@ table .product-thumbnail img {
   font-weight: 700;
   margin-bottom: 5px;
 }
-.product-cart-wrap .product-content-wrap h2 a {
-  color: #253D4E;
-}
+    .product-cart-wrap .product-content-wrap h2 a {
+        color: #253D4E;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-height: 22px;
+        max-width: 217px;
+    }
 .product-cart-wrap .product-content-wrap h2 a:hover {
   color: #3BB77E;
 }
@@ -3844,7 +3850,6 @@ table .product-thumbnail img {
   border: 1px solid #f7f8f9;
   color: #777;
   padding: 9px 16px;
-  border-radius: 10px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
   border: 1px solid #ececec;
@@ -7543,7 +7548,6 @@ span.fi-rs-apps {
   position: relative;
   padding: 30px;
   border: 1px solid #ececec;
-  border-radius: 15px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
 }
 
@@ -7833,7 +7837,7 @@ footer .hotline img {
   clear: both;
   display: table;
   width: 100%;
-  border-radius: 20px;
+  /*border-radius: 20px;*/
   overflow: hidden;
   min-height: 230px;
 }
@@ -10603,3 +10607,24 @@ footer .hotline img {
     font-size: 35px;
   }
 }/*# sourceMappingURL=main.css.map */
+.product-cart-wrap .product-img-action-wrap .product-img a {
+    display: block;
+    height: 129px;
+    width: 100%;
+    background: #fff;
+    min-height: 129px;
+}
+.product-cart-wrap .product-img-action-wrap .product-img a img {
+    max-height: 100%;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    margin: auto;
+}

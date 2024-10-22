@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace Domain.Entities
 {
@@ -24,6 +25,27 @@ namespace Domain.Entities
     public class ProductReq : Product
     {
         public IFormFile? ProductImage { get; set; }
+    }
+
+    public class CartProductReq
+    {
+        [JsonProperty("product_id")]
+        public int Product_Id { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("image_url")]
+        public string Image_Url { get; set; }
+
+        [JsonProperty("unit")]
+        public string Unit { get; set; }
+
+        [JsonProperty("price")]
+        public decimal Price { get; set; }
+
+        [JsonProperty("varientId")]
+        public string VarientId { get; set; }
     }
 
     public class ProductDetail : Product

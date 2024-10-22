@@ -19,13 +19,11 @@
                     <div class="product-img product-img-zoom">
                         <a href='shop-product-right.html'>
                             <img class="default-img productImage" src="@product.ImageUrl" alt="" />
-                            <img class="hover-img" src="@product.ImageUrl" alt="" />
                         </a>
                     </div>
                     <div class="product-action-1">
                         <a aria-label='Add To Wishlist' class='action-btn' href='shop-wishlist.html'><i class="fi-rs-heart"></i></a>
-                        <a aria-label='Compare' class='action-btn' href='shop-compare.html'><i class="fi-rs-shuffle"></i></a>
-                        <button aria-label="Quick view" class="action-btn" id="quickviewOpenModal" onclick="productDetail(@product.ProductId)"><i class="fi-rs-eye"></i></button>
+                        <a aria-label="Quick view" class="action-btn" id="quickviewOpenModal" onclick="productDetail(@product.ProductId)"><i class="fi-rs-eye"></i></a>
                     </div>
                     <div class="product-badges product-badges-position product-badges-mrg">
                         <span class="hot">Hot</span>
@@ -70,13 +68,13 @@
 <script src="~/js/cart.js"></script>
 <script>
     var showVarients = (productId) => {
-        $.post('/ProductVarient/GetProductVarientById', { ProductId: productId }).done((result) => {
+        $.post('/Website/GetProductVarientById', { ProductId: productId }).done((result) => {
             $("#pvarientModal").html(result);
             $("#variantModal").modal('show');
         })
     }
     var productDetail = (productId) => {
-        $.post("/ProductVarient/ProductDetail", { productId: productId }).done((res) => {
+        $.post("/Website/ProductDetail", { productId: productId }).done((res) => {
             $("#productDetail").html(res);
             $("#quickViewModal").modal("show");
         })
