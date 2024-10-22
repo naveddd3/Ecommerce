@@ -37,10 +37,7 @@ namespace Infrastucture.Services
                     savedAddress.AddressLine2,
                     savedAddress.City,
                     savedAddress.State,
-                    savedAddress.PostalCode,
-                    savedAddress.Country,
-                    savedAddress.IsDefault,
-                    savedAddress.IsDeleted
+                    savedAddress.PostalCode
                 });
                 return res;
             }

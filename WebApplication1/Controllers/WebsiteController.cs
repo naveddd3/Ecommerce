@@ -83,9 +83,14 @@ namespace WEBAPP.Controllers
             return PartialView(addrslist);
         }
 
-        public async Task<IActionResult> PlaceOrder(SavedAddress savedAddress)
+        public async Task<IActionResult> PlaceOrder(CheckoutDetails cart)
         {
+            return Ok(cart);
+        }
 
+        public async Task<IActionResult> CreateNewAddress()
+        {
+            return PartialView();
         }
         #endregion
     }

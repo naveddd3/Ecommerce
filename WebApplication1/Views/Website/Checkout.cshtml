@@ -89,6 +89,12 @@
                 <div class="table-responsive order_table checkout">
                     <ul class="list-group cart-dropdown-ul">
                     </ul>
+                    <h5 class="modal-title">
+                        Billing Details
+                    </h5>
+                    <p>Subtotal: <span class="total-cart-amount">₹0.00</span></p>
+                    <p>Tax (5%): <span class="tax-amount">₹0.00</span></p>
+                    <h5>Total: <span class="total-cart-amount">₹0.00</span></h5>
                 </div>
             </div>
             <div class="payment ml-30">
@@ -110,13 +116,23 @@
 </div>
 <script>
     var SaveOrder = () => {
-        let obj = {
+        debugger;
+        let cartData = JSON.parse(localStorage.getItem('cart')) || {
+            count: 0,
+            total: 0,
+            items: {},
+        };
+        let address = {
             FullName: $('#fname').val() + $('#lname').val(),
             AddressLine1: $("#billing_address1").val(),
             AddressLine2: $("#billing_address2").val(),
             City: $("#city").val(),
             State: $("#state").val(),
             PostalCode: $("#zipcode").val()
+        }
+        let checkoutDetails = {
+            address: address,
+            cart: cartData
         }
         $.post('/Website/PlaceOrder', obj).done((res) => {
             console.log(res);

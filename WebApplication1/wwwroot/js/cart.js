@@ -25,9 +25,9 @@
             <h6><span>${item.quantity} × </span>₹${item.product.price}</h4>
         </span>
     </div>
-    <div class="shopping-cart-quantity" style="display: flex; align-items: center; margin-right: 10px;">
+    <div class="shopping-cart-quantity" style="display: flex; align-items: center;">
          
-<div class="detail-extralink mr-15">
+<div class="detail-extralink">
     <div class="detail-qty border radius">
         <a href="#" onclick="updateQuantity(${item.product.product_id}, -1)" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
         <span id="quantity-${item.product.product_id}" class="qty-val" style="margin-right: 10px;">${item.quantity}</span>
