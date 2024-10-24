@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Helper;
 using Infrastucture.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -10,6 +11,7 @@ namespace WEBAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles="Admin")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
