@@ -1,5 +1,4 @@
 ﻿function cartInitialize() {
-    debugger;
     let cart = JSON.parse(localStorage.getItem('cart')) || {
         count: 0,
         total: 0,
@@ -54,7 +53,6 @@
 
 
 function addToCart(productId, element) {
-    debugger;
     var uniqueKey = productId;
     let cart = JSON.parse(localStorage.getItem('cart')) || {
         count: 0,
@@ -123,7 +121,6 @@ function addToCart(productId, element) {
 }
 
 function initializeCart() {
-    debugger
     let cart = JSON.parse(localStorage.getItem('cart')) || { items: {} };
     for (let productId in cart.items) {
         if (cart.items.hasOwnProperty(productId)) {
@@ -134,7 +131,6 @@ function initializeCart() {
     }
 }
 function updateQuantity(productId, change) {
-    debugger
     let cart = JSON.parse(localStorage.getItem('cart'));
     if (cart && cart.items[productId]) {
         cart.items[productId].quantity += change;
