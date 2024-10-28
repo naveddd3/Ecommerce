@@ -82,7 +82,15 @@ namespace WEBAPP.Controllers
             }
             return PartialView(addrslist);
         }
-
+        public IActionResult Cart()
+        {
+            return PartialView();
+        }
+        public async Task<IActionResult> DeliveryAddress()
+        {
+            var list = 
+            return PartialView();
+        }
         public async Task<IActionResult> PlaceOrder(CheckoutDetails cart)
         {
             return Ok(cart);

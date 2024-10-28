@@ -110,7 +110,7 @@
                                                     <img alt="QuickCart" src="~/siteadmin/imgs/theme/icons/icon-cart.svg" />
                                                     <span class="pro-count blue cartcount"></span>
                                                 </a>
-                                                <a id="openModal"><span class="lable">Cart</span></a>
+                                                <a onclick="OpenCart()"><span class="lable">Cart</span></a>
 
                                             </div>
                                             <div class="header-action-icon-2">
@@ -548,93 +548,9 @@
         </footer>
     </div>
     
-    <div class="modal-custom" id="myModal" style="background: #f4fffa;">
-        <div class="modal-header mb-4 mt-2">
-            <h5 class="modal-title" style="margin-left: 3%;">
-                Cart
-            </h5>
-            <button type="button" class="btn-close" id="closeModal" style="margin-right: 13px;"></button>
-        </div>
-        <div class="modal-body">
-            <div class="container ">
-                <div class="cart-container_Product">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="modal-title" style="display: flex;align-items: center;margin-bottom: 4%;">
-                                <div class="shopping-cart-img" style="margin-right: 10px;">
-                                    <a href="#">
-                                        <img alt="min-img" src="/images/min-img.png" style="max-width: 50px; max-height: 50px;">
-                                    </a>
-                                </div>
-                                <div class="shopping-cart-title" style="flex-grow: 1; min-width: 0;">
-                                    <span style="white-space: normal; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
-                                        <a href="#" style="display: block;"><h5>Delivery in 10 minutes</h5></a>
-                                        <span>Shipment of <span class="cartcount"></span> item</span>
-                                    </span>
-                                </div>
-                            </div>   
-                            <ul class="list-group cart-dropdown-ul">
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="card d-none" id="billing-details">
-                    <div class="card-body">
-                        <h5 class="modal-title">
-                            Billing Details
-                        </h5>
-                        <p>Subtotal: <span class="total-cart-amount">₹0.00</span></p>
-                        <p>Tax (5%): <span class="tax-amount">₹0.00</span></p>
-                        <h5>Total: <span class="total-cart-amount">₹0.00</span></h5>
-                    </div>
-                </div>
-                <div class="card" id="tip-parter">
-                    <div class="card-body">
-                        <h5 class="modal-title">
-                            Tip your delivery partner
-                        </h5>
-                        <div class="tip-options">
-                            <p>Your kindness means a lot! 100% of your tip will go directly to your delivery partner.</p>
-                            <button class="btn btn-outline-primary">₹20</button>
-                            <button class="btn btn-outline-primary">₹30</button>
-                            <button class="btn btn-outline-primary">₹50</button>
-                            <div class="input-group mt-2">
-                                <span class="input-group-text">₹</span>
-                                <input type="number" class="form-control" placeholder="Custom amount" aria-label="Custom amount">
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="modal-title">
-                            Cancellation Policy
-                        </h5>
-                        <div class="tip-options">
-                            <p>Orders cannot be cancelled once packed for delivery. In case of unexpected delays, a refund will be provided, if applicable.</p>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        <div class="modal-footer" style="width: 30%; position: fixed; bottom: 0; right: 0; background-color: #fff; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); z-index: 10; margin: auto;">
-            <div class="container card" style="margin-bottom: 0;">
-                <div class="card-body" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div class="total-items">
-                        <h5>Total: <span class="total-cart-amount">0</span></h5>
-                    </div>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                       <button class="btn btn-primary" id="ProceedtoCheckout">Proceed</button>
-                    }else{
-                       <button class="btn btn-primary" id="loginToProceed">Login to Proceed</button>
-                    }
-                   
-                </div>
-            </div>
-        </div>
+
+    <div class="cart-modal">
+
     </div>
     <div id="loader" class="loader"></div>
 @* 
@@ -711,18 +627,9 @@
     <script src="~/siteadmin/js/shop5103.js?v=6.0"></script>
     <script>
         var Email = ''; 
-        const originalCartContent = document.querySelector('.modal-body .container').innerHTML;
         $(document).ready(function () {
             handleOtpInput();
             cartInitialize();
-            if (@User.Identity.IsAuthenticated.ToString().ToLower()) {
-                $('#ProceedtoCheckout').click(() => {
-                    loadDeliveryAddressPage();
-                })
-            }
-            $('#loginToProceed').click(()=>{
-                $('#logintopoceedModal').modal('show');
-            })
             $('#saveLgnreq').click(() => {  
                 Email = $('#emiallp').val();
                 let obj = {
@@ -747,31 +654,18 @@
                     }
                 })
             });
-            
-            const $modal = $('#myModal');
-
-            $('#openModal').on('click', function () {
-                $modal.show();
-                $('body').addClass('modal-open');
-            });
-
-            $('#closeModal, #closeModalFooter').on('click', function () {
-                $modal.hide();
-                $('body').removeClass('modal-open');
-            });
-
-            $(window).on('click', function (event) {
-                if (event.target === $modal[0]) {
-                    $modal.hide();
-                    $('body').removeClass('modal-open');
-                }
-            });
-
             $("#addNewAddress").click((res) => {
                 $("#newaddressModal").html(res);
                 $("#").modal('show');
             });
         });
+        
+        function OpenCart() {
+            $.post('/Website/Cart').done((result) => {
+                $('.cart-modal').html(result);
+                $('#myModal').show();
+            })
+        }
 
         function handleOtpInput() {
             const otpInputs = $('.otp-box'); 
@@ -815,47 +709,14 @@
             });
 
         }
-        function loadDeliveryAddressPage() {
-            const modalHeader = document.querySelector('.modal-header h5');
-            modalHeader.innerHTML = '<i class="fi-rs-arrow-small-left" id="backToCart" style="cursor: pointer; margin-right: 5px;"></i> Select Delivery Address';
-            const modalBody = document.querySelector('.modal-body .container');
-            modalBody.innerHTML = '';
-            modalBody.innerHTML = `
-            <div class="card">
-                        <div class="card-body">
-                                     <a class="mt-3" id="addNewAddress"><i class="fi-rs-plus" id="bacttoCart"></i> Add New Address</a>
-                        </div>
-            </div>
-                <div class="card">
-                    <div class="card-body">
-                        <p>Please choose your delivery address or add a new one.</p>
-                        <div class="address-list">
-                            <div class="address-item">
-                                <input type="radio" name="address" id="address1" value="address1">
-                                <label for="address1">123, ABC Street, XYZ City</label>
-                            </div>
-                            <div class="address-item">
-                                <input type="radio" name="address" id="address2" value="address2">
-                                <label for="address2">456, DEF Avenue, LMN City</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            $('#addNewAddress').on('click', function () {
-                alert("Redirect to add new address page or load new address form inside the modal.");
-            });
-            $('#backToCart').on('click', function () {
-                loadCartContent();
-            });
-        }
-        function loadCartContent() {
-            const modalBody = document.querySelector('.modal-body .container');
-            modalBody.innerHTML = originalCartContent; 
-            document.getElementById('ProceedtoCheckout').addEventListener('click', function () {
-                loadDeliveryAddressPage();
-            });
-        }
+      
+        // function loadCartContent() {
+        //     const modalBody = document.querySelector('.modal-body .container');
+        //     modalBody.innerHTML = originalCartContent; 
+        //     document.getElementById('ProceedtoCheckout').addEventListener('click', function () {
+        //         loadDeliveryAddressPage();
+        //     });
+        // }
 
 
     </script>

@@ -1,0 +1,118 @@
+﻿@{
+    
+}
+<div class="modal-custom" id="myModal" style="background: #f4fffa;">
+    <div class="modal-header mb-4 mt-2">
+        <h5 class="modal-title" style="margin-left: 3%;">
+            Cart
+        </h5>
+        <button type="button" class="btn-close" id="closeModal" style="margin-right: 13px;"></button>
+    </div>
+    <div class="modal-body">
+        <div class="container ">
+            <div class="cart-container_Product">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="modal-title" style="display: flex;align-items: center;margin-bottom: 4%;">
+                            <div class="shopping-cart-img" style="margin-right: 10px;">
+                                <a href="#">
+                                    <img alt="min-img" src="/images/min-img.png" style="max-width: 50px; max-height: 50px;">
+                                </a>
+                            </div>
+                            <div class="shopping-cart-title" style="flex-grow: 1; min-width: 0;">
+                                <span style="white-space: normal; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+                                    <a href="#" style="display: block;"><h5>Delivery in 10 minutes</h5></a>
+                                    <span>Shipment of <span class="cartcount"></span> item</span>
+                                </span>
+                            </div>
+                        </div>
+                        <ul class="list-group cart-dropdown-ul">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card d-none" id="billing-details">
+                <div class="card-body">
+                    <h5 class="modal-title">
+                        Billing Details
+                    </h5>
+                    <p>Subtotal: <span class="total-cart-amount">₹0.00</span></p>
+                    <p>Tax (5%): <span class="tax-amount">₹0.00</span></p>
+                    <h5>Total: <span class="total-cart-amount">₹0.00</span></h5>
+                </div>
+            </div>
+            <div class="card" id="tip-parter">
+                <div class="card-body">
+                    <h5 class="modal-title">
+                        Tip your delivery partner
+                    </h5>
+                    <div class="tip-options">
+                        <p>Your kindness means a lot! 100% of your tip will go directly to your delivery partner.</p>
+                        <button class="btn btn-outline-primary">₹20</button>
+                        <button class="btn btn-outline-primary">₹30</button>
+                        <button class="btn btn-outline-primary">₹50</button>
+                        <div class="input-group mt-2">
+                            <span class="input-group-text">₹</span>
+                            <input type="number" class="form-control" placeholder="Custom amount" aria-label="Custom amount">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="modal-title">
+                        Cancellation Policy
+                    </h5>
+                    <div class="tip-options">
+                        <p>Orders cannot be cancelled once packed for delivery. In case of unexpected delays, a refund will be provided, if applicable.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer" style="width: 30%; position: fixed; bottom: 0; right: 0; background-color: #fff; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); z-index: 10; margin: auto;">
+        <div class="container card" style="margin-bottom: 0;">
+            <div class="card-body" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="total-items">
+                    <h5>Total: <span class="total-cart-amount">0</span></h5>
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button class="btn btn-primary" onclick="loadDeliveryAddressPage()" id="ProceedtoCheckout">Proceed</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary" id="loginToProceed">Login to Proceed</button>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        cartInitialize();
+    })
+    $('#closeModal, #closeModalFooter').on('click', function () {
+        $('#myModal').hide();
+    });
+    $('#loginToProceed').click(() => {
+        $('#logintopoceedModal').modal('show');
+    })
+    function loadDeliveryAddressPage() {
+        const modalHeader = $('.modal-header h5');
+        modalHeader.innerHTML = '<i class="fi-rs-arrow-small-left" id="backToCart" style="cursor: pointer; margin-right: 5px;"></i> Select Delivery Address';
+        $.post('/Website/DeliveryAddress').done((result) => {
+            const modalBody = $('.modal-body .container');
+            modalBody.html(result);
+        })
+        $('#addNewAddress').on('click', function () {
+            QAlert("Redirect to add new address page or load new address form inside the modal.");
+        });
+        $('#backToCart').on('click', function () {
+            OpenCart();
+        });
+    }
+</script>
