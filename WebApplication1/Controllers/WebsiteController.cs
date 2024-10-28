@@ -69,7 +69,7 @@ namespace WEBAPP.Controllers
             return PartialView(list);
 
         }
-
+         
         [Route("Checkout")]
         [Authorize]
         public async Task<IActionResult> Checkout()
