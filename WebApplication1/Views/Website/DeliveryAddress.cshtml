@@ -1,0 +1,43 @@
+﻿<div class="card">
+    <div class="card-body">
+        <a class="mt-3" id="addNewAddress"><i class="fi-rs-plus"></i> Add New Address</a>
+    </div>
+</div>
+<div>
+    <p>Please choose your delivery address or add a new one.</p>
+    <div class="address-list">
+        <div class="address-item bg-light rounded shadow-sm p-3 mb-3">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <img title="HOME"
+                         src="https://cdn.grofers.com/assets/ui/saved_address_type_home.png"
+                         alt="Home Icon"
+                         class="img-fluid rounded"
+                         style="max-width: 50px; max-height: 50px;" />
+                </div>
+                <div>
+                    <div class="fw-bold text-dark">Home</div>
+                    <div class="text-muted small">
+                        1st floor, 878D Vinay Khand 4, Gomti Nagar, Lucknow
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*  <div class="address-item">
+        <input type="radio" name="address" id="address2" value="address2">
+        <label for="address2">456, DEF Avenue, LMN City</label>
+        </div> *@
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        loadAddress();
+    });
+
+    var loadAddress = () => {
+        $.post('/Website/GetDeliveryAddress').done((result) => {
+
+        })
+    }
+</script>
