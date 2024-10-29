@@ -88,8 +88,13 @@ namespace WEBAPP.Controllers
         }
         public async Task<IActionResult> DeliveryAddress()
         {
-            var list = 
-            return PartialView();
+            var addrslist = new List<SavedAddress>();
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/SavedAddress/GetAddressByUserId", null, User.GetLoggedInUserToken());
+            if (apiRes != null)
+            {
+                addrslist = JsonConvert.DeserializeObject<List<SavedAddress>>(apiRes.Result);
+            }
+            return PartialView(addrslist);
         }
         public async Task<IActionResult> PlaceOrder(CheckoutDetails cart)
         {
