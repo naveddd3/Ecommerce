@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "ClassLibrary1\Dom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBAPI", "WEBAPI\WEBAPI.csproj", "{EDA795AD-03A5-4069-8874-2EED9C50D56B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{9ED24C51-04F0-4BF4-B388-8AEB498DAFFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{9ED24C51-04F0-4BF4-B388-8AEB498DAFFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastucture", "Infrastucture\Infrastucture.csproj", "{28F703A4-07DC-48FC-A6D2-C71450587E13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastucture", "Infrastucture\Infrastucture.csproj", "{28F703A4-07DC-48FC-A6D2-C71450587E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEBAPP", "WebApplication1\WEBAPP.csproj", "{9D39EA38-5C5F-44B2-B231-EA6A9F51EF00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBAPP", "WebApplication1\WEBAPP.csproj", "{9D39EA38-5C5F-44B2-B231-EA6A9F51EF00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

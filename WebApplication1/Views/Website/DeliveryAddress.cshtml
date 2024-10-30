@@ -1,4 +1,5 @@
 ﻿@using Domain.Entities
+@using Domain.Enum
 @model List<SavedAddress>;
 
 <div class="card">
@@ -20,7 +21,7 @@
                     <div class="d-flex align-items-center">
                         <div class="me-3">
                             <img title="HOME"
-                                 src="@addrrss.TypeImg"
+                               @*   src="@addrrss.TypeImg" *@
                                  alt="Home Icon"
                                  class="img-fluid rounded"
                                  style="max-width: 50px; max-height: 50px;" />
@@ -39,39 +40,74 @@
     }
 </div>
 <script>
-    $('#addNewAddress').on('click', function () {
-        $.post('/Website/CreateNewAddress').done(function (result) {
-            $("#productDetail").html(result);
-            $('#addNewAddress').modal('show');
-        }).fail(function (xhr) {
-            alert("Error: " + xhr.status + " " + xhr.statusText);
-        });
+$('#addNewAddress').on('click', function () {
+    $.post('/Website/CreateNewAddress').done(function (result) {
+        $("#productDetail").html(result);
+        $('#addNewAddress').modal('show');
+    }).fail(function (xhr) {
+        alert("Error: " + xhr.status + " " + xhr.statusText);
     });
+});
 
-    var SaveOrEditAddress = () => {
-        var obj = {
-            Id: $("#Id").val(),
-            HouseNo: $("#HouseNo").val(),
-            Type: $("#HOME").val(),
-            Floor: $("#Floor").val(),
-            Area: $("#Area").val(),
-            LandMark: $("#LandMark").val(),
-            Name: $("#Name").val(),
-            PhoneNumber: $("#PhoneNumber").val()
-        };
 
-        $.ajax({
-            url: "/Website/SaveOrUpdateAddress",
-            type: "POST",
-            data: obj,
-            success: function (response) {
+    let selectedAddressType = null; 
 
-                QAlert(response.statusCode, response.responseText);
-            },
-            error: function (res) {
-                QAlert(res.statusCode, res.responseText);
+    function setAddressType(addressTypeId) {
+        const isOtherType = addressTypeId === @Convert.ToInt32(AddressType.OTHER);
+
+        if (selectedAddressType === addressTypeId && isOtherType) {
+            document.querySelectorAll('#address-buttons .address-btn').forEach(btn => {
+                btn.style.display = "inline-block";
+            });
+            document.getElementById("other-input").style.display = "none";
+            selectedAddressType = null; 
+        } else {
+            selectedAddressType = addressTypeId;
+
+            if (isOtherType) {
+                document.querySelectorAll('#address-buttons .address-btn').forEach(btn => {
+                    if (btn.id !== "other-button") {
+                        btn.style.display = "none";
+                    }
+                });
+                document.getElementById("other-input").style.display = "inline-block";
+            } else {
+                document.querySelectorAll('#address-buttons .address-btn').forEach(btn => {
+                    btn.style.display = "inline-block"; 
+                });
+                document.getElementById("other-input").style.display = "none"; 
             }
-        });
+        }
+    }
+
+
+
+
+var SaveOrEditAddress = () => {
+    var obj = {
+        Id: $("#Id").val(),
+        HouseNo: $("#HouseNo").val(),
+        Type: selectedAddressType, 
+        Floor: $("#Floor").val(),
+        Area: $("#Area").val(),
+        LandMark: $("#LandMark").val(),
+        Name: $("#Name").val(),
+        OtherType: $("#OtherType").val(),
+        PhoneNumber: $("#PhoneNumber").val()
     };
+
+    $.ajax({
+            url: "/Website/SaveOrUpdateAddress",
+        type: "POST",
+        data: obj,
+        success: function (response) {
+            QAlert(response.statusCode, response.responseText);
+        },
+        error: function (res) {
+            QAlert(res.statusCode, res.responseText);
+        }
+    });
+};
+
 
 </script>
