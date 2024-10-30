@@ -16,7 +16,7 @@
         @foreach (var addrrss in Model)
         {
             <div class="address-list">
-                <div class="address-item bg-light rounded shadow-sm p-3 mb-3">
+                <div class="address-item bg-light rounded shadow-sm p-3 mb-3" onclick="addToCartAddress(this)">
                     <div class="d-flex align-items-center">
                         <div class="me-3">
                             <img title="HOME"
@@ -73,5 +73,16 @@
             }
         });
     };
+
+    function addToCartAddress(element) {
+        const addressType = element.querySelector('.fw-bold').innerText;
+        const addressDetails = element.querySelector('.text-muted').innerText;
+        document.querySelector('.selected-address-type').textContent = addressType;
+        document.querySelector('.selected-address-details').textContent = addressDetails;
+        document.getElementById('selectedAddressCard').style.display = 'flex';
+        localStorage.setItem('selectedAddressType', addressType);
+        localStorage.setItem('selectedAddressDetails', addressDetails);
+    }
+
 
 </script>
