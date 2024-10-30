@@ -13,7 +13,6 @@ namespace Domain.Entities
         public int UserId { get; set; }
         public AddressType Type { get; set; }
         public string Name { get; set; }
-        public string TypeImg { get; set; }
         public string HouseNo { get; set; }
         public string? Floor { get; set; }
         public string? Area { get; set; }
@@ -23,6 +22,7 @@ namespace Domain.Entities
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
+        public string OtherType { get; set; }
     }
 
 }

@@ -14,7 +14,7 @@ namespace WEBAPP.Controllers
         private readonly FileUploadService _fileUploadService;
         public WebsiteController(AppSetting appSetting, FileUploadService fileUpload)
         {
-            _BaseUrl=appSetting.WebApiBaseUrl;
+            _BaseUrl = appSetting.WebApiBaseUrl;
             _fileUploadService = fileUpload;
         }
         [Route("ProductVarient")]
@@ -25,7 +25,7 @@ namespace WEBAPP.Controllers
 
         #region ForWebsite
         [Route("p/{CategoryName?}/{CategoryId?}")]
-        public async Task<IActionResult> SubCategoryOnCategory( int CategoryId)
+        public async Task<IActionResult> SubCategoryOnCategory(int CategoryId)
         {
             var model = new WebsiteModel();
             var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/SubCategoryOnCategory/{CategoryId}", null, null);
@@ -48,10 +48,10 @@ namespace WEBAPP.Controllers
         }
 
         public async Task<IActionResult> ProductDetail(int ProductId)
-            {
+        {
             var model = new WebsiteModel();
-            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductDetailById/{ProductId}", null,null);
-            if(apiRes != null)
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductDetailById/{ProductId}", null, null);
+            if (apiRes != null)
             {
                 model.ProductDetail = JsonConvert.DeserializeObject<ProductDetail>(apiRes.Result);
             }
@@ -69,7 +69,7 @@ namespace WEBAPP.Controllers
             return PartialView(list);
 
         }
-         
+
         [Route("Checkout")]
         [Authorize]
         public async Task<IActionResult> Checkout()
@@ -104,6 +104,32 @@ namespace WEBAPP.Controllers
         public async Task<IActionResult> CreateNewAddress()
         {
             return PartialView();
+        }
+
+
+
+        public async Task<IActionResult> SaveOrUpdateAddress(SavedAddress address)
+        {
+            var res = new Response()
+            {
+                ResponseText = "An error Has Been Occured !",
+                StatusCode = ResponseStatus.Failed
+            };
+            try
+            {
+                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/SavedAddress/SaveAddress",JsonConvert.SerializeObject(address), User.GetLoggedInUserToken());
+                if (apiRes != null)
+                {
+                    res = JsonConvert.DeserializeObject<Response>(apiRes.Result);
+                }
+                return Json(res);
+            }
+            catch (Exception ex)
+            {
+                res.ResponseText = ex.Message;
+                res.StatusCode = ResponseStatus.Failed;
+                return Json(res);
+            }
         }
         #endregion
     }
