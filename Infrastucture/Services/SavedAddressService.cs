@@ -29,15 +29,15 @@ namespace Infrastucture.Services
             {
                  res = await _dapper.GetAsync<Response>("Proc_SaveOrUpdateAddress", new
                 {
-                    savedAddress.AddressId,
-                    savedAddress.UserId,
-                    savedAddress.FullName,
-                    savedAddress.PhoneNumber,
-                    savedAddress.AddressLine1,
-                    savedAddress.AddressLine2,
-                    savedAddress.City,
-                    savedAddress.State,
-                    savedAddress.PostalCode
+                    //savedAddress.AddressId,
+                    //savedAddress.UserId,
+                    //savedAddress.FullName,
+                    //savedAddress.PhoneNumber,
+                    //savedAddress.AddressLine1,
+                    //savedAddress.AddressLine2,
+                    //savedAddress.City,
+                    //savedAddress.State,
+                    //savedAddress.PostalCode
                 });
                 return res;
             }
