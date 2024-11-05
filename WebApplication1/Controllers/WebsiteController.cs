@@ -101,12 +101,25 @@ namespace WEBAPP.Controllers
             return Ok(cart);
         }
 
-        public async Task<IActionResult> CreateNewAddress()
+        public async Task<IActionResult> CreateNewAddress(int Id)
         {
-            return PartialView();
+            if (Id == 0)
+            {
+                return PartialView(new SavedAddress());
+            }
+            else
+            {
+                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/SavedAddress/GetAddressById/{Id}", null, User.GetLoggedInUserToken());
+
+                if (apiRes != null)
+                {
+                    var savedAddress = JsonConvert.DeserializeObject<SavedAddress>(apiRes.Result);
+                    return PartialView(savedAddress); 
+                }
+            }
+
+            return PartialView(new SavedAddress());
         }
-
-
 
         public async Task<IActionResult> SaveOrUpdateAddress(SavedAddress address)
         {
@@ -117,7 +130,7 @@ namespace WEBAPP.Controllers
             };
             try
             {
-                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/SavedAddress/SaveAddress",JsonConvert.SerializeObject(address), User.GetLoggedInUserToken());
+                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/SavedAddress/SaveAddress", JsonConvert.SerializeObject(address), User.GetLoggedInUserToken());
                 if (apiRes != null)
                 {
                     res = JsonConvert.DeserializeObject<Response>(apiRes.Result);
@@ -131,6 +144,7 @@ namespace WEBAPP.Controllers
                 return Json(res);
             }
         }
+
         #endregion
     }
 }

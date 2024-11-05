@@ -25,20 +25,25 @@ namespace Infrastucture.Services
                 ResponseText = "Temp Error!",
                 StatusCode = ResponseStatus.Failed
             };
+
             try
             {
-                 res = await _dapper.GetAsync<Response>("Proc_SaveOrUpdateAddress", new
+                res = await _dapper.GetAsync<Response>("Proc_SaveOrUpdateAddress", new
                 {
-                    //savedAddress.AddressId,
-                    //savedAddress.UserId,
-                    //savedAddress.FullName,
-                    //savedAddress.PhoneNumber,
-                    //savedAddress.AddressLine1,
-                    //savedAddress.AddressLine2,
-                    //savedAddress.City,
-                    //savedAddress.State,
-                    //savedAddress.PostalCode
+                 savedAddress.Id, 
+                 savedAddress.UserId,
+                savedAddress.Name,
+                savedAddress.Type,
+                savedAddress.HouseNo,
+                savedAddress.Floor,
+                savedAddress.Area,
+                savedAddress.LandMark,
+                savedAddress.PhoneNumber,
+                savedAddress.City,
+                savedAddress.PostalCode,
+                savedAddress.OtherType 
                 });
+
                 return res;
             }
             catch (Exception ex)
@@ -51,17 +56,33 @@ namespace Infrastucture.Services
         {
             try
             {
-                var res= await _dapper.GetAllAsync<SavedAddress>("SELECT * FROM SavedAddress WHERE UserId = @UserId", new
+                var res= await _dapper.GetAllAsync<SavedAddress>("Proc_GetUserAddressByUserId", new
                 {
                     UserId
-                }, System.Data.CommandType.Text);
+                }, System.Data.CommandType.StoredProcedure);
                 return res;
             }
             catch (Exception ex)
             {
-
                 throw;
             }
+        }
+        
+        public async Task <SavedAddress> GetAddressById(int Id)
+        {
+            try
+            {
+                var res = await _dapper.GetAsync<SavedAddress>("Proc_GetUserAddressById", new
+                {
+                    Id
+                }, System.Data.CommandType.StoredProcedure);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
         }
     }
 }

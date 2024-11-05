@@ -30,5 +30,12 @@ namespace WEBAPI.Controllers
             var res = await _savedAddress.GetAddressByUserId(UserId);
             return Ok(res);
         }
+
+        [HttpPost(nameof(GetAddressById) + "/{Id}")]
+        public async Task<IActionResult> GetAddressById(int Id)
+        {
+            var res = await _savedAddress.GetAddressById(Id);
+            return Ok(res);
+        }
     }
 }
