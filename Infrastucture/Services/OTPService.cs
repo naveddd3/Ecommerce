@@ -18,25 +18,27 @@ namespace Infrastucture.Services
             _dapper=dapper;
             _notify=notify;
         }
-        public async Task<Response> EmailVerificationViaOTP(VerifyEmail verifyEmail)
+        public async Task<Response> SendOTP(OTPRequest oTPRequest)
         {
             var res = new Response() { ResponseText = "Unable To Verify OTP !", StatusCode = ResponseStatus.Failed };
             try
             {
-                if (verifyEmail.Email =="")
+                if (oTPRequest.Email =="")
                 {
                     res.ResponseText = "Please Provide Email.";
+                    return res;
                 }
-                if (verifyEmail.OTP==null || verifyEmail.OTP == 0)
+                if (oTPRequest.OTP==null || oTPRequest.OTP == 0)
                 {
-                    var response = await _dapper.GetAsync<Response<int>>("Proc_VerifyEmail", new
+                    var response = await _dapper.GetAsync<Response<int>>("Proc_SendOTP", new
                     {
-                        verifyEmail.Email,
-                        verifyEmail.OTP,
+                        oTPRequest.Email,
+                        oTPRequest.OTP,
+                        oTPRequest.Method
                     });
                     if (response.Result != null || response.StatusCode == ResponseStatus.Success)
                     {
-                        res =  _notify.SendEmails(verifyEmail.Email,response.Result);
+                        res =  _notify.SendEmails(oTPRequest.Email, response.Result);
                         return res;
                     }
                     res.ResponseText = response.ResponseText;
@@ -45,16 +47,11 @@ namespace Infrastucture.Services
                 }
                 else
                 {
-                    var resp = await _dapper.GetAsync<Response>("Proc_VerifyEmail", new
-                    {
-                        verifyEmail.Email,
-                        verifyEmail.OTP,
-                    });
-                    return resp;
+                    res.StatusCode=ResponseStatus.Failed;
+                    res.ResponseText = "OTP already Sent";
+                    return res;
                 }
-              
                 return res;
-
             }
             catch (Exception ex)
             {
@@ -62,5 +59,32 @@ namespace Infrastucture.Services
                 throw;
             }
         }
+        public async Task<Response> MatchOTP(OTPRequest oTPRequest)
+        {
+            var res = new Response() { ResponseText = "Unable To Verify OTP !", StatusCode = ResponseStatus.Failed };
+            try
+            {
+                if (oTPRequest.Email =="" || oTPRequest.OTP==null || oTPRequest.OTP == 0)
+                {
+                    res.ResponseText = "OTP Or Email is null";
+                    return res;
+                }
+                var response = await _dapper.GetAsync<Response>("Proc_MatchOTP", new
+                {
+                    oTPRequest.Email,
+                    oTPRequest.OTP,
+                    oTPRequest.Method
+                });
+                res.ResponseText = response.ResponseText;
+                res.StatusCode = response.StatusCode;
+                return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

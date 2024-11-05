@@ -203,7 +203,7 @@ namespace Infrastucture.Services
 
         public async Task<Response<LoginResponse>> LoginviaOTP(LoginviaOTPReq loginviaOTPReq)
         {
-            var response = new Domain.Entities.Response<LoginResponse>();
+            var response = new Response<LoginResponse>();
             try
             {
                
