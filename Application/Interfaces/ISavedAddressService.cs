@@ -11,5 +11,6 @@ namespace Application.Interfaces
     {
         Task<Response> SaveAddress(SavedAddress savedAddress);
         Task<IEnumerable<SavedAddress>> GetAddressByUserId(int UserId);
+        Task <SavedAddress> GetAddressById(int Id);
     }
 }
