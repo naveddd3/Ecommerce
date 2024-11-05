@@ -9,6 +9,7 @@ namespace Application.Interfaces
 {
     public interface IOTPService
     {
-        Task<Response> EmailVerificationViaOTP(VerifyEmail verifyEmail);
+        Task<Response> SendOTP(OTPRequest oTPRequest);
+        Task<Response> MatchOTP(OTPRequest oTPRequest);
     }
 }

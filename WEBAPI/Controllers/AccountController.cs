@@ -66,8 +66,30 @@ namespace WEBAPI.Controllers
         [HttpPost(nameof(VerifyEmail))]
         public async Task<IActionResult> VerifyEmail(VerifyEmail email)
         {
-            var res = await _oTPService.EmailVerificationViaOTP(email);
-            return Ok(res);
+            if (email.OTP == 0 || email.OTP == null)
+            {
+                var res = await _oTPService.SendOTP(new OTPRequest
+                {
+                    Email = email.Email,
+                    OTP = email.OTP,
+                    Method = "VRFYEML"
+                });
+                return Ok(res);
+            }
+            else
+            {
+                var res = await _oTPService.MatchOTP(new OTPRequest
+                {
+                    Email = email.Email,
+                    OTP = email.OTP,
+                    Method = "VRFYEML"
+                });
+                if (res.StatusCode == ResponseStatus.Success)
+                {
+                    res.ResponseText = "Verified Email";
+                }
+                return Ok(res);
+            }
         }
 
         [HttpPost(nameof(LoginviaOTP))]
@@ -78,32 +100,34 @@ namespace WEBAPI.Controllers
                 ResponseText = "An Error has been Occured",
                 StatusCode = ResponseStatus.Failed
             };
-            if(loginviaOTPReq.OTP == 0 || loginviaOTPReq.OTP == null)
+            if (loginviaOTPReq.OTP == 0 || loginviaOTPReq.OTP == null)
             {
-                 response = await _oTPService.EmailVerificationViaOTP(new VerifyEmail
+                response = await _oTPService.SendOTP(new OTPRequest
                 {
                     Email = loginviaOTPReq.EmailOrMobile,
-                    OTP = loginviaOTPReq.OTP
+                    OTP = loginviaOTPReq.OTP,
+                    Method = "LGNREQ"
                 });
                 return Ok(response);
             }
             else
             {
-                if(loginviaOTPReq.OTP!=null || loginviaOTPReq.OTP != 0)
+                if (loginviaOTPReq.OTP!=null || loginviaOTPReq.OTP != 0)
                 {
-                    var IsValid = await _oTPService.EmailVerificationViaOTP(new VerifyEmail
+                    var IsValid = await _oTPService.MatchOTP(new  OTPRequest
                     {
                         Email = loginviaOTPReq.EmailOrMobile,
-                        OTP = loginviaOTPReq.OTP
+                        OTP = loginviaOTPReq.OTP,
+                        Method = "LGNREQ"
                     });
-                    if(IsValid.StatusCode == ResponseStatus.Success)
+                    if (IsValid.StatusCode == ResponseStatus.Success)
                     {
                         var res = await _userService.LoginviaOTP(loginviaOTPReq);
                         return Ok(res);
                     }
-                   
+
                 }
-                
+
             }
             return BadRequest(response);
 
