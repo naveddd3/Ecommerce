@@ -10,7 +10,7 @@
     </div>
 </div>
 <div>
-  <p>Your saved address</p>
+    <p>Your saved address</p>
     @if (Model != null)
     {
         @foreach (var addrrss in Model)
@@ -18,17 +18,18 @@
             <div class="address-list">
                 <div class="address-item bg-light rounded shadow-sm p-3 mb-3" onclick="addToCartAddress(this)">
                     <div class="d-flex align-items-center">
-                       
+
                         <div class="me-3">
-                            <img title="HOME"src="@addrrss.TypeImage"alt="@addrrss.Type"class="img-fluid rounded"style="max-width: 50px; max-height: 50px;" />
+                            <img title="HOME" src="@addrrss.TypeImage" alt="@addrrss.Type" class="img-fluid rounded" style="max-width: 50px; max-height: 50px;" />
                         </div>
-                       <div>
+                        <div>
                             <div class="fw-bold text-dark">@addrrss.Type</div>
                             <div class="text-muted small">
-                                @(addrrss.Floor + " " + addrrss.HouseNo + " " + addrrss.Area + " "  + addrrss.City + " " + addrrss.PostalCode)
+                                @(addrrss.Floor + " " + addrrss.HouseNo + " " + addrrss.Area + " " + addrrss.City + " " + addrrss.PostalCode)
                             </div>
                             <i class="fi-rs-edit float-end ml-12" onclick="editAddress(@addrrss.Id)"></i>
-                       </div>
+            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -37,98 +38,93 @@
 </div>
 <script>
 
-$('#addNewAddress').on('click', function () {
-    $.post('/Website/CreateNewAddress').done(function (result) {
-        $("#productDetail").html(result);
-        $('#addNewAddress').modal('show');
-    }).fail(function (xhr) {
-        alert("Error: " + xhr.status + " " + xhr.statusText);
-    });
-});
-
-let selectedAddressType = null; 
-
-function setAddressType(addressTypeId) {
-    const isOtherType = addressTypeId === @Convert.ToInt32(AddressType.OTHER);
-
-    if (selectedAddressType === addressTypeId && isOtherType) {
-        document.querySelectorAll('#address-buttons .address-btn').forEach(btn => {
-            btn.style.display = "inline-block";
+    $('#addNewAddress').on('click', function () {
+        $.post('/Website/CreateNewAddress').done(function (result) {
+            $("#productDetail").html(result);
+            $('#addNewAddress').modal('show');
+        }).fail(function (xhr) {
+            alert("Error: " + xhr.status + " " + xhr.statusText);
         });
-        document.getElementById("other-input").style.display = "none";
-        selectedAddressType = null; 
-    } else {
-        selectedAddressType = addressTypeId;
+    });
 
-        if (isOtherType) {
+    let selectedAddressType = null;
+
+    function setAddressType(addressTypeId) {
+        const isOtherType = addressTypeId === @Convert.ToInt32(AddressType.OTHER);
+
+        if (selectedAddressType === addressTypeId && isOtherType) {
             document.querySelectorAll('#address-buttons .address-btn').forEach(btn => {
-                if (btn.id !== "other-button") {
-                    btn.style.display = "none";
-                }
+                btn.style.display = "inline-block";
             });
-            document.getElementById("other-input").style.display = "inline-block";
+            document.getElementById("other-input").style.display = "none";
+            selectedAddressType = null;
         } else {
-            document.querySelectorAll('#address-buttons .address-btn').forEach(btn => {
-                btn.style.display = "inline-block"; 
-            });
-            document.getElementById("other-input").style.display = "none"; 
+            selectedAddressType = addressTypeId;
+
+            if (isOtherType) {
+                document.querySelectorAll('#address-buttons .address-btn').forEach(btn => {
+                    if (btn.id !== "other-button") {
+                        btn.style.display = "none";
+                    }
+                });
+                document.getElementById("other-input").style.display = "inline-block";
+            } else {
+                document.querySelectorAll('#address-buttons .address-btn').forEach(btn => {
+                    btn.style.display = "inline-block";
+                });
+                document.getElementById("other-input").style.display = "none";
+            }
         }
     }
-}
 
-var SaveOrEditAddress = () => {
-    var obj = {
-        Id: $("#Id").val(),
-        HouseNo: $("#HouseNo").val(),
-        Type: selectedAddressType, 
-        Floor: $("#Floor").val(),
-        Area: $("#Area").val(),
-        LandMark: $("#LandMark").val(),
-        Name: $("#Name").val(),
-        PostalCode: $("#PostalCode").val(),
-        City: $("#City").val(),
-        OtherType: $("#OtherType").val(),
-        PhoneNumber: $("#PhoneNumber").val(), 
-        UserId: $("#userId").val()
+    var SaveOrEditAddress = () => {
+        var obj = {
+            Id: $("#Id").val(),
+            HouseNo: $("#HouseNo").val(),
+            Type: selectedAddressType,
+            Floor: $("#Floor").val(),
+            Area: $("#Area").val(),
+            LandMark: $("#LandMark").val(),
+            Name: $("#Name").val(),
+            PostalCode: $("#PostalCode").val(),
+            City: $("#City").val(),
+            OtherType: $("#OtherType").val(),
+            PhoneNumber: $("#PhoneNumber").val(),
+            UserId: $("#userId").val()
         };
 
-    $.ajax({
-        url: "/Website/SaveOrUpdateAddress",
-        type: "POST",
-        data: obj,
-        success: function (response) {
-            console.log(response);
+        $.ajax({
+            url: "/Website/SaveOrUpdateAddress",
+            type: "POST",
+            data: obj,
+            success: function (response) {
+                console.log(response);
                 QAlert(response.statusCode, response.responseText);
-        },
-        error: function (res) {
-            QAlert(res.statusCode, res.responseText);
-        }
-    });
-};
-
-function addToCartAddress(element) 
-{
-    const addressType = element.querySelector('.fw-bold').innerText;
-    const addressDetails = element.querySelector('.text-muted').innerText;
-    document.querySelector('.selected-address-type').textContent = addressType;
-    document.querySelector('.selected-address-details').textContent = addressDetails;
-    document.getElementById('selectedAddressCard').style.display = 'flex';
-    localStorage.setItem('selectedAddressType', addressType);
-    localStorage.setItem('selectedAddressDetails', addressDetails);
-}
-
-const editAddress = (Id) => {
-    let param = {
-        Id: Id,
+            },
+            error: function (res) {
+                QAlert(res.statusCode, res.responseText);
+            }
+        });
     };
-    $.get("/Website/CreateNewAddress", param)
-        .done((result) => {
-                $("#productDetail").html(result);
-    $('#addNewAddress').modal('show');
-        })
-        .fail((hxr) => {
+
+    function addToCartAddress(element) {
+        const addressType = element.querySelector('.fw-bold').innerText;
+        const addressDetails = element.querySelector('.text-muted').innerText;
+        document.querySelector('.selected-address-type').textContent = addressType;
+        document.querySelector('.selected-address-details').textContent = addressDetails;
+        document.getElementById('selectedAddressCard').style.display = 'flex';
+        localStorage.setItem('selectedAddressType', addressType);
+        localStorage.setItem('selectedAddressDetails', addressDetails);
+        location.reload();
+    }
+
+    const editAddress = (Id) => {
+        $.get("/Website/CreateNewAddress", { Id: Id }).done((result) => {
+            $("#productDetail").html(result);
+            $('#addNewAddress').modal('show');
+        }).fail((hxr) => {
             alert("error");
         });
-};
+    };
 
 </script>

@@ -79,7 +79,7 @@
                     <p class="selected-address-details text-muted small mb-0">No address selected</p>
                 </div>
                 <div class="change_address">
-                    <a onclick="openAddressList()">Change</a>
+                    <a onclick="loadDeliveryAddressPage()">Change</a>
                 </div>
                 
            </div>
@@ -92,6 +92,7 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <button class="btn btn-primary" onclick="loadDeliveryAddressPage()" id="ProceedtoCheckout">Proceed</button>
+                    <button class="btn btn-success d-none" onclick="checkout()" id="checkoutButton">Checkout</button>
                 }
                 else
                 { 
@@ -128,13 +129,25 @@
         });
     }
     function loadSelectedAddress() {
-        debugger;
+        updateButtonVisibility();
         const addressType = localStorage.getItem('selectedAddressType');
         const addressDetails = localStorage.getItem('selectedAddressDetails');
         if (addressType && addressDetails) {
             document.querySelector('.selected-address-type').textContent = addressType;
             document.querySelector('.selected-address-details').textContent = addressDetails;
             document.getElementById('selectedAddressCard').style.display = 'flex';
+        }
+    }
+
+    function updateButtonVisibility() {
+        const addressType = localStorage.getItem('selectedAddressType');
+        const addressDetails = localStorage.getItem('selectedAddressDetails');
+        if (addressType && addressDetails) {
+            $('#checkoutButton').removeClass('d-none');
+            $('#ProceedtoCheckout').addClass('d-none');
+        } else {
+            $('#checkoutButton').style.display = "none";
+            $('#ProceedtoCheckout').style.display = "inline-block";
         }
     }
 </script>
