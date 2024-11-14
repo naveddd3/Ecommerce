@@ -51,7 +51,7 @@ namespace WEBAPI.Controllers
             return Ok(res);
         }
 
-        [HttpPost(nameof(GetProductById) + "/{Id}")]
+        [HttpPost(nameof(GetProductById)+"/{Id}")]
         public async Task<IActionResult> GetProductById(int Id)
         {
             var res = await _productService.GetProductById(Id);
@@ -73,7 +73,7 @@ namespace WEBAPI.Controllers
         }
 
         [HttpPost(nameof(SaveProductVarient))]
-        public async Task<IActionResult> SaveProductVarient([FromForm] ProductVarientReq productVarient)
+        public async Task<IActionResult> SaveProductVarient([FromBody] ProductVarientReq productVarient)
         {
             var res = new Response() { ResponseText = string.Empty, StatusCode = ResponseStatus.Failed };
             if (productVarient.VarientId == 0)
