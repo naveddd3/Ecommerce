@@ -1,4 +1,5 @@
-﻿@* @using Domain.Entities
+﻿@using Domain.Entities
+@using Domain.Enum
 @model List<SavedAddress>;
 @{
     Layout = "_LayoutSiteAdmin";
@@ -17,67 +18,35 @@
         <div class="col-lg-7">
             <div class="row mb-50">
                 <div class="col-lg-6">
-                    <form method="post" class="apply-coupon">
+                    <div method="post" class="apply-coupon">
                         <input type="text" placeholder="Enter Coupon Code...">
                         <button class="btn  btn-md" name="login">Apply Coupon</button>
-                    </form>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <h4 class="mb-30">Billing Details</h4>
-                    <div class="ship_detail">
-                        <div class="form-group">
-                            <div class="chek-form">
-                                <div class="custome-checkbox">
-                                    <input class="form-check-input" type="checkbox" name="checkbox" id="differentaddress">
-                                    <label class="form-check-label label_info" data-bs-toggle="collapse" data-target="#collapseAddress" href="#collapseAddress" aria-controls="collapseAddress" for="differentaddress"><span>Create New Address</span></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="collapseAddress" class="different_address collapse in">
-                            <div class="row">
-                                <div class="form-group col-lg-6">
-                                <input type="text" required="" id="fname" name="fname" placeholder="First name *">
-                                </div>
-                                <div class="form-group col-lg-6">
-                                <input type="text" required="" id="lname" name="lname" placeholder="Last name *">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6">
-                                <input type="text" id="billing_address" name="billing_address" required="" placeholder="Address *">
-                                </div>
-                                <div class="form-group col-lg-6">
-                                <input type="text" id="billing_address2" name="billing_address2" required="" placeholder="Address line2">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6">
-                                <input required="" type="text" id="state" name="state" placeholder="State">
-                                </div>
-                                <div class="form-group col-lg-6">
-                                <input required="" type="text" id="city" name="city" placeholder="City">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6">
-                                <input required="" type="text" id="zipcode" name="zipcode" placeholder="Postcode">
-                                </div>
-                            </div>
-                        </div>
+            <div class="payment ml-30">
+                <h4 class="mb-30">Payment</h4>
+                <div class="payment_option">
+                    <div class="custome-radio">
+                        <input class="form-check-input" required="" type="radio" name="payment_option" id="paymentCard" value="@PaymentMode.CARD">
+                        <label class="form-check-label" for="paymentCard" data-bs-toggle="collapse" data-target="#cardPayment" aria-controls="cardPayment">Card</label>
                     </div>
-                @foreach (var item in Model)
-                {
-                    <div class="card">
-                        <div class="card-header">
-                            Saved Address
-                        </div>
-                        <div class="card-body ">
-                            <p class="card-text saveaddress">@item.AddressLine1 + @item.AddressLine2+@item.City + @item.State </p>
-                        </div>
+                    <div class="custome-radio">
+                        <input class="form-check-input" required="" type="radio" name="payment_option" id="paymentUPI" value="@PaymentMode.UPI">
+                        <label class="form-check-label" for="paymentUPI" data-bs-toggle="collapse" data-target="#upiPayment" aria-controls="upiPayment">UPI</label>
                     </div>
-                }
+                    <div class="custome-radio">
+                        <input class="form-check-input" required="" type="radio" name="payment_option" id="paymentCOD" value="@PaymentMode.COD">
+                        <label class="form-check-label" for="paymentCOD" data-bs-toggle="collapse" data-target="#codPayment" aria-controls="codPayment">Cash on Delivery</label>
+                    </div>
+                    <div class="custome-radio">
+                        <input class="form-check-input" required="" type="radio" name="payment_option" id="paymentWallet" value="@PaymentMode.WALLET">
+                        <label class="form-check-label" for="paymentWallet" data-bs-toggle="collapse" data-target="#walletPayment" aria-controls="walletPayment">Wallets</label>
+                    </div>
+                </div>
+                <a onclick="SaveOrder()" class="btn btn-fill-out btn-block mt-30">Place an Order<i class="fi-rs-sign-out ml-15"></i></a>
             </div>
+
         </div>
         <div class="col-lg-5">
             <div class="border p-40 cart-totals ml-30 mb-50">
@@ -97,45 +66,31 @@
                     <h5>Total: <span class="total-cart-amount">₹0.00</span></h5>
                 </div>
             </div>
-            <div class="payment ml-30">
-                <h4 class="mb-30">Payment</h4>
-                <div class="payment_option">
-                    <div class="custome-radio">
-                        <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios4" checked="">
-                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Cash on delivery</label>
-                    </div>
-                    <div class="custome-radio">
-                        <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios5" checked="">
-                        <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">UPI</label>
-                    </div>
-                </div>
-                <a onclick="SaveOrder()" class="btn btn-fill-out btn-block mt-30">Place an Order<i class="fi-rs-sign-out ml-15"></i></a>
-            </div>
         </div>
     </div>
 </div>
 <script>
     var SaveOrder = () => {
         debugger;
+        let addressId = localStorage.getItem("selectedAddressID");
+        let paymentMode = $('input[name="payment_option"]:checked').attr('value');
         let cartData = JSON.parse(localStorage.getItem('cart')) || {
             count: 0,
             total: 0,
             items: {},
         };
-        let address = {
-            FullName: $('#fname').val() + $('#lname').val(),
-            AddressLine1: $("#billing_address1").val(),
-            AddressLine2: $("#billing_address2").val(),
-            City: $("#city").val(),
-            State: $("#state").val(),
-            PostalCode: $("#zipcode").val()
-        }
         let checkoutDetails = {
-            address: address,
-            cart: cartData
-        }
-        $.post('/Website/PlaceOrder', obj).done((res) => {
-            console.log(res);
-        });
-    }
-</script> *@
+            AddressID: addressId,
+            cart: cartData,
+            paymentMode: paymentMode
+        };
+
+        console.log(checkoutDetails);
+        console.log(JSON.stringify(checkoutDetails));
+
+        $.post('/Website/PlaceOrder', checkoutDetails).done((result) => {
+            console.log(result);
+        })
+    };
+
+</script>

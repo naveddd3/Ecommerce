@@ -18,7 +18,7 @@
             <div class="address-list">
                 <div class="address-item bg-light rounded shadow-sm p-3 mb-3" onclick="addToCartAddress(this)">
                     <div class="d-flex align-items-center">
-
+                        <input value="@addrrss.Id" hidden id="addressID">
                         <div class="me-3">
                             <img title="HOME" src="@addrrss.TypeImage" alt="@addrrss.Type" class="img-fluid rounded" style="max-width: 50px; max-height: 50px;" />
                         </div>
@@ -110,11 +110,13 @@
     function addToCartAddress(element) {
         const addressType = element.querySelector('.fw-bold').innerText;
         const addressDetails = element.querySelector('.text-muted').innerText;
+        const addressID = element.querySelector('#addressID').value;
         document.querySelector('.selected-address-type').textContent = addressType;
         document.querySelector('.selected-address-details').textContent = addressDetails;
         document.getElementById('selectedAddressCard').style.display = 'flex';
         localStorage.setItem('selectedAddressType', addressType);
         localStorage.setItem('selectedAddressDetails', addressDetails);
+        localStorage.setItem('selectedAddressID', addressID);
         location.reload();
     }
 

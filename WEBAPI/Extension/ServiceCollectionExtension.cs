@@ -95,6 +95,7 @@ namespace WEBAPI.Extension
             services.AddScoped<INotifyService, NotifyService>();
             services.AddScoped<ISavedAddressService, SavedAddressService>();
             services.AddScoped<IProductVarientService, ProductVarientService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<FileUploadService>();
             #endregion
         }

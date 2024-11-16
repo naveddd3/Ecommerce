@@ -96,9 +96,10 @@ namespace WEBAPP.Controllers
             }
             return PartialView(addrslist);
         }
-        public async Task<IActionResult> PlaceOrder(CheckoutDetails cart)
+        public async Task<IActionResult> PlaceOrder(CheckoutDetails  checkoutDetails)
         {
-            return Ok(cart);
+            string order = JsonConvert.SerializeObject(checkoutDetails);
+            return Ok(checkoutDetails);
         }
 
         public async Task<IActionResult> CreateNewAddress(int Id)

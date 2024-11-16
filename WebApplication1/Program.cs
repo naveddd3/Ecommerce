@@ -1,6 +1,7 @@
 using Domain.Helper;
 using Infrastucture.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
