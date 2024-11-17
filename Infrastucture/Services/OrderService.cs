@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Enum;
 using Domain.Helper;
 using System.Data;
+using System.Text;
 
 namespace Infrastucture.Services
 {
@@ -39,7 +40,7 @@ namespace Infrastucture.Services
                     return response;
                 }
                 var orderRequest = new List<OrderRequest>();
-                string OrderID = Guid.NewGuid().ToString().ToUpper();
+                string OrderID = GenerateOrderId();
                 foreach (var item in checkoutDetails.Cart.Items.Values)
                 {
                     var product = item.Product;
@@ -47,7 +48,7 @@ namespace Infrastucture.Services
                     {
                         OrderID = OrderID,
                         ProductID = Convert.ToInt32(product.Product_Id),
-                        UserId = 1,
+                        UserId = checkoutDetails.UserId,
                         Name = product.Name,
                         Unit = product.Unit,
                         Price = product.Price,
@@ -71,6 +72,19 @@ namespace Infrastucture.Services
                     return response;
                 }
                 return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public async Task<IEnumerable<OrderDetails>> GetAllOrders()
+        {
+            try
+            {
+                var list = await _dapper.GetAllAsync<OrderDetails>("Proc_GetAllOrders", null);
+                return list;
             }
             catch (Exception ex)
             {
@@ -114,6 +128,20 @@ namespace Infrastucture.Services
 
             return table;
         }
+        private string GenerateOrderId()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            var orderId = new StringBuilder("ORD");
+
+            for (int i = 0; i < 7; i++) // 7 more characters to make the total length 10
+            {
+                orderId.Append(chars[random.Next(chars.Length)]);
+            }
+
+            return orderId.ToString();
+        }
+
 
     }
 }

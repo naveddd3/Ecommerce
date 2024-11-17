@@ -98,7 +98,26 @@ namespace WEBAPP.Controllers
         }
         public async Task<IActionResult> PlaceOrder(CheckoutDetails  checkoutDetails)
         {
-            string order = JsonConvert.SerializeObject(checkoutDetails);
+            var res = new Response()
+            {
+                ResponseText = "Unable to Process !",
+                StatusCode = ResponseStatus.Failed
+            };
+            try
+            {
+                checkoutDetails.UserId = User.GetLoggedInUserId<int>();
+                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Order/PlaceOrder", JsonConvert.SerializeObject(checkoutDetails), User.GetLoggedInUserToken());
+                if(apiRes != null)
+                {
+                    res = JsonConvert.DeserializeObject<Response>(apiRes.Result);
+                }
+                return Json(res);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
             return Ok(checkoutDetails);
         }
 

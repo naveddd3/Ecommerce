@@ -71,7 +71,6 @@
 </div>
 <script>
     var SaveOrder = () => {
-        debugger;
         let addressId = localStorage.getItem("selectedAddressID");
         let paymentMode = $('input[name="payment_option"]:checked').attr('value');
         let cartData = JSON.parse(localStorage.getItem('cart')) || {
@@ -84,11 +83,9 @@
             cart: cartData,
             paymentMode: paymentMode
         };
-
-        console.log(checkoutDetails);
-        console.log(JSON.stringify(checkoutDetails));
-
         $.post('/Website/PlaceOrder', checkoutDetails).done((result) => {
+            localStorage.clear();
+            QAlert(result.statusCode, result.responseText);
             console.log(result);
         })
     };
