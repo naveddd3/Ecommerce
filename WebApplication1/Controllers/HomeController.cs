@@ -11,7 +11,7 @@ namespace WEBAPP.Controllers
         private readonly string _BaseUrl;
         public HomeController(AppSetting baseUrl)
         {
-            _BaseUrl=baseUrl.WebApiBaseUrl;
+            _BaseUrl=baseUrl.WebApiBaseUrl; 
         }
 
         public async Task<IActionResult> Index()
