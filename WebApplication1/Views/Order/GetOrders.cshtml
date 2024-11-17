@@ -1,0 +1,41 @@
+﻿@using Domain.Entities;
+@model List<OrderDetails>
+@if (Model != null && Model.Any())
+{
+    int i = 0;
+    foreach (var item in Model)
+    {
+        i++;
+        <tr class="text-nowrap">
+            <td>@i</td>
+            <td><textarea >@item.OrderID</textarea></td>
+            <td>@item.ProductName</td>
+            <td>@item.Description</td>
+            <td><img src="@item.ImageURI" alt="ProductImage" width="100" height="100" /></td>
+            <td>@item.Unit</td>
+            <td>@item.Price</td>
+            <td>@item.Quantity</td>
+            <td>@item.PaymentModes</td>
+            <td>@item.OrderStatus</td>
+            <td class="table-action">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">Action</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item" onclick="addVarient(@item.ID)"><i class="mdi mdi-plus-circle me-2"></i>Add Varient</button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+
+    }
+}
+else
+{
+    <tr>
+        <td colspan="12" style="text-align:center" class="danger">Record Not Found!</td>
+    </tr>
+}

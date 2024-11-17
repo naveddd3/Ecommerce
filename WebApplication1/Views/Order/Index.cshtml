@@ -1,0 +1,75 @@
+﻿<div id="modal"></div>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                            <li class="breadcrumb-item active">Orders</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Orders</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="partialview">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-5">
+                                
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="text-sm-end">
+                                    <button type="button" class="btn btn-success mb-2 me-1">
+                                        <i class="mdi mdi-cog-outline"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                    <button type="button" class="btn btn-light mb-2">Export</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hidden-content" style="display:none;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
+                                <thead class="table-light">
+                                    <tr class="text-nowrap">
+                                        <th>Sr No.</th>
+                                        <th>OrderID</th>
+                                        <th>Product Name</th>
+                                        <th>Product Description</th>
+                                        <th>Image</th>
+                                        <th>Unit</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>PaymentModes</th>
+                                        <th>OrderStatus</th>
+                                        <th style="width: 85px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- end card-body -->
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+    </div> <!-- end container-fluid -->
+</div> <!-- end content -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(() => {
+        loadData();
+    });
+    var loadData=()=>{
+        $.post("/Order/GetOrders").done((result) => {
+            $("#grid tbody").html(result);
+        })
+    }
+</script>

@@ -7,6 +7,7 @@ namespace Domain.Entities
         public int AddressID { get; set; }
         public Cart Cart { get; set; }
         public PaymentMode PaymentMode { get; set; }
+        public int UserId { get; set; }
     }
 
     public class OrderRequest
