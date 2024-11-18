@@ -3,34 +3,52 @@
 @if (Model != null && Model.Any())
 {
     int i = 0;
-    foreach (var item in Model)
+    foreach (var order in Model.GroupBy(o => o.OrderID))
     {
         i++;
-        <tr class="text-nowrap">
+        var orderDetails = order.First();
+        <tr data-bs-toggle="collapse" data-bs-target="#order-@orderDetails.OrderID" aria-expanded="false" aria-controls="order-@orderDetails.OrderID">
             <td>@i</td>
-            <td><textarea >@item.OrderID</textarea></td>
-            <td>@item.ProductName</td>
-            <td>@item.Description</td>
-            <td><img src="@item.ImageURI" alt="ProductImage" width="100" height="100" /></td>
-            <td>@item.Unit</td>
-            <td>@item.Price</td>
-            <td>@item.Quantity</td>
-            <td>@item.PaymentModes</td>
-            <td>@item.OrderStatus</td>
+            <td>@orderDetails.OrderID</td>
+            <td>@orderDetails.UserName</td>
+            <td>@orderDetails.ShippingAddress</td>
+            <td>@orderDetails.PaymentModes</td>
+            <td>@orderDetails.OrderStatus</td>
             <td class="table-action">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary">Action</button>
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                    </button>
-                    <div class="dropdown-menu">
-                        <button class="dropdown-item" onclick="addVarient(@item.ID)"><i class="mdi mdi-plus-circle me-2"></i>Add Varient</button>
-                    </div>
-                </div>
+                <button type="button" class="btn btn-primary">Action</button>
             </td>
         </tr>
-
-
+        <tr id="order-@orderDetails.OrderID" class="collapse">
+            <td colspan="10">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                            <th>Unit</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in order)
+                        {
+                            <tr>
+                                <td>@product.ProductName</td>
+                                <td>@product.Description</td>
+                                <td>
+                                    <img src="@product.ImageURI" alt="Product Image" width="100" height="100" />
+                                </td>
+                                <td>@product.Unit</td>
+                                <td>@product.Price</td>
+                                <td>@product.Quantity</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </td>
+        </tr>
     }
 }
 else
