@@ -34,6 +34,7 @@
             overflow-y: auto;
             filter: none;
         }
+
         .modal-header {
             border-bottom: none;
         }
@@ -352,22 +353,22 @@
                         <div class="col-lg-12">
                             <div class="position-relative newsletter-inner">
                                 <div class="newsletter-content">
-                                   <div class="row">
-                                       <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="col-sm-6">
                                             <h2 class="mb-20">
                                                 Stay home & get your daily <br />
                                                 needs from our shop
                                             </h2>
                                             <p class="mb-45">Start You'r Daily Shopping with <span class="text-brand">QuickCart Mart</span></p>
-                                       </div>
+                                        </div>
                                         <div class="col-sm-6">
                                             <form class="form-subcriber d-flex">
                                                 <input type="email" placeholder="Your emaill address" />
                                                 <button class="btn" type="submit">Subscribe</button>
                                             </form>
                                         </div>
-                                   </div>
-                               
+                                    </div>
+
                                 </div>
                                 <img src="../siteadmin/imgs/banner/banner-9.png" alt="newsletter" />
                             </div>
@@ -547,24 +548,23 @@
             </div>
         </footer>
     </div>
-    
+
 
     <div class="cart-modal">
-
     </div>
     <div id="loader" class="loader"></div>
-@* 
+    @*
     <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="text-center">
-                    <img src="~/siteadmin/imgs/theme/loading.gif" alt="" />
-                </div>
-            </div>
-        </div>
+    <div class="preloader d-flex align-items-center justify-content-center">
+    <div class="preloader-inner position-relative">
+    <div class="text-center">
+    <img src="~/siteadmin/imgs/theme/loading.gif" alt="" />
+    </div>
+    </div>
+    </div>
     </div> *@
 
-   
+
     <div class="modal" id="logintopoceedModal" tabindex="-1" role="dialog" aria-labelledby="logintopoceedModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -576,7 +576,7 @@
                     <div class="text-center emails">
                         <label for="emiallp">Login or Signup</label>
                         <input type="email" class="form-control" id="emiallp" placeholder="Enter Email Address">
-                  </div>
+                    </div>
                     <div class="text-center mt-3" id="otpSection" style="display: none;">
                         <label for="otpInput"></label>
                         <div id="otpInputs" class="d-flex justify-content-center">
@@ -595,8 +595,11 @@
             </div>
         </div>
     </div>
-    
+
     <div id="newaddressModal"></div>
+
+
+   
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" integrity="sha512-TX8lDz+Jka3IT8BuE6s8M4wAa8GzPRGGrD7FjYZZyBCmNZdmAvBzJYqT4B1O9/INJfs5nV5/5ItnD9ErTuzcDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -626,18 +629,18 @@
     <script src="~/siteadmin/js/main5103.js?v=6.0"></script>
     <script src="~/siteadmin/js/shop5103.js?v=6.0"></script>
     <script>
-        var Email = ''; 
+        var Email = '';
         $(document).ready(function () {
             handleOtpInput();
             cartInitialize();
-            $('#saveLgnreq').click(() => {  
+            $('#saveLgnreq').click(() => {
                 Email = $('#emiallp').val();
                 let obj = {
                     EmailOrMobile: Email,
-                    OTP : $('#lgnOTP').val()
+                    OTP: $('#lgnOTP').val()
                 }
-                $.post('/Account/LoginViaOTP',obj).done((res) => {
-                    if(res.statusCode==1){
+                $.post('/Account/LoginViaOTP', obj).done((res) => {
+                    if (res.statusCode == 1) {
                         $('.emails').addClass('d-none')
                         $('#saveLgnreq').addClass('d-none')
                         document.getElementById('otpSection').style.display = 'block';
@@ -659,7 +662,7 @@
                 $("#").modal('show');
             });
         });
-        
+
         function OpenCart() {
             $.post('/Website/Cart').done((result) => {
                 $('.cart-modal').html(result);
@@ -668,7 +671,7 @@
         }
 
         function handleOtpInput() {
-            const otpInputs = $('.otp-box'); 
+            const otpInputs = $('.otp-box');
             otpInputs.on('input', function () {
                 let otpValue = '';
                 let allFilled = true;
@@ -683,7 +686,7 @@
                 }
             });
         }
-        function matchOtp(otp){
+        function matchOtp(otp) {
             let obj = {
                 EmailOrMobile: Email,
                 OTP: otp
@@ -691,28 +694,28 @@
             $.post('/Account/LoginViaOTP', obj).done((res) => {
                 if (res.statusCode == 1) {
                     let lgnsucss = `
-                    <div class="logo text-center">
-                        <a href="index.html">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Eo_circle_green_checkmark.svg" alt="logo" style="width: 50px;">
-                        </a>
-                    </div>
-                    <h5 class="text-center" id="lgnSuccess">Login Successfull</h5>`;
+                            <div class="logo text-center">
+                                <a href="index.html">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Eo_circle_green_checkmark.svg" alt="logo" style="width: 50px;">
+                                </a>
+                            </div>
+                            <h5 class="text-center" id="lgnSuccess">Login Successfull</h5>`;
                     $('#logintopoceedModal .modal-footer').addClass('d-none');
                     $('#logintopoceedModal .modal-body').html(lgnsucss);
                     setTimeout(() => {
                         location.reload();
                     }, 3000);
-                }else{
+                } else {
                     QAlert(-1, 'User does not Exists');
                 }
 
             });
 
         }
-      
+
         // function loadCartContent() {
         //     const modalBody = document.querySelector('.modal-body .container');
-        //     modalBody.innerHTML = originalCartContent; 
+        //     modalBody.innerHTML = originalCartContent;
         //     document.getElementById('ProceedtoCheckout').addEventListener('click', function () {
         //         loadDeliveryAddressPage();
         //     });

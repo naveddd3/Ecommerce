@@ -31,5 +31,10 @@ namespace WEBAPP.Controllers
             return category;
 
         }
+
+        public async Task<IActionResult> Map()
+        {
+            return View();
+        }
     }
 }
