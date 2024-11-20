@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enum;
 using Domain.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -289,8 +290,8 @@ namespace Infrastucture.Services
                     shop.IFSCCode,
                     shop.Username,
                     shop.Password,
-                    shop.AdharNo
-
+                    shop.AdharNo,
+                    VerificationStatus = VerificationStatus.PENDING
                 });
                 return res;
 

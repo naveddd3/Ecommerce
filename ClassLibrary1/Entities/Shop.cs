@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Enum;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,11 +32,20 @@ namespace Domain.Entities
         public string AdharNo { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public VerificationStatus VerificationStatus { get; set; }
     }
 
     public class ShopReq : Shop
     {
         public IEnumerable<IFormFile>? BusinessLicense { get; set; }
         public string? Role { get; set; } = "Vendor";
+    }
+
+    public class ShopVerification
+    {
+        public int ShopId { get; set; }
+        public VerificationStatus VerificationStatus { get; set; }
+        public string Remark { get; set; }
+
     }
 }
