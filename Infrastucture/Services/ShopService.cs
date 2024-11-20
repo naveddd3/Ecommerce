@@ -1,20 +1,59 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastucture.Services
 {
-    public class ShopService
+    public class ShopService : IShopService
     {
         private readonly IDapperRepository _dapper;
         public ShopService(IDapperRepository dapper)
         {
             _dapper=dapper;
         }
-       
+        public async Task<Response<IEnumerable<ShopReq>>> GetShops()
+        {
+            var res = new Response<IEnumerable<ShopReq>>()
+            {
+                ResponseText = "Something has been Wrong !",
+                StatusCode = ResponseStatus.Failed
+            };
+            try
+            {
+                string sp = "Proc_GetShops";
+                var list = await _dapper.GetAllAsync<ShopReq>(sp, null);
+                if (list != null)
+                {
+                    res.StatusCode = ResponseStatus.Success;
+                    res.ResponseText = "Found";
+                    res.Result = list;
+                }
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Response> UpdateVerificationStatus(ShopVerification shopVerification)
+        {
+            try
+            {
+                string sp= "Proc_UpdateShopVerification";
+                var res = await _dapper.GetAsync<Response>(sp, new
+                {
+                    shopVerification.ShopId,
+                    shopVerification.VerificationStatus,
+                    shopVerification.Remark
+                });
+                return res;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

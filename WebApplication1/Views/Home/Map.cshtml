@@ -63,31 +63,8 @@
           view:view,
           nextBasemap: "hybrid"
           });
-            // view.on("click", function(event) {
-            //   event.stopPropagation();
-            //   //overwrite default click-for-popup behavior
-            //   //get the coordinates of the click on the view
-            //   var lat = Math.round(event.mapPoint.latitude * 1000)/
-            //   1000;
-            //   var lon = Math.round(event.mapPoint.longitude * 1000)/
-            //   1000;
-            //   view.popup.open({
-            //   title:"Where Am I?: [" + lon + ", " + lat + "]",
-            //   location: event.mapPoint
-            //   //set the location of the popup to the clicked location
-            // });
-            //  //display the popup
-            // //execute a reverse geocode using the clicked location
-            //  dojoWhen(locatorTask.locationToAddress(event.mapPoint),
-            // function(response) {
-            //   view.popup.content = response.address;
-            // }, function(err) {
-            //   view.popup.content = "No address was found for this location" + err;
-            // })
-            // });
             view.on("click", function (event) {
                 event.stopPropagation();
-                // Perform reverse geocoding
                 locatorTask.locationToAddress(event.mapPoint)
                     .then(function (response) {
                         let res = response;
