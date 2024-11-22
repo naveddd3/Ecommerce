@@ -24,75 +24,124 @@
     <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
     <script src="https://js.arcgis.com/4.7/"></script>
     <script>
-          require([
+        require([
             "esri/Map",
             "esri/views/MapView",
             "esri/widgets/CoordinateConversion",
             "esri/widgets/Search",
             "esri/widgets/BasemapToggle",
+            "esri/Graphic",
             "esri/tasks/Locator",
-            "dojo/when",
             "dojo/domReady!"
-            ],function(Map, MapView, CoordinateConversion, Search, BasemapToggle, Locator, dojoWhen){
-         //locatior url for addresses
+        ], function (
+            Map,
+            MapView,
+            CoordinateConversion,
+            Search,
+            BasemapToggle,
+            Graphic,
+            Locator
+        ) {
             var locatorTask = new Locator({
-              url:
-         "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+                url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
             });
 
             var map = new Map({
-                basemap: "streets-navigation-vector"
-              });
-              var view = new MapView({
+                basemap: "streets-navigation-vector",
+            });
+
+            var view = new MapView({
                 container: "viewDiv",
                 map: map,
-        // code for zoom in map and positioning
-                zoom:15,
-                center:[-122.100900,47.697028]
+                zoom: 15,
+                center: [-122.1009, 47.697028], // Default center
             });
-        // search widget
-        var searchWidget = new Search({
-          view: view
-        });
-         // Coordinate display widget
-        var ccWidget = new CoordinateConversion({
-         view: view
-        });
-        // basemap toggle widget
-        var toggle = new BasemapToggle({
-          view:view,
-          nextBasemap: "hybrid"
-          });
+
+            // Geolocation function
+            function getLiveLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            const { latitude, longitude } = position.coords;
+
+                            // Center the map on the user's location
+                            view.center = [longitude, latitude];
+                            view.zoom = 16;
+
+                            // Add a graphic (marker) to the map
+                            const pointGraphic = new Graphic({
+                                geometry: {
+                                    type: "point", // autocasts as new Point()
+                                    longitude: longitude,
+                                    latitude: latitude,
+                                },
+                                symbol: {
+                                    type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+                                    color: "blue",
+                                    size: "10px",
+                                },
+                            });
+                            view.graphics.add(pointGraphic);
+
+                            // Display a popup at the user's location
+                            view.popup.open({
+                                title: "Your Location",
+                                content: `Latitude: ${latitude}, Longitude: ${longitude}`,
+                                location: { latitude, longitude },
+                            });
+                        },
+                        function (error) {
+                            alert("Unable to fetch location: " + error.message);
+                        }
+                    );
+                } else {
+                    alert("Geolocation is not supported by your browser.");
+                }
+            }
+
+            // Add widgets
+            var searchWidget = new Search({
+                view: view,
+            });
+
+            var ccWidget = new CoordinateConversion({
+                view: view,
+            });
+
+            var toggle = new BasemapToggle({
+                view: view,
+                nextBasemap: "hybrid",
+            });
+
+            view.ui.add(toggle, "top-right");
+            view.ui.add(ccWidget, "bottom-left");
+            view.ui.add(searchWidget, { position: "top-right" });
+
+            // Call getLiveLocation to fetch and display the user's location
+            getLiveLocation();
+
             view.on("click", function (event) {
                 event.stopPropagation();
-                locatorTask.locationToAddress(event.mapPoint)
+                locatorTask
+                    .locationToAddress(event.mapPoint)
                     .then(function (response) {
-                        let res = response;
-                        console.log(JSON.stringify(res))
-                        let areaName = response.attributes.Region || "Unknown Region"; // Use 'Region' or appropriate field
                         view.popup.open({
-                            title: "Area: " + areaName, // Display the area name
-                            content: response.address, // Show the full address in the content
-                            location: event.mapPoint
+                            title: "Location Info",
+                            content: response.address,
+                            location: event.mapPoint,
                         });
                     })
                     .catch(function (err) {
                         view.popup.open({
                             title: "No address found",
                             content: "No address was found for this location. Error: " + err.message,
-                            location: event.mapPoint
+                            location: event.mapPoint,
                         });
                     });
             });
-
-            //togggle for basemap in top-right corner
-            view.ui.add(toggle,"top-right");
-            //toggle for coordinate widget in bottom-left corner
-            view.ui.add(ccWidget, "bottom-left");
-            //search in top-right corner
-            view.ui.add(searchWidget,{position: "top-right"});
-              });
+        });
     </script>
+
 </head>
 <body>
     <div id="viewDiv"></div>
