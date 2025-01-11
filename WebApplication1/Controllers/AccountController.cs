@@ -129,6 +129,7 @@ namespace WEBAPP.Controllers
             };
             var request = JsonConvert.DeserializeObject<ShopReq>(Jsondata);
             request.BusinessLicense = BusinessLicense;
+            request.VerificationStatus = Domain.Enum.VerificationStatus.PENDING;
             var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Account/SaveShop", User.GetLoggedInUserToken(), request);
             var response = await apiRes.Content.ReadAsStringAsync();
             if (apiRes != null)

@@ -37,3 +37,34 @@
 }
 
 
+let userCoords = {};
+async function getLocation() {
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    resolve({ latitude, longitude }); // Resolving the promise with the object
+                },
+                function (error) {
+                    reject("Error occurred: " + error.message); // Rejecting the promise if there's an error
+                }
+            );
+        } else {
+            reject("Geolocation is not supported by this browser."); // Reject if geolocation isn't supported
+        }
+    });
+}
+
+async function getUserCoordinates() {
+    try {
+        userCoords = await getLocation();
+        console.log(userCoords.latitude, userCoords.longitude);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+

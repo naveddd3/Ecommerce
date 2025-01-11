@@ -7,7 +7,7 @@ using WEBAPP.Models.Helper;
 
 namespace WEBAPP.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin,Vendor")]
     public class OrderController : Controller
     {
         private readonly string _BaseUrl;

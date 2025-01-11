@@ -291,7 +291,9 @@ namespace Infrastucture.Services
                     shop.Username,
                     shop.Password,
                     shop.AdharNo,
-                    VerificationStatus = VerificationStatus.PENDING
+                    VerificationStatus = VerificationStatus.PENDING,
+                    shop.Lattitude,
+                    shop.Longitude
                 });
                 return res;
 

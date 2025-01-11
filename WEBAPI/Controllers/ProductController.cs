@@ -11,7 +11,7 @@ namespace WEBAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles="Admin")]
+    //[Authorize(MatserRoles="Admin")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
