@@ -202,9 +202,11 @@
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+<script src="~/js/site.js"></script>
 <script>
     jQuery(document).ready(function () {
+        debugger
+        getUserCoordinates();
         jQuery("#ownerEmail").on("change", function () {
             jQuery("#sendOTP").show();
         });
@@ -291,7 +293,9 @@
             PostalCode: $('#shopPostal').val(),
             Country: $('#shopCountry').val(),
             Username: $('#username').val(),
-            Password: $('#password').val()
+            Password: $('#password').val(),
+            Lattitude: userCoords.latitude,
+            Longitude: userCoords.longitude
         }
 
         var formData = new FormData();
@@ -353,6 +357,7 @@
 
         })
     }
+
 
 
 </script>

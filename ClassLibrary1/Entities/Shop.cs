@@ -33,6 +33,8 @@ namespace Domain.Entities
         public string Username { get; set; }
         public string Password { get; set; }
         public VerificationStatus VerificationStatus { get; set; }
+        public decimal Lattitude { get; set; }
+        public decimal Longitude { get; set; }
     }
 
     public class ShopReq : Shop

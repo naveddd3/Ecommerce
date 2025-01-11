@@ -26,7 +26,7 @@ namespace WEBAPI.Controllers
         }
 
         [HttpPost(nameof(GetOrders))]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin,Vendor")]
         public async Task<IActionResult> GetOrders()
         {
             var res = await _orderService.GetAllOrders();
