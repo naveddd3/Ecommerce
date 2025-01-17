@@ -26,5 +26,31 @@ namespace Domain.Helper
             var baseUrl = $"{request.Scheme}://{request.Host}";
             return baseUrl;
         }
+
+        public string GenerateRandomPassword()
+        {
+            int length = 8;
+            var random = new Random();
+            var password = new StringBuilder();
+            var uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+            var lowercaseLetters = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+            var digits = "0123456789".ToCharArray();
+            var specialCharacters = "!@#$%^&*()_+-=[]{}|;:,.<>?".ToCharArray();
+            password.Append(uppercaseLetters[random.Next(uppercaseLetters.Length)]);
+            password.Append(lowercaseLetters[random.Next(lowercaseLetters.Length)]);
+            password.Append(digits[random.Next(digits.Length)]);
+            password.Append(specialCharacters[random.Next(specialCharacters.Length)]);
+            var allCharacters = uppercaseLetters.Concat(lowercaseLetters)
+                                                 .Concat(digits)
+                                                 .Concat(specialCharacters)
+                                                 .ToArray();
+
+            for (int i = password.Length; i < length; i++)
+            {
+                password.Append(allCharacters[random.Next(allCharacters.Length)]);
+            }
+            return new string(password.ToString().OrderBy(c => random.Next()).ToArray());
+        }
+
     }
 }

@@ -33,7 +33,7 @@ namespace Infrastucture.Services
 
         public async Task<Response> SignUp(SignUpReq signUpReq)
         {
-            var res = new Domain.Entities.Response()
+            var res = new Response()
             {
                 ResponseText = "An Error Has Occured",
                 StatusCode = ResponseStatus.Failed
@@ -143,6 +143,36 @@ namespace Infrastucture.Services
 
                 throw;
             }
+        }
+
+        public async Task<Response> DeleteUserbyId(int UserId)
+        {
+            var response = new Response();
+            try
+            {
+				var userexists = await userManager.FindByIdAsync(UserId.ToString());
+                if(userexists != null)
+                {
+                    var result = await userManager.DeleteAsync(userexists);
+                    if (result.Succeeded)
+                    {
+                        response.StatusCode = ResponseStatus.Success;
+                        response.ResponseText = "User Deleted Success";
+                    }
+                    else
+                    {
+                        response.StatusCode = ResponseStatus.Failed;
+                        response.ResponseText = "Some Error has been Occured";
+                    }
+                }
+			}
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return response;
+
         }
         public async Task<Response> SaveShopOwner(ShopReq shopReq)
         {

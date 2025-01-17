@@ -491,7 +491,7 @@
 
                     <li class="side-nav-title">Masters</li>
 
-                    @if (User.IsInRole(MatserRole.ADMIN))
+                    @if (User.IsInRole(MasterRole.ADMIN))
                     {
                         <li class="side-nav-item">
                             <a href="/Category" class="side-nav-link">
@@ -529,7 +529,12 @@
                         </a>
                     </li>
 
-
+                    <li class="side-nav-item">
+                        <a href="/DeliveryPartner" class="side-nav-link">
+                            <i class="uil-store"></i>
+                            <span> DeliveryPartner </span>
+                        </a>
+                    </li>
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarEmail" aria-expanded="false" aria-controls="sidebarEmail" class="side-nav-link">
                             <i class="uil-envelope"></i>
@@ -1871,14 +1876,13 @@
             </div>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/js/vendor.min.js"></script>
     <script src="~/vendor/daterangepicker/moment.min.js"></script>
     <script src="~/vendor/daterangepicker/daterangepicker.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/alert.js"></script>
     <script src="~/js/site.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="~/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
     <script src="~/vendor/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>

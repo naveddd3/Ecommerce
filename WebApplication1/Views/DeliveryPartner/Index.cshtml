@@ -1,0 +1,134 @@
+﻿<div id="modal"></div>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                            <li class="breadcrumb-item active">DeliveryPartner</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">DeliveryPartner</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="partialview">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-5">
+                                <button onclick="AddOrEditDeliveryPartner(0)" s class="btn btn-danger mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Add DeliveryPartner
+                                </button>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="text-sm-end">
+                                    <button type="button" class="btn btn-success mb-2 me-1">
+                                        <i class="mdi mdi-cog-outline"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                    <button type="button" class="btn btn-light mb-2">Export</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hidden-content" style="display:none;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
+                                <thead class="table-light">
+                                    <tr class="text-nowrap">
+                                        <th>Sr No.</th>
+                                        <th>Partner Name</th>
+                                        <th>ProfilePicture</th>
+                                        <th>Email</th>
+                                        <th>AadharNumber</th>
+                                        <th>PhoneNumber</th>
+                                        <th>DrivingLicense</th>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th>PostalCode</th>
+                                        <th>VehicleType</th>
+                                        <th>VehicleNumber</th>
+                                        <th>JoiningDate</th>
+                                        <th>IsVerified</th>
+                                        <th style="width: 85px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- end card-body -->
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+    </div> <!-- end container-fluid -->
+</div> <!-- end content -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadData();
+    });
+    var loadData = () => {
+        $.post("/DeliveryPartner/PartialDeliveryPartnerList").done((result) => {
+            $("#grid tbody").html(result);
+        })
+    }
+
+    var AddOrEditDeliveryPartner = (Id) => {
+        preloader.load();
+        $.post("/DeliveryPartner/AddOrEditDeliveryPartner", { Id: Id }).done((response) => {
+            $("#partialview").html(response);
+            preloader.remove();
+        }).fail((res) => {
+            QAlert(res.status, res.responseText);
+        });
+    }
+
+    var SaveOrUpdateDeliveryPartner = () => {
+        if (!valiadteInputs()) {
+            return false;
+        }
+        var formData = new FormData();
+        var deliveryPartner = {
+            ID: $("#ID").val(),
+            FirstName: $("#FirstName").val(),
+            LastName: $("#LastName").val(),
+            Email: $("#Email").val(),
+            AadharNumber: $("#AadharNumber").val(),
+            PhoneNumber: $("#PhoneNumber").val(),
+            DrivingLicense: $("#DrivingLicense").val(),
+            Address: $("#Address").val(),
+            City: $("#City").val(),
+            State: $("#State").val(),
+            PostalCode: $("#PostalCode").val(),
+            VehicleType: $("#VehicleType").val(),
+            VehicleNumber: $("#VehicleNumber").val(),
+            JoiningDate: $("#JoiningDate").val(),
+            IsVerified: $("#IsVerified").is(":checked")
+        };
+        formData.append('Jsondata', JSON.stringify(deliveryPartner));
+        var imageInput = $("#ProfilePicture").prop("files")[0];
+        formData.append('ProfilePicture', imageInput);
+        preloader.load();
+        $.ajax({
+            url: '/DeliveryPartner/SaveOrUpdateDeliveryPartner',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                loadData();
+                QAlert(response.statusCode, response.responseText);
+            },
+            error: function (error) {
+                QAlert(-1,"Error saving product.");
+            }
+        });
+    }
+</script>

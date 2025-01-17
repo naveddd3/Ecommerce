@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enum;
 using Domain.Helper;
 using System;
 using System.Collections.Generic;

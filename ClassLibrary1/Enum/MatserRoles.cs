@@ -13,8 +13,11 @@ namespace Domain.Enum
         USER = 2,
         VENODR = 3,
     }
-    public static class MatserRole
+    public static class MasterRole
     {
         public static string ADMIN { get; set; } = "Admin";
+        public static string USER { get; set; } = "User";
+        public static string VENDOR { get; set; } = "Vendor";
+        public static string DPARTNER { get; set; } = "DPARTNER";
     }
 }

@@ -98,6 +98,8 @@ namespace WEBAPI.Extension
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<FileUploadService>();
+            services.AddScoped<ILoggerService, LoggerService>();
+            services.AddScoped<IDeliveryPartnersServices, DeliveryPartnersServices>();
             #endregion
         }
     }
