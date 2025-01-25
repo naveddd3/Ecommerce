@@ -38,15 +38,24 @@ namespace Infrastucture.Services
             }
         }
 
-        public async Task<dynamic> ProductOnSubCategoryId(int SubCategoryId)
+        public async Task<dynamic> ProductOnSubCategoryId(int SubCategoryId,decimal UserLatitude,decimal UserLongitude)
         {
             try
             {
 
                 var product = new ProductVarientAPIRES();
-                var res = await _dapper.GetMultipleAsync<Product, ProductVarientRes>("Proc_GetProductOnSubCategoryId", new {SubCategoryId},System.Data.CommandType.StoredProcedure);
+                var res = await _dapper.GetMultipleAsync<Product, ProductVarientRes>("Proc_GetProductOnSubCategoryId", new {
+                    SubCategoryId,
+                    UserLatitude,
+                    UserLongitude
+                },System.Data.CommandType.StoredProcedure);
                 product.Products = (List<Product>)res.GetType().GetProperty("Table1").GetValue(res, null);
                 product.ProductVarients = (List<ProductVarientRes>)res.GetType().GetProperty("Table2").GetValue(res, null);
+                if(product.Products.Count()<=0 && product.ProductVarients.Count() <= 0)
+                {
+                    product.StatusCode = ResponseStatus.Failed;
+                    product.ResponseText = "No Products Found";
+                }
                 return product;
 
             }

@@ -19,6 +19,7 @@ namespace Domain.Entities
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public decimal? Quantity { get; set; }  
+        public int VendorId { get; set; }  
 
     }
 
@@ -53,7 +54,7 @@ namespace Domain.Entities
         public string ImageUrl { get; set; }
     }
 
-    public class ProductVarientAPIRES
+    public class ProductVarientAPIRES : Response
     {
         public IEnumerable<Product>? Products { get; set; }
         public IEnumerable<ProductVarientRes>? ProductVarients { get; set; }

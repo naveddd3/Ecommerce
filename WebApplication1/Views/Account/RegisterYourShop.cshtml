@@ -193,7 +193,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
                 <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
                 <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
                 <button type="submit" class="btn btn-success" id="submitBtn" onclick="saveShop()" style="display: none;">Submit</button>
@@ -202,16 +202,20 @@
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script src="~/js/site.js"></script>
 <script>
     jQuery(document).ready(function () {
-        debugger
-        getUserCoordinates();
         jQuery("#ownerEmail").on("change", function () {
             jQuery("#sendOTP").show();
         });
 
     })
+     var closeModal=() =>{
+        $("#exampleModalCenter").modal('hide');
+    } 
+
     let currentStep = 0;
     let IsEmailVerified = 0;
     showStep(currentStep);
@@ -221,6 +225,19 @@
         steps.forEach((step, index) => {
             step.style.display = index === n ? 'block' : 'none';
         });
+        if (n == 4) {
+            let latitude = userCoords.latitude;
+            let longitude = userCoords.longitude;
+            let baseUrl = '';
+            if(window.location.hostname.includes('localhost')){
+               baseUrl = 'https://localhost:7035'
+            }else{
+                baseUrl = 'http://quickcartapi.runasp.net'
+            }
+            $.post(`${baseUrl}/api/Map/ReverseGeocode?latitude=${latitude}&longitude=${longitude}`).done((result) => {
+                $('#shopStreet').val(result);
+            })
+        }
 
         if (n === 0) {
             document.getElementById('prevBtn').style.display = 'none';

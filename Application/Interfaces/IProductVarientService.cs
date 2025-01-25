@@ -9,7 +9,7 @@ namespace Application.Interfaces
     public interface IProductVarientService
     {
         Task<dynamic> SubCategoryOnCategory(int CategoryId);
-        Task<dynamic> ProductOnSubCategoryId(int ProductId);
+        Task<dynamic> ProductOnSubCategoryId(int ProductId, decimal UserLattitude, decimal UserLongitude);
         Task<dynamic> ProductDetailById(int ProductId);
     }
 }

@@ -14,6 +14,7 @@
     @foreach (var product in Model.ProductVarientAPIRES.Products)
     {
         <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+            <input type="hidden" id="vendorId" value="@product.VendorId"/>
             <div class="product-cart-wrap mb-30">
                 <div class="product-img-action-wrap">
                     <div class="product-img product-img-zoom">
@@ -64,6 +65,15 @@
             </div>
         </div>
     }
+}
+else
+{
+    <div class="col-12 text-center" style="margin-top:15%">
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Products Unavailable !</h4>
+            <p>We're sorry, but there are currently no products available in this category. Please check back later!</p>
+        </div>
+    </div>
 }
 <div id="pvarientModal"></div>
 <script src="~/js/cart.js"></script>

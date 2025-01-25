@@ -44,7 +44,8 @@ namespace Infrastucture.Services
                     product.MRP,
                     product.Discount,
                     product.UnitId,
-                    product.Quantity
+                    product.Quantity,
+                    product.VendorId
                 });
                 return res;
             }
@@ -54,11 +55,14 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-        public async Task<dynamic> GetProduct()
+        public async Task<dynamic> GetProduct(int Id)
         {
             try
             {
-                var list = await _dapper.GetAllAsync<Product>("PROC_GETPRODUCTS", null, System.Data.CommandType.StoredProcedure);
+                var list = await _dapper.GetAllAsync<Product>("PROC_GETPRODUCTS", new
+                {
+                    VendorId = Id
+                }, System.Data.CommandType.StoredProcedure);
                 return list;
             }
             catch (Exception ex)
@@ -142,6 +146,7 @@ namespace Infrastucture.Services
                     productVarientVM.ProductName,
                     productVarientVM.Quantity,
                     productVarientVM.SubCategoryId,
+                    productVarientVM.VendorId
                 });
                 return response;
             }

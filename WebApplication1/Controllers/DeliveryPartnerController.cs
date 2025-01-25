@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
+using Domain.Enum;
 using Domain.Helper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,6 +9,7 @@ using WEBAPP.Models.Helper;
 
 namespace WEBAPP.Controllers
 {
+	[Authorize(Roles = MasterRole.ADMIN)]
 	public class DeliveryPartnerController : Controller
 	{
         private readonly string _BaseUrl;

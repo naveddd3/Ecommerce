@@ -1,0 +1,120 @@
+﻿<div id="modal"></div>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                            <li class="breadcrumb-item active">Vendors</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Vendors</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="partialview">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="hidden-content" style="display:none;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
+                                <thead class="table-light">
+                                    <tr class="text-nowrap">
+                                        <th>Sr No.</th>
+                                        <th>Shop Name</th>
+                                        <th>Shop Description</th>
+                                        <th>Owner Name</th>
+                                        <th>Owner Contact Number</th>
+                                        <th>Owner Email</th>
+                                        <th>IsVerified</th>
+                                        <th>Business License</th>
+                                        <th>Business Registration Number</th>
+                                        <th>GST Number</th>
+                                        <th>Business Address</th>
+                                        <th>Bank Name</th>
+                                        <th>Account Number</th>
+                                        <th>Branch</th>
+                                        <th>IFSC Code</th>
+                                        <th>Lattitude</th>
+                                        <th>Longitude</th>
+                                        <th style="width: 85px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+    </div> <!-- end container-fluid -->
+</div> <!-- end content -->
+<!-- Remark Modal -->
+<div class="modal fade" id="remarkModal" tabindex="-1" aria-labelledby="remarkModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="remarkModalLabel">Remark</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="remarkInput" class="form-control" rows="3" placeholder="Enter your remark here..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitRemark">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadData();
+    });
+    var loadData = () => {
+        $.post("/Shop/PendingShopsPartial").done((result) => {
+            $("#grid tbody").html(result);
+        })
+    }
+
+    let selectedStatus;
+    let selectedShopId;
+
+    var shopVerification = (_this,Status) => {
+        selectedStatus = Status;
+        selectedShopId = $(_this).closest('tr').data('item-shopid');
+        let remarkModal = new bootstrap.Modal(document.getElementById("remarkModal"));
+        remarkModal.show();
+    };
+    $("#submitRemark").on("click", () => {
+        let remark = $("#remarkInput").val();
+        if (remark === "") {
+            QAlert(-1,"Remark is required to proceed.");
+            return;
+        }
+        $.post("/Shop/UpdateShopVStatus", {
+            ShopId: selectedShopId,
+            VerificationStatus: selectedStatus,
+            Remark: remark
+        })
+            .done((result) => {
+                let remarkModal = bootstrap.Modal.getInstance(document.getElementById("remarkModal"));
+                remarkModal.hide();
+                QAlert(result.statusCode, result.responseText);
+                loadData();
+            })
+            .fail((error) => {
+                QAlert(-1,"Failed to update status. Please try again.");
+                console.error("Error:", error);
+            });
+    });
+
+</script>

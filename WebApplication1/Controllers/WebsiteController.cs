@@ -36,10 +36,10 @@ namespace WEBAPP.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> ProductOnSubCategory(int SubCategoryId)
+        public async Task<IActionResult> ProductOnSubCategory(int SubCategoryId, decimal UserLattitude, decimal UserLongitude)
         {
             var model = new WebsiteModel();
-            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductOnSubCategoryId/{SubCategoryId}", null, null);
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/ProductVarient/ProductOnSubCategoryId/{SubCategoryId}/{UserLattitude}/{UserLongitude}", null, null);
             if (apiRes != null)
             {
                 model.ProductVarientAPIRES = JsonConvert.DeserializeObject<ProductVarientAPIRES>(apiRes.Result);

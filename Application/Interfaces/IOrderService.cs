@@ -6,6 +6,7 @@ namespace Application.Interfaces
     {
         Task<Response> PlaceOrder(CheckoutDetails checkoutDetails);
 
-        Task<IEnumerable<OrderDetails>> GetAllOrders();
-    }
+        Task<IEnumerable<OrderDetails>> GetAllOrders(int VendorId);
+
+	}
 }

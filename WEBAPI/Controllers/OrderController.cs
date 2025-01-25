@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enum;
+using Domain.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,10 +28,10 @@ namespace WEBAPI.Controllers
         }
 
         [HttpPost(nameof(GetOrders))]
-        [Authorize(Roles ="Admin,Vendor")]
+        [Authorize(Roles =$"{MasterRole.ADMIN},{MasterRole.VENDOR}")]
         public async Task<IActionResult> GetOrders()
         {
-            var res = await _orderService.GetAllOrders();
+            var res = await _orderService.GetAllOrders(User.GetLoggedInUserId<int>());
             return Ok(res);
         }
     }

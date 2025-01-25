@@ -23,10 +23,10 @@ namespace WEBAPI.Controllers
             return Ok(res);
         }
 
-        [HttpPost(nameof(ProductOnSubCategoryId) + "/{SubCategoryId}")]
-        public async Task<IActionResult> ProductOnSubCategoryId(int SubCategoryId)
+        [HttpPost(nameof(ProductOnSubCategoryId) + "/{SubCategoryId}"+ "/{UserLattitude}" + "/{UserLongitude}")]
+        public async Task<IActionResult> ProductOnSubCategoryId(int SubCategoryId, decimal UserLattitude, decimal UserLongitude)
         {
-            var res = await _productVarientService.ProductOnSubCategoryId(SubCategoryId);
+            var res = await _productVarientService.ProductOnSubCategoryId(SubCategoryId, UserLattitude, UserLongitude);
             return Ok(res);
         }
 

@@ -21,7 +21,7 @@ namespace Domain.Helper
                 throw new Exception("Invalid type provided");
             }
         }
-        public static T GetLoggedInUserName<T>(this ClaimsPrincipal principal)
+		public static T GetLoggedInUserName<T>(this ClaimsPrincipal principal)
         {
             var loggedInUserIdClaim = principal.FindFirst("UserId");
             var loggedInUserId = loggedInUserIdClaim != null ? loggedInUserIdClaim.Value : null;
