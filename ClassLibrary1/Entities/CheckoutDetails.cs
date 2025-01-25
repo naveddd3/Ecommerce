@@ -20,6 +20,7 @@ namespace Domain.Entities
         public decimal Price { get; set; }
         public string VarientID { get; set; }
         public int Quantity { get; set; }
+        public string VendorId { get; set; }
         public int AddressID { get; set; }
         public PaymentMode PaymentModes { get; set; }
         public OrderStatus  OrderStatus { get; set; }

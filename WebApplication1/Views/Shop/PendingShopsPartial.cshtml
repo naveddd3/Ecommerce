@@ -1,0 +1,51 @@
+﻿@using Domain.Entities;
+@using Domain.Enum
+@model List<Shop>
+@if (Model != null && Model.Any())
+{
+    int i = 0;
+    foreach (var item in Model)
+    {
+        i++;
+        <tr data-item-shopId="@item.ShopId">
+            <td>@i</td>
+            <td>@item.ShopName</td>
+            <td>@item.ShopDescription</td>
+            <td>@item.OwnerName</td>
+            <td>@item.OwnerContactNumber</td>
+            <td>@item.OwnerEmail</td>
+            <td>
+                <span class="badge badge-info" style="background: yellowgreen;">@item.VerificationStatus</span>
+            </td>
+            <td><img src="@item.BusinessLicensePath" alt="ProductImage" width="100" height="100" /></td>
+            <td>@item.BusinessRegistrationNumber</td>
+            <td>@item.GSTNumber</td>
+            <td>@item.StreetAddress  @item.City  @item.State [@item.PostalCode]</td>
+            <td>@item.BankName</td>
+            <td>@item.AccountNumber</td>
+            <td>@item.Branch</td>
+            <td>@item.IFSCCode</td>
+            <td>@item.Lattitude</td>
+            <td>@item.Longitude</td>
+            <td class="table-action text-center">
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button class="btn btn-success" onclick="shopVerification(this,'@VerificationStatus.SUCCESS')">
+                        Approve
+                    </button>
+                    <button class="btn btn-danger" onclick="shopVerification(this,'@VerificationStatus.FAILED')">
+                        Reject
+                    </button>
+                </div>
+            </td>
+
+        </tr>
+
+
+    }
+}
+else
+{
+    <tr>
+        <td colspan="20" style="text-align:center" class="danger">Record Not Found!</td>
+    </tr>
+}

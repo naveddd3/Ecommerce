@@ -53,6 +53,7 @@ namespace Infrastucture.Services
                         Unit = product.Unit,
                         Price = product.Price,
                         VarientID = product.VarientId,
+                        VendorId = product.VendorId,
                         Quantity = item.Quantity,
                         AddressID = checkoutDetails.AddressID,
                         PaymentModes = checkoutDetails.PaymentMode,
@@ -79,11 +80,14 @@ namespace Infrastucture.Services
                 throw;
             }
         }
-        public async Task<IEnumerable<OrderDetails>> GetAllOrders()
+        public async Task<IEnumerable<OrderDetails>> GetAllOrders(int VendorId)
         {
             try
             {
-                var list = await _dapper.GetAllAsync<OrderDetails>("Proc_GetAllOrders", null);
+                var list = await _dapper.GetAllAsync<OrderDetails>("Proc_GetAllOrders", new
+                {
+					VendorId
+				});
                 return list;
             }
             catch (Exception ex)
@@ -107,6 +111,7 @@ namespace Infrastucture.Services
             table.Columns.Add("PaymentModes", typeof(string));
             table.Columns.Add("OrderStatus", typeof(string));
             table.Columns.Add("StatusRemark", typeof(string));
+            table.Columns.Add("VendorId", typeof(string));
 
             foreach (var item in orderRequest)
             {
@@ -122,7 +127,8 @@ namespace Infrastucture.Services
                     item.AddressID,
                     item.PaymentModes,
                     item.OrderStatus,
-                    item.StatusRemark
+                    item.StatusRemark,
+                    item.VendorId
                 );
             }
 

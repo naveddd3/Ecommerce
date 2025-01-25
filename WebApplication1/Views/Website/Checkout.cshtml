@@ -85,8 +85,8 @@
         };
         $.post('/Website/PlaceOrder', checkoutDetails).done((result) => {
             localStorage.clear();
+            cartInitialize();
             QAlert(result.statusCode, result.responseText);
-            console.log(result);
         })
     };
 

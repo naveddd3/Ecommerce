@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Helper;
 using Infrastucture.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using WEBAPP.Models.Helper;
@@ -31,7 +32,8 @@ namespace WEBAPP.Controllers
             var list = new List<Product>();
             try
             {
-                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProduct", null, User.GetLoggedInUserToken());
+                
+                var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Product/GetProduct/{User.GetLoggedInUserId<int>()}", null, User.GetLoggedInUserToken());
                 if (apiRes != null)
                 {
                     list = JsonConvert.DeserializeObject<List<Product>>(apiRes.Result);
@@ -84,6 +86,7 @@ namespace WEBAPP.Controllers
                         return Json(res);
                     }
                 }
+                request.VendorId = User.GetLoggedInUserId<int>();
                 var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveProduct", User.GetLoggedInUserToken(), request);
                 var response = await apiRes.Content.ReadAsStringAsync();
                 if (apiRes != null)
@@ -205,6 +208,7 @@ namespace WEBAPP.Controllers
                     }
                 }
                 request.productvarientImages = productvarientImages;
+                request.VendorId = User.GetLoggedInUserId<int>();
                 var apiRes = await AppWebRequest.O.SendFileAndContentAsync($"{_BaseUrl}/api/Product/SaveProductVarient", User.GetLoggedInUserToken(), request);
                 var response = await apiRes.Content.ReadAsStringAsync();
                 if (apiRes != null)

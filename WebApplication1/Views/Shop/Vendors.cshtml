@@ -1,0 +1,72 @@
+﻿<div id="modal"></div>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                            <li class="breadcrumb-item active">Vendors</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Vendors</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="partialview">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="hidden-content" style="display:none;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap" id="grid">
+                                <thead class="table-light">
+                                    <tr class="text-nowrap">
+                                        <th>Sr No.</th>
+                                        <th>Shop Name</th>
+                                        <th>Shop Description</th>
+                                        <th>Owner Name</th>
+                                        <th>Owner Contact Number</th>
+                                        <th>Owner Email</th>
+                                        <th>IsVerified</th>
+                                        <th>Business License</th>
+                                        <th>Business Registration Number</th>
+                                        <th>GST Number</th>
+                                        <th>Business Address</th>
+                                        <th>Bank Name</th>
+                                        <th>Account Number</th>
+                                        <th>Branch</th>
+                                        <th>IFSC Code</th>
+                                        <th>Lattitude</th>
+                                        <th>Longitude</th>
+                                        <th>Remark</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+    </div> <!-- end container-fluid -->
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadData();
+    });
+    var loadData = () => {
+        $.post("/Shop/VendorsPartial").done((result) => {
+            $("#grid tbody").html(result);
+        })
+    }
+
+   
+</script>

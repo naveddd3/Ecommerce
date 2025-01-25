@@ -10,7 +10,7 @@ namespace Application.Interfaces
     public interface IProductService
     {
         Task<Response> SaveOrUpdateProduct(Product product);
-        Task<dynamic> GetProduct();
+        Task<dynamic> GetProduct(int Id);
         Task<ProductVM> GetProductById(int Id);
         Task<List<ProductImage>> ShowImagesOfProduct(int ID);
         Task<Response> DeleteImageOfProduct(int Id);

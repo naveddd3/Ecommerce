@@ -107,9 +107,9 @@ namespace Infrastucture.Services
                         new Claim(ClaimTypes.Name, userexists.UserName),
                         new Claim("UserId", userexists.Id.ToString()),
                         new Claim(ClaimTypes.MobilePhone, userexists.MobileNo),
-                        new Claim(ClaimTypes.Role, roledetails.FirstOrDefault()??""),
+                        new Claim(ClaimTypes.Role, roledetails.FirstOrDefault()??"")
                       };
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Secretkey"]));
+					var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Secretkey"]));
                     var token = new JwtSecurityToken(
                         issuer: configuration["AuthSettings:Issuer"],
                         audience: configuration["AuthSettings:Audience"],
@@ -128,7 +128,7 @@ namespace Infrastucture.Services
                         UserName = userexists.UserName,
                         Name = userexists.UserName,
                         Token = tokenAsString,
-                        Role = roledetails.FirstOrDefault(),
+                        Role = roledetails.FirstOrDefault()
                     };
                     response.ResponseText="Login Succesfull";
                     response.StatusCode = ResponseStatus.Success;

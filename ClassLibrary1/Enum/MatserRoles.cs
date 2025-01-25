@@ -15,9 +15,9 @@ namespace Domain.Enum
     }
     public static class MasterRole
     {
-        public static string ADMIN { get; set; } = "Admin";
-        public static string USER { get; set; } = "User";
-        public static string VENDOR { get; set; } = "Vendor";
-        public static string DPARTNER { get; set; } = "DPARTNER";
+        public const string ADMIN  = "Admin";
+        public const string USER = "User";
+        public const string VENDOR = "Vendor";
+        public const string DPARTNER = "DPARTNER";
     }
 }

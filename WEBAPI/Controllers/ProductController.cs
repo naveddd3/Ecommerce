@@ -41,13 +41,17 @@ namespace WEBAPI.Controllers
                 res.StatusCode = ResponseStatus.Success;
                 product.ImageUrl = files;
             }
+            if(product.VendorId == 0)
+            {
+                product.VendorId = User.GetLoggedInUserId<int>();
+            }
             var response = await _productService.SaveOrUpdateProduct(product);
             return Ok(response);
         }
-        [HttpPost(nameof(GetProduct))]
-        public async Task<IActionResult> GetProduct()
+        [HttpPost(nameof(GetProduct) + "/{Id}")]
+        public async Task<IActionResult> GetProduct(int Id)
         {
-            var res = await _productService.GetProduct();
+            var res = await _productService.GetProduct(Id);
             return Ok(res);
         }
 
@@ -73,7 +77,7 @@ namespace WEBAPI.Controllers
         }
 
         [HttpPost(nameof(SaveProductVarient))]
-        public async Task<IActionResult> SaveProductVarient([FromBody] ProductVarientReq productVarient)
+        public async Task<IActionResult> SaveProductVarient([FromForm] ProductVarientReq productVarient)
         {
             var res = new Response() { ResponseText = string.Empty, StatusCode = ResponseStatus.Failed };
             if (productVarient.VarientId == 0)

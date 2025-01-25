@@ -125,6 +125,7 @@
             success: function (response) {
                 loadData();
                 QAlert(response.statusCode, response.responseText);
+                preloader.remove();
             },
             error: function (error) {
                 QAlert(-1,"Error saving product.");

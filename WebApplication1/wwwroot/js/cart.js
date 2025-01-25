@@ -53,6 +53,7 @@
 
 
 function addToCart(productId, element) {
+    debugger;
     var uniqueKey = productId;
     let cart = JSON.parse(localStorage.getItem('cart')) || {
         count: 0,
@@ -69,7 +70,8 @@ function addToCart(productId, element) {
                 image_url: productElement.find('.productImage').attr('src'),
                 price: parseFloat(productElement.find('.product-price span').text().replace('₹', '')),
                 unit: productElement.find('.unit').text(),
-                varientId: '0'
+                varientId: '0',
+                vendorId: $('#vendorId').val()
             },
             quantity: 1
         };
@@ -83,7 +85,8 @@ function addToCart(productId, element) {
                 image_url: cardElement.find('.varient-image img').attr('src'),
                 unit: cardElement.find('.varient-unit').text().trim(),
                 price: parseFloat(cardElement.find('.varient-price span').first().text().replace('₹', '').trim()),
-                varientId: cardElement.find('#varientid').val()
+                varientId: cardElement.find('#varientid').val(),
+                vendorId: $('#vendorId').val(),
             },
             quantity: 1
         };
@@ -99,6 +102,7 @@ function addToCart(productId, element) {
                 image_url: modalElement.find('.carousel-item.active img').attr('src'),
                 price: parseFloat(modalElement.find('.current-price').text().replace('₹', '')),
                 unit: modalElement.find('#unit').val(),
+                vendorId: $('#vendorId').val()
             },
             quantity: parseInt(modalElement.find('.qty-val').text())
         };

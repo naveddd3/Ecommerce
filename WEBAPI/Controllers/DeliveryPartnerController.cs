@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enum;
 using Infrastucture.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +10,7 @@ namespace WEBAPI.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = MasterRole.ADMIN)]
 	public class DeliveryPartnerController : ControllerBase
 	{
 		private readonly IDeliveryPartnersServices _deliverypartnersServices;

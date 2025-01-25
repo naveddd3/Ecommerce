@@ -11,6 +11,7 @@ namespace Domain.Entities
     public class Shop
     {
         public string ShopName { get; set; }
+        public int ShopId { get; set; }
         public string ShopDescription { get; set; }
         public string OwnerName { get; set; }
         public string OwnerContactNumber { get; set; }
@@ -35,6 +36,7 @@ namespace Domain.Entities
         public VerificationStatus VerificationStatus { get; set; }
         public decimal Lattitude { get; set; }
         public decimal Longitude { get; set; }
+        public string Remark { get; set; }
     }
 
     public class ShopReq : Shop
