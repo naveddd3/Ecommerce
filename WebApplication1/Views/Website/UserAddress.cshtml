@@ -1,0 +1,66 @@
+﻿<style>
+    #userlocationModal .modal-dialog {
+        top: 10%;
+        transform: translate(-60%, 0);
+    }
+</style>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="userlocationModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Location</h5>
+                <button type="button" class="btn-close" onclick="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <button type="button" class="btn btn-primary" id="detectLocation">
+                        <span id="locationText">Location</span>
+                        <span id="loader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
+                    <span class="fw-bold text-muted mx-2">OR</span>
+                    <input type="text" class="form-control flex-grow-1" placeholder="Search Location" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var closeModal = () => {
+        $("#userlocationModal").modal('hide');
+    };
+
+    $('#detectLocation').click(()=>{
+        (async () => {
+           await getCoordinates();
+        let latitude = userCoords.latitude;
+        let longitude = userCoords.longitude;
+        $('#locationText').text('Fetching Location');
+        $('#loader').removeClass('d-none');
+        $.post('/Website/GetUserLocation',{latitude :latitude,longitude : longitude})
+            .done((result) => {
+                $('.LocationBar__Subtitle-sc-x8ezho-10').attr('title', result.userAddress);
+                $("#delivery-time").text(`Delivery in ${result.deliveryDuration} minutes`);
+                let truncatedAddress = result.userAddress.length > 20 ? result.userAddress.substring(0, 20) + "..." : result.userAddress;
+                $('.short-address').text(truncatedAddress);
+                let location = JSON.parse(sessionStorage.getItem('location'));
+                location.UserAddress = result.userAddress;
+                location.DeliveryDuration = result.deliveryDuration;
+                sessionStorage.setItem('location',JSON.stringify(location));
+                setTimeout(closeModal(), 60000);
+            })
+            .fail((error) => {
+                console.error("Error fetching location:", error);
+                alert("Failed to fetch location. Please try again.");
+            })
+            .always(() => {
+                $('#locationText').text('Location');
+                $('#loader').addClass('d-none');
+            });
+        })();
+
+    });
+</script>
+

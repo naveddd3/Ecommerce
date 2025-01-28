@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enum;
 using Domain.Helper;
 using Infrastucture.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +36,6 @@ namespace WEBAPP.Controllers
             }
             return View(model);
         }
-
         public async Task<IActionResult> ProductOnSubCategory(int SubCategoryId, decimal UserLattitude, decimal UserLongitude)
         {
             var model = new WebsiteModel();
@@ -46,7 +46,6 @@ namespace WEBAPP.Controllers
             }
             return PartialView(model);
         }
-
         public async Task<IActionResult> ProductDetail(int ProductId)
         {
             var model = new WebsiteModel();
@@ -71,7 +70,7 @@ namespace WEBAPP.Controllers
         }
 
         [Route("Checkout")]
-        [Authorize]
+        [Authorize(Roles =MasterRole.USER)]
         public async Task<IActionResult> Checkout()
         {
             var addrslist = new List<SavedAddress>();
@@ -120,7 +119,6 @@ namespace WEBAPP.Controllers
             }
             return Ok(checkoutDetails);
         }
-
         public async Task<IActionResult> CreateNewAddress(int Id)
         {
             if (Id == 0)
@@ -140,7 +138,6 @@ namespace WEBAPP.Controllers
 
             return PartialView(new SavedAddress());
         }
-
         public async Task<IActionResult> SaveOrUpdateAddress(SavedAddress address)
         {
             var res = new Response()
@@ -163,6 +160,22 @@ namespace WEBAPP.Controllers
                 res.StatusCode = ResponseStatus.Failed;
                 return Json(res);
             }
+        }
+
+        public async Task<IActionResult> UserAddress()
+        {
+            return PartialView();
+        }
+
+        public async Task<IActionResult> GetUserLocation(double latitude, double longitude)
+        {
+            var apiRes = await AppWebRequest.O.PostAsync($"{_BaseUrl}/api/Map/GetUserLocation?latitude={latitude}&longitude={longitude}",null);
+            if (apiRes != null)
+            {
+                var useradress = JsonConvert.DeserializeObject<MapModel>(apiRes.Result); 
+                return Json(useradress);
+            }
+            return Json(null);
         }
 
         #endregion
