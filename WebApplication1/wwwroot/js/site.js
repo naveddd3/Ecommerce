@@ -1,4 +1,5 @@
 ﻿"use strict";
+
 let valiadteInputs = () => {
     let isValid = false;
     $('input:required, select:required').removeClass("is-invalid");
@@ -37,7 +38,8 @@ let valiadteInputs = () => {
     return isValid;
 }
 
-let userCoords = {};
+var userCoords = {};
+
 async function getCoordinates() {
     try {
         const coords = await new Promise((resolve, reject) => {
@@ -57,17 +59,27 @@ async function getCoordinates() {
                 reject("Geolocation is not supported by this browser.");
             }
         });
-        return coords; // Returns the coordinates as an object
+        userCoords = coords;
+        sessionStorage.setItem('location', JSON.stringify(userCoords));
+        return coords;
     } catch (error) {
         console.error("Error fetching coordinates:", error);
-        return null; // Returns null in case of an error
+        return error;
     }
+}
+var userLocation = () => {
+    $.post('/Website/UserAddress').done((result) => {
+        $('#showModal').html(result);
+        $('#userlocationModal').modal('show');
+    }).fail((xhr) => {
+        QAlert(-1, 'Something went wrong !');
+    })
 }
 
 // Example usage:
-(async () => {
-    userCoords = await getCoordinates();
-})();
+//(async () => {
+//    userCoords = await getCoordinates();
+//})();
 
 
 

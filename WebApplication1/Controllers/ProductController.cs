@@ -102,7 +102,6 @@ namespace WEBAPP.Controllers
                 throw;
             }
         }
-
         public async Task<IActionResult> ShowImagesOfProduct(int ID)
         {
             var list = new List<ProductImage>();
@@ -113,7 +112,6 @@ namespace WEBAPP.Controllers
             }
             return Json(list);
         }
-
         public async Task<IActionResult> DeleteImageOfProduct(int ID)
         {
             var res = new Response()
@@ -128,13 +126,11 @@ namespace WEBAPP.Controllers
             }
             return Json(res);
         }
-
         public IActionResult AddSliderImage(int Id)
         {
             ViewBag.Id = Id;
             return PartialView();
         }
-
         public async Task<IActionResult> EditSliderImages(int Id)
         {
             var res = new List<ProductSliderImages>();
@@ -224,7 +220,6 @@ namespace WEBAPP.Controllers
             }
 
         }
-
         public async Task<IActionResult> VarientDetails(int Id)
         {
             var list = new List<ProductVarientRes>();
@@ -235,7 +230,6 @@ namespace WEBAPP.Controllers
             }
             return View(list);
         }
-
         public async Task<IActionResult> GetProductVarientById(int Id)
         {
             var varient = new ProductVarientVM();

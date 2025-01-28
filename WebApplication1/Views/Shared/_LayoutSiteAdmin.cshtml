@@ -53,21 +53,20 @@
             border: 1px solid #ced4da;
             border-radius: 4px;
         }
+
         .LocationBar__Subtitle-sc-x8ezho-10 {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
     </style>
 </head>
 
 <body>
+    <div id="showModal"></div>
     <div class="content">
         <div id="productDetail">
         </div>
@@ -86,17 +85,17 @@
                                 <div class="header-right">
                                     <div class="search-location">
                                         <div class="LocationBar__Title-sc-x8ezho-8 gccyuD">
-                                            <h6>Delivery in 8 minutes</h6>
+                                            <h6 id="delivery-time">Delivery in 8 minutes</h6>
                                         </div>
-                                    <div class="LocationBar__SubtitleContainer-sc-x8ezho-9 jWpzvj">
-                                        <div class="LocationBar__Subtitle-sc-x8ezho-10 bdWwbr" title="2/79, Vikaskhand 2, Vikas Khand, Gomti Nagar, Lucknow, Uttar Pradesh 226010, India">
-                                            <span class="short-address">
-                                                2/79, Vikaskhand 2...
-                                            </span>
-                                           <span style="margin-left: 10%;margin-top: 3%;"> <i class="fi-rs-angle-down"></i></span>
+                                        <div class="LocationBar__SubtitleContainer-sc-x8ezho-9 jWpzvj">
+                                            <div class="LocationBar__Subtitle-sc-x8ezho-10 bdWwbr" title="">
+                                                <span class="short-address">
+                                                    Select Location...
+                                                </span>
+                                                <span style="margin-left: 10%;margin-top: 3%;"> <i class="fi-rs-angle-down"></i></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
                                     <div class="search-style-2">
                                         <form action="#">
@@ -105,7 +104,7 @@
                                     </div>
                                     <div class="header-action-right">
                                         <div class="header-action-2">
-                                          
+
                                             <div class="header-action-icon-2">
                                                 <a href='shop-wishlist.html'>
                                                     <img class="svgInject" alt="QuickCart" src="~/siteadmin/imgs/theme/icons/icon-heart.svg" />
@@ -606,7 +605,7 @@
     <div id="newaddressModal"></div>
 
 
-   
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" integrity="sha512-TX8lDz+Jka3IT8BuE6s8M4wAa8GzPRGGrD7FjYZZyBCmNZdmAvBzJYqT4B1O9/INJfs5nV5/5ItnD9ErTuzcDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -668,15 +667,25 @@
                 $("#newaddressModal").html(res);
                 $("#").modal('show');
             });
+            if (!sessionStorage.getItem('location')) {
+                 userLocation();
+            }else{
+                let userlocation = JSON.parse(sessionStorage.getItem('location'));
+                 $('.LocationBar__Subtitle-sc-x8ezho-10').attr('title', userlocation.UserAddress);
+                 let truncatedAddress = userlocation.UserAddress.length > 20 ? userlocation.UserAddress.substring(0, 20) + "..." : userlocation.UserAddress;
+                  $('.short-address').text(truncatedAddress);
+                  $("#delivery-time").text(`Delivery in ${userlocation.DeliveryDuration} minutes`);
+            }
+            $('.search-location').click(()=>{
+                userLocation();
+            });
         });
-
         function OpenCart() {
             $.post('/Website/Cart').done((result) => {
                 $('.cart-modal').html(result);
                 $('#myModal').show();
             })
         }
-
         function handleOtpInput() {
             const otpInputs = $('.otp-box');
             otpInputs.on('input', function () {
@@ -720,15 +729,15 @@
 
         }
 
-        // function loadCartContent() {
-        //     const modalBody = document.querySelector('.modal-body .container');
-        //     modalBody.innerHTML = originalCartContent;
-        //     document.getElementById('ProceedtoCheckout').addEventListener('click', function () {
-        //         loadDeliveryAddressPage();
-        //     });
-        // }
 
-
+        var userLocation = ()=>{
+            $.post('/Website/UserAddress').done((result)=>{
+                $('#showModal').html(result);
+                $('#userlocationModal').modal('show');
+            }).fail((xhr)=>{
+                QAlert(-1,'Something went wrong !');
+            })
+        }
     </script>
 </body>
 </html>

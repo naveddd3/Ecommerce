@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WEBAPI.Controllers
@@ -7,21 +8,18 @@ namespace WEBAPI.Controllers
     [ApiController]
     public class MapController : ControllerBase
     {
-        [HttpPost(nameof(ReverseGeocode))]
-        public async Task<IActionResult> ReverseGeocode([FromQuery] double latitude, [FromQuery] double longitude)
-        {
-            var client = new HttpClient();
-            var apiUrl = $"http://farazapi.runasp.net/api/Map/ReverseGeocodeAsync?latitude={latitude}&longitude={longitude}&SecretKey=zaAgkwufYHSNHOXDMvskXk1MpkTNt2RA";
+		private readonly IMapService _mapService;
 
-            try
-            {
-                var response = await client.GetStringAsync(apiUrl);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Error: " + ex.Message);
-            }
+		public MapController(IMapService mapService)
+		{
+			_mapService = mapService;
+		}
+
+		[HttpPost(nameof(GetUserLocation))]
+        public async Task<IActionResult> GetUserLocation([FromQuery] double latitude, [FromQuery] double longitude)
+        {
+            var res = await _mapService.GetUserLocationAndDeliveryTime(latitude, longitude);
+            return Ok(res);
         }
     }
 }

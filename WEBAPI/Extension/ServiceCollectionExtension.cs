@@ -100,6 +100,7 @@ namespace WEBAPI.Extension
             services.AddScoped<FileUploadService>();
             services.AddScoped<ILoggerService, LoggerService>();
             services.AddScoped<IDeliveryPartnersServices, DeliveryPartnersServices>();
+            services.AddScoped<IMapService, MapService>();
             #endregion
         }
     }
