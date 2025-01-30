@@ -124,7 +124,8 @@
         $("#productonsubcateory_1").click();
     })
     var ProductOnSubCategory = (subCategoryId) => {
-        $.post("/Website/ProductOnSubCategory", { SubCategoryId: subCategoryId, UserLattitude: userCoords.latitude, UserLongitude: userCoords.longitude }).done((response) => {
+         let location = JSON.parse(sessionStorage.getItem('location'));
+        $.post("/Website/ProductOnSubCategory", { SubCategoryId: subCategoryId, UserLattitude: location.latitude, UserLongitude: location.longitude }).done((response) => {
             $("#products").html(response);
         })
     }
