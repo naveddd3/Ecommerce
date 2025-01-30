@@ -1,16 +1,17 @@
 ﻿@model Domain.Entities.WebsiteModel;
 <style>
     #variantDetailsTable {
-        border-collapse: collapse;
+    border-collapse: collapse;
     }
 
-        #variantDetailsTable th,
-        #variantDetailsTable td {
-            border: none !important;
-        }
+    #variantDetailsTable th,
+    #variantDetailsTable td {
+    border: none !important;
+    }
 </style>
 @if (Model.ProductVarientAPIRES != null && Model.ProductVarientAPIRES.Products.Count() > 0)
 {
+    int badge = 0;
     @foreach (var product in Model.ProductVarientAPIRES.Products)
     {
         <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
@@ -28,6 +29,7 @@
                     </div>
                     <div class="product-badges product-badges-position product-badges-mrg">
                         <span class="hot">Hot</span>
+                      
                     </div>
                 </div>
                 <div class="product-content-wrap">

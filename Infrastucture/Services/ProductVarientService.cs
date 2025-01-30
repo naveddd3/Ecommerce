@@ -62,8 +62,12 @@ namespace Infrastucture.Services
             catch (Exception ex)
             {
 
-                throw;
-            }
+				return new ProductVarientAPIRES()
+                {
+					StatusCode = ResponseStatus.Failed,
+					ResponseText = "No Products Found"
+				};
+			}
         }
 
         public async Task<dynamic> ProductDetailById(int ProductId)

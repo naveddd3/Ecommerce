@@ -58,8 +58,7 @@ namespace Infrastucture.Services
                         AddressID = checkoutDetails.AddressID,
                         PaymentModes = checkoutDetails.PaymentMode,
                         OrderStatus = OrderStatus.PLACED,
-                        StatusRemark = (string?)null,
-
+                        StatusRemark = ""
                     });
                 }
                 var orderTable = ConvertOrderRequestToDataTable(orderRequest);
@@ -147,7 +146,5 @@ namespace Infrastucture.Services
 
             return orderId.ToString();
         }
-
-
     }
 }

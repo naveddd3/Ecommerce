@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Enum
+namespace Infrastucture.Services
 {
-    public enum PaymentMode
-    {
-        CARD = 1,
-        UPI = 2,
-        COD = 3
-    }
+	public class CashfreePGService
+	{
+		public CashfreePGService() { }
+
+	}
 }
